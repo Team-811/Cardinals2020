@@ -43,22 +43,6 @@ public class MecanumDrive
 
         return driveOutput;
     }
-    public Output RyanarcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, double deadbandValue)
-    {
-        //First invert all the values if needed before doing the motor output calculations
-        forwardValue = forwardValue * forwardBackwardInvert;
-        strafeValue = strafeValue * strafingInvert;
-        rotationValue = rotationValue * rotationInvert;
-
-        double topRightValue = ((forwardValue + rotationValue) + strafeValue);
-        double bottomRightValue = ((forwardValue + rotationValue) - strafeValue);
-        double topLeftValue = ((forwardValue - rotationValue) - strafeValue);
-        double bottomLeftValue = ((forwardValue - rotationValue) + strafeValue);
-
-        driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
-
-        return driveOutput;
-    }
 
 
     public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue)

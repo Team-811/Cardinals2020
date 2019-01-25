@@ -59,39 +59,7 @@ public class Drive extends Subsystem {
   public void DriveWithJoy(double leftJoy, double rightJoy, double strafe)
   {
       
-      boolean quickTurn;
-
-      if(leftJoy <= .2 && leftJoy >= -.2)
-      {
-          quickTurn = true;
-      }
-      else
-      {
-          quickTurn = false;
-      }
-
-     /* 
-      int inverted;
-      Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 1);
-      if(Robot.controllers.operatorController.aButton.get())
-      {
-            inverted = -1;
-            driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, inverted);
-      }
-      else if (Robot.controllers.operatorController.bButton.get())
-      {
-          driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
-      }
-      else if (Robot.controllers.operatorController.xButton.get())
-      {
-          driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, -1);
-      }
-      else if (Robot.controllers.operatorController.yButton.get())
-      {
-          inverted = 1;  
-          driveOutput = drivetrain.RyanarcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
-      }
-      */
+  
       
 
       
