@@ -7,11 +7,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import frc.robot.robot;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
@@ -28,9 +29,9 @@ public class Intakes extends Subsystem {
 
   public Intakes()
   {
-      retractPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_RETRACT_PISTON, Robot.robotMap.INTAKE_RETRACT_PISTON_FORWARD, Robot.robotMap.INTAKE_RETRACT_PISTON_BACKWARD);
-      hatchPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_HATCH_PISTON, Robot.robotMap.INTAKE_HATCH_PISTON_FORWARD, Robot.robotMap.INTAKE_HATCH_PISTON_BACKWARD);
-      cargoPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_CARGO_PISTON, Robot.robotMap.INTAKE_CARGO_PISTON_FORWARD, Robot.robotMap.INTAKE_CARGO_PISTON_BACKWARD);
+      retractPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_RETRACT_PISTON, Robot.robotMap.INTAKE_RETRACT_PISTON_FORWARD, Robot.robotMap.INTAKE_RETRACT_PISTON_REVERSE);
+      hatchPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_HATCH_PISTON, Robot.robotMap.INTAKE_HATCH_PISTON_FORWARD, Robot.robotMap.INTAKE_HATCH_PISTON_REVERSE);
+      cargoPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_CARGO_PISTON, Robot.robotMap.INTAKE_CARGO_PISTON_FORWARD, Robot.robotMap.INTAKE_CARGO_PISTON_REVERSE);
       cargoMotor = new TalonSRX(Robot.robotMap.INTAKE_CARGO_MOTOR);
   }
 
