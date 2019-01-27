@@ -26,7 +26,7 @@ import com.kauailabs.navx.frc.AHRS;
 /**
  * Add your docs here.
  */
-public class Drive extends Subsystem {
+public class Drivetrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -39,7 +39,7 @@ public class Drive extends Subsystem {
 
   private MecanumDrive drivetrain;
 
-  public Drive()
+  public Drivetrain()
   {
       topLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_TOP_LEFT_MOTOR);
       topRightMotor = new TalonSRX(Robot.robotMap.DRIVE_TOP_RIGHT_MOTOR);
@@ -58,11 +58,6 @@ public class Drive extends Subsystem {
 
   public void DriveWithJoy(double leftJoy, double rightJoy, double strafe)
   {
-      
-  
-      
-
-      
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
       //Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 1);
       Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle());
