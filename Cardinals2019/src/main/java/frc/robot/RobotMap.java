@@ -24,6 +24,17 @@ public class RobotMap {
   public static final int DRIVE_BOTTOM_LEFT_MOTOR  = 2;
   public static final int DRIVE_BOTTOM_RIGHT_MOTOR = 3;
 
+  public static final int INTAKE_RETRACT_PISTON = 0;
+  public static final int INTAKE_RETRACT_PISTON_FORWARD = 0;
+  public static final int INTAKE_RETRACT_PISTON_REVERSE = 1;
+  public static final int INTAKE_HATCH_PISTON = 1;
+  public static final int INTAKE_HATCH_PISTON_FORWARD = 0;
+  public static final int INTAKE_HATCH_PISTON_REVERSE = 1;
+  public static final int INTAKE_CARGO_PISTON = 2;
+  public static final int INTAKE_CARGO_PISTON_FORWARD = 0;
+  public static final int INTAKE_CARGO_PISTON_REVERSE = 1;
+  public static final int INTAKE_CARGO_MOTOR = 4;
+
 
   // If you are using multiple modules, make sure to define both the port
   // number and the module. For example you with a rangefinder:
