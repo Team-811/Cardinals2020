@@ -12,9 +12,41 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  * Add your docs here.
  */
-public class Climber extends Subsystem {
+public class Climber extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+
+
+
+
+  @Override
+  public void outputSmartdashboard() 
+  {
+    
+  }
+
+  @Override
+  public void zeroSensors() 
+  {
+    
+  }
+
+  @Override
+  public void stopSubsystem() 
+  {
+    
+  }
+
+  @Override
+  public void checkSubsystem()
+  {
+    
+  }
+
+  @Override
+  public void testSubsystem() {
+    
+  }
 
   @Override
   public void initDefaultCommand() {

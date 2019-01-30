@@ -26,7 +26,7 @@ import com.kauailabs.navx.frc.AHRS;
 /**
  * Add your docs here.
  */
-public class Drivetrain extends Subsystem {
+public class Drivetrain extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -67,6 +67,36 @@ public class Drivetrain extends Subsystem {
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
 
+  }
+
+
+  @Override
+  public void outputSmartdashboard() 
+  {
+    
+  }
+
+  @Override
+  public void zeroSensors() 
+  {
+    
+  }
+
+  @Override
+  public void stopSubsystem() 
+  {
+    
+  }
+
+  @Override
+  public void checkSubsystem()
+  {
+    
+  }
+
+  @Override
+  public void testSubsystem() {
+    
   }
 
   @Override

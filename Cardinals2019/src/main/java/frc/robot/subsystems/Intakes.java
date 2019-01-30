@@ -17,7 +17,7 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class Intakes extends Subsystem {
+public class Intakes extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -81,6 +81,37 @@ public class Intakes extends Subsystem {
       cargoMotor.set(ControlMode.PercentOutput, 0);
   }
 
+
+
+
+  @Override
+  public void outputSmartdashboard() 
+  {
+    
+  }
+
+  @Override
+  public void zeroSensors() 
+  {
+      //There are no sensors
+  }
+
+  @Override
+  public void stopSubsystem() 
+  {
+    
+  }
+
+  @Override
+  public void checkSubsystem()
+  {
+    
+  }
+
+  @Override
+  public void testSubsystem() {
+    
+  }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
