@@ -27,25 +27,42 @@ public class MecanumDrive
         strafingInvert = 1;
     }
 
-    public Output tankMecanumDrive(double leftValue, double rightValue, double strafeValue, double deadbandValue)
+    public Output tankMecanumDrive(double leftValue, double rightValue, double strafeValue, double deadbandValue, int inverted)
     {
         //First invert all the values if needed before doing the motor output calculations
         leftValue = leftValue * forwardBackwardInvert;
         rightValue = leftValue * rotationInvert;
         strafeValue = strafeValue * strafingInvert;
 
-        double topLeftValue = (leftValue - strafeValue);
-        double bottomLeftValue = (leftValue + strafeValue);
-        double topRightValue = (rightValue + strafeValue);
-        double bottomRightValue = (rightValue - strafeValue);
+        double topLeftValue = handleLimits(leftValue + strafeValue);
+        double bottomLeftValue = handleLimits(leftValue - strafeValue);
+        double topRightValue = handleLimits(rightValue - strafeValue);
+        double bottomRightValue = handleLimits(rightValue + strafeValue); 
 
         driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
 
         return driveOutput;
     }
+    /*
+    public Output RyanarcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, double deadbandValue, int inverted)
+    {
+        //First invert all the values if needed before doing the motor output calculations
+        forwardValue = forwardValue * forwardBackwardInvert;
+        strafeValue = strafeValue * strafingInvert;
+        rotationValue = rotationValue * rotationInvert;
 
+        double topRightValue = ((forwardValue + rotationValue) + strafeValue)*inverted;
+        double bottomRightValue = ((forwardValue + rotationValue) - strafeValue)*inverted;
+        double topLeftValue = ((forwardValue - rotationValue) - strafeValue)*inverted;
+        double bottomLeftValue = ((forwardValue - rotationValue) + strafeValue)*inverted;
 
-    public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue)
+        driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
+
+        return driveOutput;
+    }
+    */
+
+    public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, int inverted)
     {
         //First invert all the values if needed before doing the motor output calculations
         forwardValue = forwardValue * forwardBackwardInvert;
@@ -53,10 +70,10 @@ public class MecanumDrive
         rotationValue = rotationValue * rotationInvert;
 
 
-        double topLeftValue = ((forwardValue + rotationValue) - strafeValue);
-        double bottomLeftValue = ((forwardValue + rotationValue) + strafeValue);
-        double topRightValue = ((forwardValue - rotationValue) + strafeValue);
-        double bottomRightValue = ((forwardValue - rotationValue) - strafeValue);
+        double topLeftValue = handleLimits((forwardValue + rotationValue) + strafeValue);
+        double bottomLeftValue = handleLimits((forwardValue + rotationValue) - strafeValue);
+        double topRightValue = handleLimits((forwardValue - rotationValue) - strafeValue);
+        double bottomRightValue = handleLimits((forwardValue - rotationValue) + strafeValue);
 
         driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
 
@@ -126,10 +143,10 @@ public class MecanumDrive
       rightMotorOutput /= maxMagnitude;
     }
 
-        double topLeftValue = leftMotorOutput + strafeValue;
-        double bottomLeftValue = leftMotorOutput - strafeValue;
-        double topRightValue = rightMotorOutput - strafeValue;
-        double bottomRightValue = rightMotorOutput + strafeValue; 
+        double topLeftValue = handleLimits(leftMotorOutput + strafeValue);
+        double bottomLeftValue = handleLimits(leftMotorOutput - strafeValue);
+        double topRightValue = handleLimits(rightMotorOutput - strafeValue);
+        double bottomRightValue = handleLimits(rightMotorOutput + strafeValue); 
 
         driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
 
@@ -152,10 +169,10 @@ public class MecanumDrive
         double strafe= -forwardValue*y + strafeValue*x;
 
         //Calculates the output of each motor 
-        double topLeftValue = (forward + rotationValue) + strafe;
-        double bottomLeftValue = (forward + rotationValue) - strafe;
-        double topRightValue = (forward - rotationValue) - strafe;
-        double bottomRightValue = (forward - rotationValue) + strafe;
+        double topLeftValue = handleLimits((forward + rotationValue) + strafe);
+        double bottomLeftValue = handleLimits((forward + rotationValue) - strafe);
+        double topRightValue = handleLimits((forward - rotationValue) - strafe);
+        double bottomRightValue = handleLimits((forward - rotationValue) + strafe);
 
         driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
 
@@ -214,6 +231,22 @@ public class MecanumDrive
         else if(input < -limit)
         {
             return -limit;
+        }
+        else
+        {
+            return input;
+        }
+    }
+
+    private double handleLimits(double input)
+    {
+        if(input > 1 )
+        {
+            return 1;
+        }
+        else if(input < -1)
+        {
+            return -1;
         }
         else
         {
