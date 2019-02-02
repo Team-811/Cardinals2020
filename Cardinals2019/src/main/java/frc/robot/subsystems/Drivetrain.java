@@ -49,18 +49,22 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       topRightMotor.setInverted(true);
       bottomRightMotor.setInverted(true);
 
+
       gyro = new AHRS(SerialPort.Port.kMXP);
       gyro.reset();
 
       drivetrain = new MecanumDrive();
+
+      drivetrain.invertForwardBackward(true);
+      drivetrain.invertStrafing(true);
   }
 
 
   public void DriveWithJoy(double leftJoy, double rightJoy, double strafe)
   {
-      SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
-      //Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 1);
-      Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle());
+      SmartDashboard.putNumber("Gyro Angle", -1 * gyro.getAngle());
+      Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 1);
+      //Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, -1 * gyro.getAngle());
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
