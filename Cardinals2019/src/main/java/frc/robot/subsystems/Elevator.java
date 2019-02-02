@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Add your docs here.
  */
+
+/*
 public class Elevator extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -229,6 +232,8 @@ public void configPIDF(double kP, double kI, double kD, double kF) {
  * @param cruiseVelocity cruise velocity in sensorUnits per 100ms
  * @param acceleration   cruise acceleration in sensorUnits per 100ms
  */
+
+/*
 public void configMotionMagic(int cruiseVelocity, int acceleration) {
     rightElevatorLeader.configMotionCruiseVelocity(cruiseVelocity, 0);
     rightElevatorLeader.configMotionAcceleration(acceleration, 0);
@@ -286,3 +291,6 @@ public void updatePIDFFromDashboard() {
     // setDefaultCommand(new MySpecialCommand());
   }
 }
+
+
+*/

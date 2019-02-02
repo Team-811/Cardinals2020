@@ -7,6 +7,12 @@
 
 package frc.robot.controllers;
 
+import frc.robot.commands.*;
+import frc.robot.commands.Intakes.ExtendHatchIntake;
+import frc.robot.commands.Intakes.GrabHatch;
+import frc.robot.commands.Intakes.ReleaseHatch;
+import frc.robot.commands.Intakes.RetractHatchIntake;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -40,7 +46,21 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-    public BobXboxController driveController = new BobXboxController(0, 0.2, 0.2);
-    public BobXboxController operatorController = new BobXboxController(1, 0.2, 0.2);
+    public BobXboxController driveController;
+    public BobXboxController operatorController;
+
+    public OI()
+    {
+      driveController = new BobXboxController(0, 0.2, 0.2);
+      operatorController = new BobXboxController(1, 0.2, 0.2);
+
+      operatorController.aButton.whenPressed(new ReleaseHatch());
+      operatorController.bButton.whenPressed(new GrabHatch());
+      operatorController.xButton.whenPressed(new ExtendHatchIntake());
+      operatorController.yButton.whenPressed(new RetractHatchIntake());  
+
+    }
+
+  
 
 }
