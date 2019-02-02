@@ -4,6 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+
 package frc.robot.Utility;
 
 import jaci.pathfinder.*;
@@ -12,7 +13,9 @@ import jaci.pathfinder.Trajectory.Segment;
 import java.io.*;
 
 /**
- * Add your docs here.
+ * This class contains the motion profiling controller.  It first loads and initializes trajectories based on waypoints.  If the 
+ * trajectory has already been generated before, then it loads a trajectory from a file.  Then, it uses a ramsete follower to 
+ * follow the path.
  */
 
 public class MotionProfiling 

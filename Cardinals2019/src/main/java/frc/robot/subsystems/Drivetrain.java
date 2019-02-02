@@ -24,7 +24,7 @@ import com.kauailabs.navx.AHRSProtocol;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
- * Add your docs here.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
  */
 public class Drivetrain extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
@@ -63,7 +63,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   public void DriveWithJoy(double leftJoy, double rightJoy, double strafe)
   {
       SmartDashboard.putNumber("Gyro Angle", -1 * gyro.getAngle());
-      Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 1);
+      Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe);
       //Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, -1 * gyro.getAngle());
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());

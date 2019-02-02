@@ -8,7 +8,8 @@
 package frc.robot.subsystems;
 
 /**
- * Add your docs here.
+ * This is the subsystem interface.  It ensures that the subsystem classes all must contain these methods for safety 
+ * and convienance.
  */
 public interface ISubsystem 
 {

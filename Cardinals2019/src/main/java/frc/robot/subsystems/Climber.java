@@ -10,7 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
- * Add your docs here.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
  */
 public class Climber extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem

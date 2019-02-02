@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Add your docs here.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
  */
 
 /*

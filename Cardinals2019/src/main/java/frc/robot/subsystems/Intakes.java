@@ -15,7 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Robot;
 
 /**
- * Add your docs here.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
  */
 public class Intakes extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem

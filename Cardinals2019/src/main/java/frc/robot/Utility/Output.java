@@ -8,7 +8,8 @@
 package frc.robot.Utility;
 
 /**
- * Add your docs here.
+ * This class is used to store an output for drivetrain motors.  You can get either the left or the right for tank drives 
+ * or you can get the top left, top right, bottom left, or bottom right for mecanum drive.
  */
 
 public class Output 

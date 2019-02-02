@@ -1,4 +1,19 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.Utility;
+
+/**
+ * This class contains a pid controller.  A PID controller essentialy helps a mechanism go to a certain position by 
+ * slowing the the mechanism down as it approaches the goal.  The P gain controls how fast you approach the object.
+ * The I gain controls how much you want to boost the mechanism if it cant quite reach the desired position.  
+ * The D gains dampens the mechanism if it oscilates around the goal.
+ *
+ */
 
 public class PIDController {
 
