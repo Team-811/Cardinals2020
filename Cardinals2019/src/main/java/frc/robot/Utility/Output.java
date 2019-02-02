@@ -7,6 +7,9 @@
 
 package frc.robot.Utility;
 
+/**
+ * Add your docs here.
+ */
 
 public class Output 
 {

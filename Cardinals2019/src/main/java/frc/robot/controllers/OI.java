@@ -8,10 +8,7 @@
 package frc.robot.controllers;
 
 import frc.robot.commands.*;
-import frc.robot.commands.Intakes.ExtendHatchIntake;
-import frc.robot.commands.Intakes.GrabHatch;
-import frc.robot.commands.Intakes.ReleaseHatch;
-import frc.robot.commands.Intakes.RetractHatchIntake;
+import frc.robot.commands.Intakes.InstantCommands.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator

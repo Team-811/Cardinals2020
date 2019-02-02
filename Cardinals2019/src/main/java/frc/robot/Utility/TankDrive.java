@@ -8,13 +8,17 @@
 package frc.robot.Utility;
 
 /**
- * Add your docs here.
+ * This class contains different contol modes for a tank drivetrain(a set of wheels or tank treads that are chained together
+ * to control the left and right side of the drivetrain only).  Each method takes in parameters like forward movement, rotation, 
+ * etc and then calculates what value each motor in the drivetrain is set to.  The control modes that a tank drivetrain has 
+ * are tank drive, arcade drive, and curvature drive.
  */
 
 public class TankDrive 
 {
     private Output driveOutput;
 
+    //used to invert all drive modes  
     private int forwardBackwardInvert;
     private int rotationInvert;
 

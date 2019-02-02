@@ -8,8 +8,10 @@
 package frc.robot.Utility;
 
 /**
- * Add your docs here.
+ * This class is used to store a X coordinate, a Y coordinate, and an angle of something.  Also, it is used to store the robot's
+ * position on the field based on its starting position, encoder values, and gyro values
  */
+
 public class Odometry 
 {
     private double xCoordinate;
@@ -37,10 +39,15 @@ public class Odometry
 
 
     }
-/*
+
     //Parameterized constructors
-    public Odometry(double xCoordinate, double yCoordinate, double thetaInRadians)
+    public Odometry(double xCoordinate, double yCoordinate, double theta, boolean inRadians)
     {
+        if(!inRadians)
+        {
+            theta = Math.toRadians(theta);
+        }
+
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.theta = theta;
@@ -50,17 +57,9 @@ public class Odometry
         initialTheta = 0;
     }
 
-    public Odometry(double initialXCoordinate, double initialYCoordinate, double initialTheta)
-    {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
-        this.theta = theta;
+    
+    //The following deal with basic coordinate storage 
 
-        initialX = 0;
-        initialY = 0;
-        initialTheta = 0;
-    }
-*/
 
     //Getter methods
 
@@ -98,7 +97,7 @@ public class Odometry
         this.yCoordinate = yCoordinate;
     }
 
-    public void setThetRadians(double thetaRadians)
+    public void setThetaRadians(double thetaRadians)
     {
         this.theta = thetaRadians;
     }
@@ -109,24 +108,47 @@ public class Odometry
     }
 
 
+
+
+
+
+
+    //The following deal with the position of the robot
+
+
     //Setting Odometries based on robot sensors
 
-    public void setRobotOdometry(double encoderLeft, double encoderRight, double gyroAngle)
+    public void setRobotOdometry(double encoderLeft, double encoderRight, double gyroAngle, boolean inRadians)
     {
+        if(!inRadians)
+        {
+            gyroAngle = Math.toRadians(gyroAngle);
+        }
+
         this.xCoordinate = (Math.cos(gyroAngle) * ((getDeltaEncoderLeft(encoderLeft) + getDeltaEncoderRight(encoderRight))/2)) + initialXCoordinate;
-        this.yCoordinate = (Math.cos(gyroAngle) * ((getDeltaEncoderLeft(encoderLeft) + getDeltaEncoderRight(encoderRight))/2)) + initialYCoordinate;
-        this.theta = (Math.toRadians(gyroAngle) - initialGyroAngle) + initialTheta;
+        this.yCoordinate = (Math.sin(gyroAngle) * ((getDeltaEncoderLeft(encoderLeft) + getDeltaEncoderRight(encoderRight))/2)) + initialYCoordinate;
+        this.theta = getDeltaGyro(gyroAngle) + initialTheta; 
     }
 
-    public void setInitialRobotOdometry(double x, double y, double thetaRadians)
+    public void setInitialRobotOdometry(double x, double y, double theta, boolean inRadians)
     {
-        this.xCoordinate = x;
-        this.yCoordinate = y;
-        this.theta = theta;
+        if(!inRadians)
+        {
+            theta = Math.toRadians(theta);
+        }
+
+        this.initialXCoordinate = x;
+        this.initialYCoordinate = y;
+        this.initialTheta = theta;
     }
 
-    public void setInitialRobotState(double initialEncoderLeft, double initialEncoderRight, double initialGyroAngle)
+    public void setInitialRobotState(double initialEncoderLeft, double initialEncoderRight, double initialGyroAngle, boolean inRadians)
     {
+        if(!inRadians)
+        {
+            initialGyroAngle = Math.toRadians(theta);
+        }
+
         this.initialEncoderLeft = initialEncoderLeft;
         this.initialEncoderRight = initialEncoderRight;
         this.initialGyroAngle = Math.toRadians(initialGyroAngle);
@@ -141,6 +163,11 @@ public class Odometry
     private double getDeltaEncoderRight(double encoderRight)
     {
         return encoderRight - initialEncoderRight;
+    }
+
+    private double getDeltaGyro(double gyroAngle)
+    {
+        return gyroAngle - initialGyroAngle;
     }
 
 

@@ -88,7 +88,7 @@ public class MotionProfiling
         setInitialOdometry();
     }
 
-     public Output getNextDriveSignal(boolean reverse, double leftEncoderMeters, double rightEncoderMeters, double gyroAngle){
+     public Output getNextDriveSignal(boolean reverse, double leftEncoderMeters, double rightEncoderMeters, double gyroAngle, boolean inRadians){
 
         int inverted = 1;
 
@@ -105,11 +105,11 @@ public class MotionProfiling
          left = 0;
          right = 0;
 
-         odometry.setRobotOdometry(leftEncoderMeters, rightEncoderMeters, gyroAngle);
+         odometry.setRobotOdometry(leftEncoderMeters, rightEncoderMeters, gyroAngle, inRadians);
 
          if(segmentIndex == 0)
          {
-             odometry.setInitialRobotState(leftEncoderMeters, rightEncoderMeters, gyroAngle);
+             odometry.setInitialRobotState(leftEncoderMeters, rightEncoderMeters, gyroAngle, inRadians);
          }
  
          current = trajectory.get(segmentIndex);
@@ -178,7 +178,7 @@ public class MotionProfiling
      }
  
      public void setInitialOdometry(){
-         odometry.setInitialRobotOdometry(trajectory.get(0).x, trajectory.get(0).y, trajectory.get(0).heading);
+         odometry.setInitialRobotOdometry(trajectory.get(0).x, trajectory.get(0).y, trajectory.get(0).heading, true);
      }
  
      public boolean isFinished(){
