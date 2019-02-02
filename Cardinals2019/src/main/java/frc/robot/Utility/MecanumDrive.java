@@ -27,7 +27,7 @@ public class MecanumDrive
         strafingInvert = 1;
     }
 
-    public Output tankMecanumDrive(double leftValue, double rightValue, double strafeValue, double deadbandValue, int inverted)
+    public Output tankMecanumDrive(double leftValue, double rightValue, double strafeValue)
     {
         //First invert all the values if needed before doing the motor output calculations
         leftValue = leftValue * forwardBackwardInvert;
@@ -43,26 +43,8 @@ public class MecanumDrive
 
         return driveOutput;
     }
-    /*
-    public Output RyanarcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, double deadbandValue, int inverted)
-    {
-        //First invert all the values if needed before doing the motor output calculations
-        forwardValue = forwardValue * forwardBackwardInvert;
-        strafeValue = strafeValue * strafingInvert;
-        rotationValue = rotationValue * rotationInvert;
 
-        double topRightValue = ((forwardValue + rotationValue) + strafeValue)*inverted;
-        double bottomRightValue = ((forwardValue + rotationValue) - strafeValue)*inverted;
-        double topLeftValue = ((forwardValue - rotationValue) - strafeValue)*inverted;
-        double bottomLeftValue = ((forwardValue - rotationValue) + strafeValue)*inverted;
-
-        driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
-
-        return driveOutput;
-    }
-    */
-
-    public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, int inverted)
+    public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue)
     {
         //First invert all the values if needed before doing the motor output calculations
         forwardValue = forwardValue * forwardBackwardInvert;
@@ -155,7 +137,7 @@ public class MecanumDrive
 
 
      
-    public Output fieldOrientedDrive(double forwardValue, double strafeValue, double rotationValue, double gyroAngle)
+    public Output fieldOrientedDrive(double forwardValue, double rotationValue, double strafeValue, double gyroAngle)
     {
         //First invert all the values if needed before doing the motor output calculations
         forwardValue = forwardValue * forwardBackwardInvert;
