@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Utility;
+package frc.robot.lib;
 
 /**
  * This class is used to store an output for drivetrain motors.  You can get either the left or the right for tank drives 

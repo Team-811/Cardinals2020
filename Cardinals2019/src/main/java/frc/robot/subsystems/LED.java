@@ -16,7 +16,10 @@ public class LED extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  public LED()
+  {
 
+  }
 
 
   @Override
@@ -32,7 +35,7 @@ public class LED extends Subsystem implements ISubsystem{
   }
 
   @Override
-  public void stopSubsystem() 
+  public void resetSubsystem() 
   {
     
   }

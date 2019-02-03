@@ -24,9 +24,12 @@ import frc.robot.subsystems.*;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static Drivetrain drivetrain = new Drivetrain();
-  public static Intakes intakes = new Intakes();
-  public static RobotMap robotMap = new RobotMap();
+  public static Drivetrain drivetrain;
+  public static Intakes intakes;
+  public static Climber climber;
+  public static Elevator elevator;
+  public static LED led;
+  public static Vision vision;
   public static OI controllers; 
 
   //Command m_autonomousCommand;
@@ -38,6 +41,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    drivetrain = new Drivetrain();
+    intakes = new Intakes();
+    climber = new Climber();
+    elevator = new Elevator();
+    led = new LED();
+    vision = new Vision();
     controllers = new OI();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
@@ -131,4 +140,23 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
+  public class RunNetwork implements Runnable
+  {
+    public void run()
+    {
+
+    }
+  }
+
+  public class UpdateRobotPostion implements Runnable
+  {
+    public void run()
+    {
+      
+    }
+  }
+
+  
+
 }

@@ -1,6 +1,6 @@
-package frc.robot.controllers;
+package frc.robot.controllers.Utility;
 
-import frc.robot.controllers.BobXboxController.XboxAxis;
+import frc.robot.controllers.Utility.BobXboxController.XboxAxis;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;

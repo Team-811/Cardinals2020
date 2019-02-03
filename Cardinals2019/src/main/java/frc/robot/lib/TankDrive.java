@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Utility;
+package frc.robot.lib;
 
 /**
  * This class contains different contol modes for a tank drivetrain(a set of wheels or tank treads that are chained together

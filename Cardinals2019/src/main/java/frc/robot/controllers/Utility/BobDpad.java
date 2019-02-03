@@ -1,8 +1,8 @@
-package frc.robot.controllers;
+package frc.robot.controllers.Utility;
 
-import frc.robot.controllers.BobAxisButton.ThresholdType;
-import frc.robot.controllers.BobXboxController.XboxAxis;
-import frc.robot.controllers.BobXboxController.XboxDpad;
+import frc.robot.controllers.Utility.BobAxisButton.ThresholdType;
+import frc.robot.controllers.Utility.BobXboxController.XboxAxis;
+import frc.robot.controllers.Utility.BobXboxController.XboxDpad;
 
 import edu.wpi.first.wpilibj.Joystick;
 

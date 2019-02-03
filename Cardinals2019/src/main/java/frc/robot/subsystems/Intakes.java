@@ -7,12 +7,14 @@
 
 package frc.robot.subsystems;
 
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import frc.robot.Robot;
+
+import frc.robot.RobotMap;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
@@ -29,10 +31,10 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   public Intakes()
   {
-      retractPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_RETRACT_PISTON_FORWARD, Robot.robotMap.INTAKE_RETRACT_PISTON_REVERSE);
-      hatchPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_HATCH_PISTON_FORWARD, Robot.robotMap.INTAKE_HATCH_PISTON_REVERSE);
-      cargoPiston = new DoubleSolenoid(Robot.robotMap.INTAKE_CARGO_PISTON_FORWARD, Robot.robotMap.INTAKE_CARGO_PISTON_REVERSE);
-      cargoMotor = new TalonSRX(Robot.robotMap.INTAKE_CARGO_MOTOR);
+      retractPiston = new DoubleSolenoid(RobotMap.INTAKE_RETRACT_PISTON_FORWARD, RobotMap.INTAKE_RETRACT_PISTON_REVERSE);
+      hatchPiston = new DoubleSolenoid(RobotMap.INTAKE_HATCH_PISTON_FORWARD, RobotMap.INTAKE_HATCH_PISTON_REVERSE);
+      cargoPiston = new DoubleSolenoid(RobotMap.INTAKE_CARGO_PISTON_FORWARD, RobotMap.INTAKE_CARGO_PISTON_REVERSE);
+      cargoMotor = new TalonSRX(RobotMap.INTAKE_CARGO_MOTOR);
   }
 
   public void retractHatchIntake()
@@ -93,11 +95,11 @@ public class Intakes extends Subsystem implements ISubsystem{
   @Override
   public void zeroSensors() 
   {
-      //There are no sensors
+      
   }
 
   @Override
-  public void stopSubsystem() 
+  public void resetSubsystem() 
   {
     
   }

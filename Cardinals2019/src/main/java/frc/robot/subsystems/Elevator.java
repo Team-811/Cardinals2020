@@ -8,6 +8,8 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -21,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
  */
 
-/*
+
 public class Elevator extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -43,10 +45,8 @@ private void setState(LiftState newState) {
 
 private volatile LiftState state = LiftState.Stationary;
 
-private volatile TalonSRX rightElevatorLeader = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MAIN);
-private TalonSRX rightElevatorSlave = new TalonSRX(RobotMap.RIGHT_ELEVATOR_SLAVE);
-private TalonSRX leftElevatorSlaveA = new TalonSRX(RobotMap.LEFT_ELEVATOR_SLAVE_A);
-private TalonSRX leftElevatorSlaveB = new TalonSRX(RobotMap.LEFT_ELEVATOR_SLAVE_B);
+private TalonSRX elevatorLeader = new TalonSRX(RobotMap.ELEVATOR_MAIN);
+private TalonSRX elevatorSlave = new TalonSRX(RobotMap.ELEVATOR_SLAVE);
 
 private double kP = 0.5; // .3
 private double kI = 0.0;
@@ -63,6 +63,7 @@ private static final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); /
 private static final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.6); // 1024
 
 public enum Positions {
+    //TODO
     Intake(300),
     ScoreSwitch(50000),
     ScoreScale(22000),
@@ -96,92 +97,78 @@ private static final double ELEVATOR_HI_POW = 1.0;
 private static final double ELEVATOR_LOW_POW = -ELEVATOR_HI_POW;
 
 public Elevator() {
-    this.rightElevatorSlave.follow(rightElevatorLeader);
-    this.leftElevatorSlaveA.follow(rightElevatorLeader);
-    this.leftElevatorSlaveB.follow(rightElevatorLeader);
-    this.rightElevatorLeader.configPeakOutputForward(ELEVATOR_HI_POW, 0);
-    this.rightElevatorLeader.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
-    this.rightElevatorLeader.configNominalOutputForward(0.0, 0);
-    this.rightElevatorLeader.configNominalOutputReverse(0.0, 0);
-    this.rightElevatorSlave.configPeakOutputForward(ELEVATOR_HI_POW, 0);
-    this.rightElevatorSlave.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
-    this.rightElevatorSlave.configNominalOutputForward(0.0, 0);
-    this.rightElevatorSlave.configNominalOutputReverse(0.0, 0);
-    this.leftElevatorSlaveA.configPeakOutputForward(ELEVATOR_HI_POW, 0);
-    this.leftElevatorSlaveA.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
-    this.leftElevatorSlaveA.configNominalOutputForward(0.0, 0);
-    this.leftElevatorSlaveA.configNominalOutputReverse(0.0, 0);
-    this.leftElevatorSlaveB.configPeakOutputForward(ELEVATOR_HI_POW, 0);
-    this.leftElevatorSlaveB.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
-    this.leftElevatorSlaveB.configNominalOutputForward(0.0, 0);
-    this.leftElevatorSlaveB.configNominalOutputReverse(0.0, 0);
+    //configure motors
+    this.elevatorSlave.follow(elevatorLeader);
+    this.elevatorLeader.configPeakOutputForward(ELEVATOR_HI_POW, 0);
+    this.elevatorLeader.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
+    this.elevatorLeader.configNominalOutputForward(0.0, 0);
+    this.elevatorLeader.configNominalOutputReverse(0.0, 0);
+    this.elevatorSlave.configPeakOutputForward(ELEVATOR_HI_POW, 0);
+    this.elevatorSlave.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
+    this.elevatorSlave.configNominalOutputForward(0.0, 0);
+    this.elevatorSlave.configNominalOutputReverse(0.0, 0);
 
     //Encoder
-    this.rightElevatorLeader.setSensorPhase(true);
-    this.rightElevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    resetEncoders();
-    //this.rightElevatorLeader.setSelectedSensorPosition(rightElevatorLeader.getSensorCollection().getQuadraturePosition(), 0, 0);
+    this.elevatorLeader.setSensorPhase(true);
+    this.elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+
+    zeroSensors();
 
     //Neutral mode
-    this.rightElevatorLeader.setNeutralMode(NeutralMode.Brake);
-    this.rightElevatorSlave.setNeutralMode(NeutralMode.Brake);
-    this.leftElevatorSlaveA.setNeutralMode(NeutralMode.Brake);
-    this.leftElevatorSlaveB.setNeutralMode(NeutralMode.Brake);
+    this.elevatorLeader.setNeutralMode(NeutralMode.Brake);
+    this.elevatorSlave.setNeutralMode(NeutralMode.Brake);
 
-    this.leftElevatorSlaveA.setInverted(true);
-    this.leftElevatorSlaveB.setInverted(true);
-    this.rightElevatorLeader.setInverted(false);
-    this.rightElevatorSlave.setInverted(false);
+    this.elevatorLeader.setInverted(false);
+    this.elevatorSlave.setInverted(false);
 
     configPIDF(kP, kI, kD, kF);
     configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
 
-    //Hard coded to false to reduce chance of breaking...
 }
 
 
-public void resetEncoders() {
-    this.rightElevatorLeader.setSelectedSensorPosition(0, 0, 0);
+
+
+public int getEncoderPosition() {
+    return elevatorLeader.getSelectedSensorPosition(0);
 }
 
-public int getQuadraturePosition() {
-    return rightElevatorLeader.getSelectedSensorPosition(0);
-    //return rightElevatorLeader.getSensorCollection().getQuadraturePosition();
-}
-
-public void startMotionMagic(Positions pos) { // Up is now negative
-    if (getQuadraturePosition() > pos.getPosition()) {
-        setState(LiftState.GoingDown);
-        configMotionMagic(CRUISE_VELOCITY_DOWN, CRUISE_ACCELERATION_DOWN);
-    } else if (getQuadraturePosition() < pos.getPosition()) {
+public void startMotionMagic(Positions pos) { 
+    //If the desired position is higher than the current, then the elevator must go up
+    if (getEncoderPosition() > pos.getPosition()) {
         setState(LiftState.GoingUp);
+        configMotionMagic(CRUISE_VELOCITY_DOWN, CRUISE_ACCELERATION_DOWN);
+    
+    //If the desired position is lower than the current, then the elevator must going down
+    } else if (getEncoderPosition() < pos.getPosition()) {          
+        setState(LiftState.GoingDown);
         configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
     }
 
-    rightElevatorLeader.set(ControlMode.MotionMagic, pos.getPosition());
+    elevatorLeader.set(ControlMode.MotionMagic, pos.getPosition());
 }
 
 public void checkMotionMagicTermination(Positions pos) {
     if (pos == Positions.Intake) {
-        if (getQuadraturePosition() <= (MOTION_MAGIC_TOLERANCE * 2)) {
+        if (getEncoderPosition() <= (MOTION_MAGIC_TOLERANCE * 2)) {
             state = LiftState.Stationary;
             stopElevator();
             position = pos;
         }
-    } else if (Math.abs(pos.getPosition() - getQuadraturePosition()) <= MOTION_MAGIC_TOLERANCE) {
+    } else if (Math.abs(pos.getPosition() - getEncoderPosition()) <= MOTION_MAGIC_TOLERANCE) {
         state = LiftState.Stationary;
         stopElevator();
         position = pos;
     }
     SmartDashboard.putString("Desired elevator position enum", pos.toString());
-    SmartDashboard.putNumber("Motion Magic set position", rightElevatorLeader.getClosedLoopTarget(0));
-    SmartDashboard.putNumber("CTRError", rightElevatorLeader.getClosedLoopError(0));
+    SmartDashboard.putNumber("Motion Magic set position", elevatorLeader.getClosedLoopTarget(0));
+    SmartDashboard.putNumber("CTRError", elevatorLeader.getClosedLoopError(0));
     SmartDashboard.putNumber("Desired elevator position", pos.getPosition());
-    SmartDashboard.putNumber("Closed loop error", Math.abs(pos.getPosition() - getQuadraturePosition()));
+    SmartDashboard.putNumber("Closed loop error", Math.abs(pos.getPosition() - getEncoderPosition()));
 }
 
 public void stopElevator() {
-    rightElevatorLeader.set(ControlMode.PercentOutput, 0.0);
+    elevatorLeader.set(ControlMode.PercentOutput, 0.0);
 }
 
 public void directElevate(double pow) {
@@ -200,11 +187,11 @@ public void directElevate(double pow) {
     if (pow == 0.0) {
         setState(LiftState.Stationary);
     }
-    rightElevatorLeader.set(ControlMode.PercentOutput, pow);
+    elevatorLeader.set(ControlMode.PercentOutput, pow);
 }
 
 private void checkIfToppedOut() {
-    if (getQuadraturePosition() >= Positions.Top.getPosition() && getState() != LiftState.GoingDown) {
+    if (getEncoderPosition() >= Positions.Top.getPosition() && getState() != LiftState.GoingDown) {
         setState(LiftState.ToppedOut);
         setPosition(Positions.Top);
         stopElevator();
@@ -212,7 +199,7 @@ private void checkIfToppedOut() {
 }
 
 private void checkIfZeroedOut() {
-    if (getQuadraturePosition() <= Positions.Intake.getPosition() && getState() != LiftState.GoingUp) {
+    if (getEncoderPosition() <= Positions.Intake.getPosition() && getState() != LiftState.GoingUp) {
         setState(LiftState.BottomedOut);
         setPosition(Positions.Intake);
         stopElevator();
@@ -220,10 +207,10 @@ private void checkIfZeroedOut() {
 }
 
 public void configPIDF(double kP, double kI, double kD, double kF) {
-    rightElevatorLeader.config_kP(0, kP, 0);
-    rightElevatorLeader.config_kI(0, kI, 0);
-    rightElevatorLeader.config_kD(0, kD, 0);
-    rightElevatorLeader.config_kF(0, kF, 0);
+    elevatorLeader.config_kP(0, kP, 0);
+    elevatorLeader.config_kI(0, kI, 0);
+    elevatorLeader.config_kD(0, kD, 0);
+    elevatorLeader.config_kF(0, kF, 0);
 }
 
 /**
@@ -233,10 +220,10 @@ public void configPIDF(double kP, double kI, double kD, double kF) {
  * @param acceleration   cruise acceleration in sensorUnits per 100ms
  */
 
-/*
+
 public void configMotionMagic(int cruiseVelocity, int acceleration) {
-    rightElevatorLeader.configMotionCruiseVelocity(cruiseVelocity, 0);
-    rightElevatorLeader.configMotionAcceleration(acceleration, 0);
+    elevatorLeader.configMotionCruiseVelocity(cruiseVelocity, 0);
+    elevatorLeader.configMotionAcceleration(acceleration, 0);
 }
 
 public void updatePIDFOnDashboard() {
@@ -265,13 +252,13 @@ public void updatePIDFFromDashboard() {
   @Override
   public void zeroSensors() 
   {
-    
+    this.elevatorLeader.setSelectedSensorPosition(0, 0, 0);
   }
 
   @Override
-  public void stopSubsystem() 
+  public void resetSubsystem() 
   {
-    
+    elevatorLeader.set(ControlMode.PercentOutput, 0.0);
   }
 
   @Override
@@ -293,4 +280,3 @@ public void updatePIDFFromDashboard() {
 }
 
 
-*/

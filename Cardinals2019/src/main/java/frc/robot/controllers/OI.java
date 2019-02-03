@@ -7,6 +7,8 @@
 
 package frc.robot.controllers;
 
+import frc.robot.controllers.Utility.*;
+
 import frc.robot.commands.*;
 import frc.robot.commands.Intakes.InstantCommands.*;
 

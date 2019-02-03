@@ -5,17 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.lib;
 
 /**
- * This is the subsystem interface.  It ensures that the subsystem classes all must contain these methods for safety 
- * and convienance.
+ * Add your docs here.
  */
-public interface ISubsystem 
-{
-    public abstract void outputSmartdashboard();
-    public abstract void zeroSensors();
-    public abstract void resetSubsystem();
-    public abstract void testSubsystem();
-    public abstract void checkSubsystem();
+public class TalonChecker {
 }

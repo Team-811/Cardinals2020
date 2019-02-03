@@ -8,7 +8,7 @@
 package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
+import frc.robot.commands.Utility.*;
 import frc.robot.commands.Intakes.InstantCommands.ExtendHatchIntake;
 import frc.robot.commands.Intakes.InstantCommands.ReleaseHatch;
 import frc.robot.commands.Intakes.InstantCommands.RetractHatchIntake;

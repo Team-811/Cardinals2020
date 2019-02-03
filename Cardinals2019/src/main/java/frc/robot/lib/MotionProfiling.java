@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Utility;
+package frc.robot.lib;
 
 import jaci.pathfinder.*;
 import jaci.pathfinder.Trajectory.Segment;

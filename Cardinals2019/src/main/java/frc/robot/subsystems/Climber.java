@@ -32,7 +32,7 @@ public class Climber extends Subsystem implements ISubsystem{
   }
 
   @Override
-  public void stopSubsystem() 
+  public void resetSubsystem() 
   {
     
   }

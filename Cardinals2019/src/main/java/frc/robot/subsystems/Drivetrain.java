@@ -7,20 +7,16 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.SerialPort;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.*;
-import frc.robot.Utility.MecanumDrive;
-import frc.robot.Utility.Output;
-import frc.robot.commands.*;
-
-import javax.lang.model.util.ElementScanner6;
+import frc.robot.RobotMap;
+import frc.robot.lib.MecanumDrive;
+import frc.robot.lib.Output;
+import frc.robot.commands.Drivetrain.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.AHRSProtocol;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
@@ -41,16 +37,16 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   public Drivetrain()
   {
-      topLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_TOP_LEFT_MOTOR);
-      topRightMotor = new TalonSRX(Robot.robotMap.DRIVE_TOP_RIGHT_MOTOR);
-      bottomLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_LEFT_MOTOR);
-      bottomRightMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
+      topLeftMotor = new TalonSRX(RobotMap.DRIVE_TOP_LEFT_MOTOR);
+      topRightMotor = new TalonSRX(RobotMap.DRIVE_TOP_RIGHT_MOTOR);
+      bottomLeftMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR);
+      bottomRightMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
       topRightMotor.setInverted(true);
       bottomRightMotor.setInverted(true);
 
 
-      gyro = new AHRS(SerialPort.Port.kMXP);
+      gyro = new AHRS(RobotMap.GYRO_PORT);
       gyro.reset();
 
       drivetrain = new MecanumDrive();
@@ -87,7 +83,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   }
 
   @Override
-  public void stopSubsystem() 
+  public void resetSubsystem() 
   {
     
   }

@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SerialPort.Port;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -19,11 +22,14 @@ public class RobotMap {
   // public static int leftMotor = 1;
   // public static int rightMotor = 2;
   
+  //Drivetrain
   public static final int DRIVE_TOP_LEFT_MOTOR     = 0;
   public static final int DRIVE_TOP_RIGHT_MOTOR    = 1;
   public static final int DRIVE_BOTTOM_LEFT_MOTOR  = 2;
   public static final int DRIVE_BOTTOM_RIGHT_MOTOR = 3;
+  public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
 
+  //Intake
   public static final int INTAKE_RETRACT_PISTON_FORWARD = 2;
   public static final int INTAKE_RETRACT_PISTON_REVERSE = 3;
   public static final int INTAKE_HATCH_PISTON_FORWARD = 0;
@@ -31,6 +37,10 @@ public class RobotMap {
   public static final int INTAKE_CARGO_PISTON_FORWARD = 4;
   public static final int INTAKE_CARGO_PISTON_REVERSE = 5;
   public static final int INTAKE_CARGO_MOTOR = 4;
+
+  //Elevator
+  public static final int ELEVATOR_MAIN     = 0;
+  public static final int ELEVATOR_SLAVE    = 1;
 
 
   // If you are using multiple modules, make sure to define both the port

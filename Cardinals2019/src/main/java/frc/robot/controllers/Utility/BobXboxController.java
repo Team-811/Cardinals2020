@@ -1,6 +1,6 @@
-package frc.robot.controllers;
+package frc.robot.controllers.Utility;
 
-import frc.robot.controllers.BobAxisButton.ThresholdType;
+import frc.robot.controllers.Utility.BobAxisButton.ThresholdType;
 
 import edu.wpi.first.wpilibj.Joystick;
 

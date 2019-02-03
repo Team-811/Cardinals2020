@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Utility;
+package frc.robot.lib;
 
 /**
  * This class is used to store a X coordinate, a Y coordinate, and an angle of something.  Also, it is used to store the robot's

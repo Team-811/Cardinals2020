@@ -1,6 +1,6 @@
-package frc.robot.controllers;
+package frc.robot.controllers.Utility;
 
-import frc.robot.controllers.BobXboxController.XboxButton;
+import frc.robot.controllers.Utility.BobXboxController.XboxButton;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;

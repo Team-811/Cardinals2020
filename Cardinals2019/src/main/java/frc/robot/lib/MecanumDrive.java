@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Utility;
+package frc.robot.lib;
 
 /**
  * This class contains different contol modes for a mecanum drivetrain(4 mecanum wheels that are independently contorl).

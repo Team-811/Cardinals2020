@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Utility;
+package frc.robot.lib;
 
 /**
  * This class contains a pid controller.  A PID controller essentialy helps a mechanism go to a certain position by 
