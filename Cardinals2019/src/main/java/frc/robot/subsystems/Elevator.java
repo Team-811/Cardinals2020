@@ -65,12 +65,12 @@ private static final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION *
 public enum Positions {
     //TODO
     Intake(300),
-    ScoreSwitch(50000),
-    ScoreScale(22000),
-    PreClimb(70000),
-    Top(75001),
-    ChinUp(0),
-    ClimbingBar(0);
+    Level2Hatch(50000),
+    Level3Hatch(22000),
+    Level1Cargo(70000),
+    Level2Cargo(75001),
+    Level3Cargo(0),
+    Top(75000);
     private int position;
 
     Positions(int encPos) {
@@ -82,7 +82,7 @@ public enum Positions {
     }
 }
 
-private volatile Positions position = Positions.Intake;
+private Positions position = Positions.Intake;
 
 public Positions getPosition() {
     return position;
