@@ -161,8 +161,8 @@ public class Intakes extends Subsystem implements ISubsystem{
 
         System.out.println("Checking Cargo Motor");
         Timer.delay(0.5);
-        TalonChecker checker = new TalonChecker("Cargo Talon", cargoMotor, false, false);
-        sucess = checker.runTest(5, 0); //TODO
+        TalonChecker checker = new TalonChecker("Cargo Talon", cargoMotor, false);
+        sucess = checker.runTest(5); //TODO
         Timer.delay(0.2);
 
         if(sucess)

@@ -28,7 +28,6 @@ public class TalonChecker
 	private double mMotorSpeed = 0.75;
 	private TalonSRX testingSpeedController;
     private String motorName;
-    private boolean hasEncoder;
 	private double motorRPM;
 	private double motorCurrent;
 	private boolean inverted = false;
@@ -36,13 +35,48 @@ public class TalonChecker
     private boolean testCompleted = false;
     private UnitConverter converter = new UnitConverter();
 
-	public TalonChecker(String motorName, TalonSRX testingSpeedController, boolean hasEncoder, boolean inverted) {
+	public TalonChecker(String motorName, TalonSRX testingSpeedController, boolean inverted) {
 		this.testingSpeedController = testingSpeedController;
         this.motorName = motorName;
-        this.hasEncoder = hasEncoder;
         this.inverted = inverted;
 	}
 
+	//A test or a motor without an encoder
+	public boolean runTest(double currentThreshold) {
+		// testingSpeedController.configForwardSoftLimitEnable(false, 20);
+		// testingSpeedController.configReverseSoftLimitEnable(false, 20);
+        if(testingSpeedController.getFirmwareVersion() == 0)
+        {
+            System.out.println(motorName + "is not present!!!!!");
+            return false;
+        }
+        else
+        {
+            //Setup
+            double motorPositionPreTest = 0;
+            double motorPositionPostTest = 0;
+		    mMotorSpeed = Math.abs(mMotorSpeed);
+		    testingSpeedController.set(ControlMode.PercentOutput, inverted ? -mMotorSpeed : mMotorSpeed);
+            Timer.delay(mTestDurationSeconds/2.0);
+        
+            //Mid Spin
+            motorCurrent = testingSpeedController.getOutputCurrent();
+            Timer.delay(mTestDurationSeconds/2.0);
+        
+            //End
+			testingSpeedController.set(ControlMode.PercentOutput, 0);
+			
+            testCompleted = true;
+        
+            //Analysis
+            if(isCurrentUnderThreshold(currentThreshold))
+                return false;
+            else
+                return true;
+            
+		}
+
+	}
 
 	public boolean runTest(double currentThreshold, double RPMThreshold) {
 		// testingSpeedController.configForwardSoftLimitEnable(false, 20);
@@ -57,50 +91,37 @@ public class TalonChecker
             //Setup
             double motorPositionPreTest = 0;
             double motorPositionPostTest = 0;
-            if(hasEncoder)
-		        motorPositionPreTest = getPosition();
+		    motorPositionPreTest = getPosition();
 		    mMotorSpeed = Math.abs(mMotorSpeed);
 		    testingSpeedController.set(ControlMode.PercentOutput, inverted ? -mMotorSpeed : mMotorSpeed);
             Timer.delay(mTestDurationSeconds/2.0);
         
             //Mid Spin
             motorCurrent = testingSpeedController.getOutputCurrent();
-            if(hasEncoder){
-		        motorRPM = getRPM();
-                motorPositionPostTest = getPosition();
-            }
+		    motorRPM = getRPM();
+            motorPositionPostTest = getPosition();
             Timer.delay(mTestDurationSeconds/2.0);
         
             //End
 		    testingSpeedController.set(ControlMode.PercentOutput, 0);
-            if(hasEncoder)
-            {
-		        if (inverted & (motorPositionPostTest < motorPositionPreTest))
-			        sensorInPhase =  true;
-		        else if (!inverted & (motorPositionPostTest > motorPositionPreTest))
-			        sensorInPhase = true;
-		        else
-			        sensorInPhase = false;
-            }
+            if (inverted & (motorPositionPostTest < motorPositionPreTest))
+			    sensorInPhase =  true;
+		    else if (!inverted & (motorPositionPostTest > motorPositionPreTest))
+			    sensorInPhase = true;
+		    else
+				sensorInPhase = false;
+				
             testCompleted = true;
         
             //Analysis
-            if(hasEncoder)
-            {
-                if(isCurrentUnderThreshold(currentThreshold) || isRPMUnderThreshold(RPMThreshold))
-                    return false;
-                else
-                    return true;
-            }
+            
+            if(isCurrentUnderThreshold(currentThreshold) || isRPMUnderThreshold(RPMThreshold))
+                return false;
             else
-            {
-                if(isCurrentUnderThreshold(currentThreshold))
-                    return false;
-                else
-                    return true;
-            }
+				return true;
+				
         }
-
+            
 	}
 
 	public boolean isSensorInPhase() {
