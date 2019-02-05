@@ -8,11 +8,13 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.lib.MecanumDrive;
 import frc.robot.lib.Output;
+import frc.robot.lib.TalonChecker;
 import frc.robot.commands.Drivetrain.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -96,7 +98,82 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   @Override
   public void testSubsystem() {
-    
+    boolean sucess = true;
+
+    Timer delay = new Timer();
+    System.out.println("///////////////////////////////////////////////////");
+    System.out.println("***************Beginning Drivetrain Test***************");
+    Timer.delay(0.2);
+
+
+    //Test top left wheel
+    System.out.println("Testing Top Left Wheel");
+    Timer.delay(0.5);
+    TalonChecker checker = new TalonChecker("Top Left Wheel Talon", topLeftMotor, true, false);
+    sucess = checker.runTest(5, 0); //TODO
+    Timer.delay(0.2);
+
+    if(!sucess)
+    {
+        System.out.println("***************Error in Top Left Wheel***************");
+        return;
+    }
+
+    //Test top right wheel
+    System.out.println("Testing Top Right Wheel");
+    Timer.delay(0.5);
+    checker = new TalonChecker("Top Right Wheel Talon", topRightMotor, true, false);
+    sucess = checker.runTest(5, 0); //TODO
+    Timer.delay(0.2);
+
+    if(!sucess)
+    {
+        System.out.println("***************Error in Top Right Wheel***************");
+        return;
+    }
+
+    //Test bottom left wheel
+    System.out.println("Testing Bottom Left Wheel");
+    Timer.delay(0.5);
+    checker = new TalonChecker("Bottom Left Wheel Talon", bottomLeftMotor, true, false);
+    sucess = checker.runTest(5, 0); //TODO
+    Timer.delay(0.2);
+
+    if(!sucess)
+    {
+        System.out.println("***************Error in Bottom Left Wheel***************");
+        return;
+    }
+
+    //Test bottom right wheel
+    System.out.println("Testing Bottom Right Motor");
+    Timer.delay(0.5);
+    checker = new TalonChecker("Cargo Talon", bottomRightMotor, true, false);
+    sucess = checker.runTest(5, 0); //TODO
+    Timer.delay(0.2);
+
+    if(!sucess)
+    {
+        System.out.println("***************Error in Bottom Right Wheel***************");
+        return;
+    }
+
+    //Test Gyro Presence
+    System.out.println("Testing Gyro Presence");
+    Timer.delay(0.5);
+    sucess = gyro.isConnected();
+    Timer.delay(0.2);
+
+    if(!sucess)
+    {
+        System.out.println("***************Error in Gyro***************");
+        return;
+    }
+
+    if(sucess)
+        System.out.println("***************Everything in drivetrain is working***************");
+    else
+        System.out.println("***************Error in Drivetrain***************");
   }
 
   @Override

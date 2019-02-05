@@ -7,8 +7,164 @@
 
 package frc.robot.lib;
 
+import java.util.ArrayList;
+import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Subsystem;
+
 /**
  * Add your docs here.
  */
-public class TalonChecker {
+public class TalonChecker 
+{
+    
+    private static final String TEST_NOT_RUN_STR = "Test not run yet!";
+
+	private double mTestDurationSeconds = 2.0;
+	private double mMotorSpeed = 0.75;
+	private TalonSRX testingSpeedController;
+    private String motorName;
+    private boolean hasEncoder;
+	private double motorRPM;
+	private double motorCurrent;
+	private boolean inverted = false;
+	private boolean sensorInPhase = false;
+    private boolean testCompleted = false;
+    private UnitConverter converter = new UnitConverter();
+
+	public TalonChecker(String motorName, TalonSRX testingSpeedController, boolean hasEncoder, boolean inverted) {
+		this.testingSpeedController = testingSpeedController;
+        this.motorName = motorName;
+        this.hasEncoder = hasEncoder;
+        this.inverted = inverted;
+	}
+
+
+	public boolean runTest(double currentThreshold, double RPMThreshold) {
+		// testingSpeedController.configForwardSoftLimitEnable(false, 20);
+		// testingSpeedController.configReverseSoftLimitEnable(false, 20);
+        if(testingSpeedController.getFirmwareVersion() == 0)
+        {
+            System.out.println(motorName + "is not present!!!!!");
+            return false;
+        }
+        else
+        {
+            //Setup
+            double motorPositionPreTest = 0;
+            double motorPositionPostTest = 0;
+            if(hasEncoder)
+		        motorPositionPreTest = getPosition();
+		    mMotorSpeed = Math.abs(mMotorSpeed);
+		    testingSpeedController.set(ControlMode.PercentOutput, inverted ? -mMotorSpeed : mMotorSpeed);
+            Timer.delay(mTestDurationSeconds/2.0);
+        
+            //Mid Spin
+            motorCurrent = testingSpeedController.getOutputCurrent();
+            if(hasEncoder){
+		        motorRPM = getRPM();
+                motorPositionPostTest = getPosition();
+            }
+            Timer.delay(mTestDurationSeconds/2.0);
+        
+            //End
+		    testingSpeedController.set(ControlMode.PercentOutput, 0);
+            if(hasEncoder)
+            {
+		        if (inverted & (motorPositionPostTest < motorPositionPreTest))
+			        sensorInPhase =  true;
+		        else if (!inverted & (motorPositionPostTest > motorPositionPreTest))
+			        sensorInPhase = true;
+		        else
+			        sensorInPhase = false;
+            }
+            testCompleted = true;
+        
+            //Analysis
+            if(hasEncoder)
+            {
+                if(isCurrentUnderThreshold(currentThreshold) || isRPMUnderThreshold(RPMThreshold))
+                    return false;
+                else
+                    return true;
+            }
+            else
+            {
+                if(isCurrentUnderThreshold(currentThreshold))
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+	}
+
+	public boolean isSensorInPhase() {
+		if (testCompleted)
+			return sensorInPhase;
+		else {
+			System.out.println("Encoder out of phase");
+			return false;
+		}
+	}
+
+	private double getPosition() {
+		return converter.ticksToRotations(testingSpeedController.getSelectedSensorPosition(0), 1024);
+	}
+
+	private double getRPM() {
+		return converter.talonUnitsToRPM(testingSpeedController.getSelectedSensorVelocity(0), 1024);
+	}
+
+	public void setZero() {
+		testingSpeedController.set(ControlMode.PercentOutput, 0);
+	}
+
+	public String getMotorName() {
+		return motorName;
+	}
+
+	public double getMotorCurrent() {
+		if (testCompleted)
+			return motorCurrent;
+		else {
+			System.out.println(motorName + " has not completed test yet");
+			return 0;
+		}
+	}
+
+	public double getMotorRPM() {
+		if (testCompleted)
+			return motorRPM;
+		else {
+			System.out.println(motorName + " has not completed test yet");
+			return 0;
+		}
+	}
+
+	public boolean isCurrentUnderThreshold(double threshold) {
+        if(motorCurrent < threshold || !testCompleted)
+        {
+            System.out.println(motorName + " has low current!!!!!");
+            return true;
+        }
+        else 
+            return false;
+	}
+
+	public boolean isRPMUnderThreshold(double threshold) {
+        if (motorRPM < threshold || !testCompleted)
+        {
+            System.out.println(motorName + " has low RPM!!!!!");
+            return true;
+        }
+		else {
+			return false;
+		}
+	}
+
 }

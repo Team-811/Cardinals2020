@@ -227,17 +227,17 @@ public void configMotionMagic(int cruiseVelocity, int acceleration) {
 }
 
 public void updatePIDFOnDashboard() {
-    SmartDashboard.putNumber("kP", kP);
-    SmartDashboard.putNumber("kI", kI);
-    SmartDashboard.putNumber("kD", kD);
-    SmartDashboard.putNumber("kF", kF);
+    SmartDashboard.putNumber("Elevator kP", kP);
+    SmartDashboard.putNumber("Elevator kI", kI);
+    SmartDashboard.putNumber("Elevator kD", kD);
+    SmartDashboard.putNumber("Elevator kF", kF);
 }
 
 public void updatePIDFFromDashboard() {
-    kP = SmartDashboard.getNumber("kP", kP);
-    kI = SmartDashboard.getNumber("kI", kI);
-    kD = SmartDashboard.getNumber("kD", kD);
-    kF = SmartDashboard.getNumber("kF", kF);
+    kP = SmartDashboard.getNumber("Elevator kP", kP);
+    kI = SmartDashboard.getNumber("Elevator kI", kI);
+    kD = SmartDashboard.getNumber("Elevator kD", kD);
+    kF = SmartDashboard.getNumber("Elevator kF", kF);
     configPIDF(kP, kI, kD, kF);
 }
 
@@ -246,7 +246,7 @@ public void updatePIDFFromDashboard() {
   @Override
   public void outputSmartdashboard() 
   {
-    
+    updatePIDFOnDashboard();
   }
 
   @Override
