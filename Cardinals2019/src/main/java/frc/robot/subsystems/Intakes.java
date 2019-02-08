@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -28,18 +30,24 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   private DoubleSolenoid retractPiston;
   private DoubleSolenoid hatchPiston;
+  private DigitalInput limitSwitch;
 
   private DoubleSolenoid cargoPiston;
   private TalonSRX cargoMotor;
+  private AnalogInput distanceSensor;
 
   public Intakes()
   {
       retractPiston = new DoubleSolenoid(RobotMap.INTAKE_RETRACT_PISTON_FORWARD, RobotMap.INTAKE_RETRACT_PISTON_REVERSE);
       hatchPiston = new DoubleSolenoid(RobotMap.INTAKE_HATCH_PISTON_FORWARD, RobotMap.INTAKE_HATCH_PISTON_REVERSE);
+      limitSwitch = new DigitalInput(RobotMap.INTAKE_LIMIT_SWITCH);
+
       cargoPiston = new DoubleSolenoid(RobotMap.INTAKE_CARGO_PISTON_FORWARD, RobotMap.INTAKE_CARGO_PISTON_REVERSE);
       cargoMotor = new TalonSRX(RobotMap.INTAKE_CARGO_MOTOR);
+      distanceSensor = new AnalogInput(RobotMap.INTAKE_DISTANCE_SENSOR);
   }
 
+  //Hatch Intake Methods
   public void retractHatchIntake()
   {
       retractPiston.set(DoubleSolenoid.Value.kReverse);
@@ -60,6 +68,18 @@ public class Intakes extends Subsystem implements ISubsystem{
       hatchPiston.set(DoubleSolenoid.Value.kReverse);
   }
 
+  public boolean hasHatch()
+  {
+      if(limitSwitch.get())
+        return true;
+      else
+        return false;
+  }
+
+
+
+  
+   //Cargo Intake Methods
    public void bringUpCargoIntake()
   {
       cargoPiston.set(DoubleSolenoid.Value.kReverse);
@@ -85,6 +105,17 @@ public class Intakes extends Subsystem implements ISubsystem{
   {
       cargoMotor.set(ControlMode.PercentOutput, 0);
   }
+
+  public boolean hasCargo()
+  {
+      if(distanceSensor.getVoltage() > 0.8)  //Any object that is 7cm or closer will produce 0.8V or more
+        return true;
+      else
+        return false;
+  }
+
+
+
 
 
 

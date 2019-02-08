@@ -7,27 +7,47 @@
 
 package frc.robot.commands.Intakes.InstantCommands;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.Timer;
 
-/**
- * Add your docs here.
- */
-public class ReleaseCargo extends InstantCommand {
-  /**
-   * Add your docs here.
-   */
+public class ReleaseCargo extends Command {
+
+
   public ReleaseCargo() {
-    super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.intakes);
+
   }
 
-  // Called once when the command executes
+  // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.intakes.releaseCargo();
+      Robot.intakes.releaseCargo();
   }
 
+  // Called repeatedly when this Command is scheduled to run
+  @Override
+  protected void execute() {
+    Timer.delay(5);
+  }
+
+  // Make this return true when this Command no longer needs to run execute()
+  @Override
+  protected boolean isFinished() {
+    return true;
+  }
+
+  // Called once after isFinished returns true
+  @Override
+  protected void end() {
+    Robot.intakes.stopCargo();
+  }
+
+  // Called when another command which requires one or more of the same
+  // subsystems is scheduled to run
+  @Override
+  protected void interrupted() {
+  }
 }
