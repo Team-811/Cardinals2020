@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.lib.MecanumDrive;
 import frc.robot.lib.Output;
-import frc.robot.lib.TalonChecker;
+//import frc.robot.lib.TalonChecker;
 import frc.robot.commands.Drivetrain.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -44,7 +44,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       bottomLeftMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
-      topRightMotor.setInverted(true);
+      //topRightMotor.setInverted(false);
       bottomRightMotor.setInverted(true);
 
 
@@ -109,8 +109,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     //Test top left wheel
     System.out.println("Testing Top Left Wheel");
     Timer.delay(0.5);
-    TalonChecker checker = new TalonChecker("Top Left Wheel Talon", topLeftMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    //TalonChecker checker = new TalonChecker("Top Left Wheel Talon", topLeftMotor, false);
+    //sucess = checker.runTest(5, 0); //TODO
     Timer.delay(0.2);
 
     if(!sucess)
@@ -122,8 +122,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     //Test top right wheel
     System.out.println("Testing Top Right Wheel");
     Timer.delay(0.5);
-    checker = new TalonChecker("Top Right Wheel Talon", topRightMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    //checker = new TalonChecker("Top Right Wheel Talon", topRightMotor, false);
+    //sucess = checker.runTest(5, 0); //TODO
     Timer.delay(0.2);
 
     if(!sucess)
@@ -135,8 +135,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     //Test bottom left wheel
     System.out.println("Testing Bottom Left Wheel");
     Timer.delay(0.5);
-    checker = new TalonChecker("Bottom Left Wheel Talon", bottomLeftMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    //checker = new TalonChecker("Bottom Left Wheel Talon", bottomLeftMotor, false);
+    //sucess = checker.runTest(5, 0); //TODO
     Timer.delay(0.2);
 
     if(!sucess)
@@ -148,8 +148,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     //Test bottom right wheel
     System.out.println("Testing Bottom Right Motor");
     Timer.delay(0.5);
-    checker = new TalonChecker("Cargo Talon", bottomRightMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    //checker = new TalonChecker("Cargo Talon", bottomRightMotor, false);
+    //sucess = checker.runTest(5, 0); //TODO
     Timer.delay(0.2);
 
     if(!sucess)

@@ -25,12 +25,12 @@ public class ReleaseCargo extends Command {
   @Override
   protected void initialize() {
       Robot.intakes.releaseCargo();
+      Timer.delay(5);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Timer.delay(5);
   }
 
   // Make this return true when this Command no longer needs to run execute()
