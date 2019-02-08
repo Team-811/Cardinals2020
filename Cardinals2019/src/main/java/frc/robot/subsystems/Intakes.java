@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -92,13 +94,13 @@ public class Intakes extends Subsystem implements ISubsystem{
 
    public void intakeCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, 1);
+      cargoMotor.set(ControlMode.PercentOutput, 0.25);
       
   }
 
    public void releaseCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, -1);
+      cargoMotor.set(ControlMode.PercentOutput, -0.25);
   }
 
   public void stopCargo()
@@ -123,7 +125,7 @@ public class Intakes extends Subsystem implements ISubsystem{
   @Override
   public void outputSmartdashboard() 
   {
-    
+    SmartDashboard.putNumber("Intake Distance", distanceSensor.getVoltage());
   }
 
   @Override

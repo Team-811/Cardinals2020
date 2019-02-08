@@ -8,7 +8,7 @@
 package frc.robot.lib;
 
 /**
- * This class contains different contol modes for a mecanum drivetrain(4 mecanum wheels that are independently contorl).
+ * This class contains different contol modes for a mecanum drivetrain(4 mecanum wheels that are independently controled).
  * Each method takes in parameters like forward movement, strafe movement, rotation, etc. and then calculates what value 
  * each motor in the drivetrain is set to.  The control modes that a mecanum drivetrain has are tank drive, arcade drive,
  * curvature drive, and field oriented drive.
