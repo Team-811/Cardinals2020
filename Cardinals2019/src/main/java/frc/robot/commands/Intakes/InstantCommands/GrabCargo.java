@@ -13,11 +13,11 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class ReleaseCargo extends InstantCommand {
+public class GrabCargo extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ReleaseCargo() {
+  public GrabCargo() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -27,7 +27,7 @@ public class ReleaseCargo extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.intakes.releaseCargo();
+    Robot.intakes.intakeCargo();
   }
 
 }

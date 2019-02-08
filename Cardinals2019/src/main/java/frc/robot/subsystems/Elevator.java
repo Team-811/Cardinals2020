@@ -9,6 +9,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
+import frc.robot.lib.TalonChecker;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -16,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -269,8 +271,35 @@ public void updatePIDFFromDashboard() {
 
   @Override
   public void testSubsystem() {
-    
+    boolean sucess = true;
+
+    Timer delay = new Timer();
+    System.out.println("///////////////////////////////////////////////////");
+    System.out.println("***************Beginning Drivetrain Test***************");
+    Timer.delay(0.2);
+
+
+    //Test elevator motors
+    System.out.println("Testing Elevator Motors and Encoders");
+    Timer.delay(0.5);
+    TalonChecker checker = new TalonChecker("Top Left Wheel Talon", elevatorLeader, false);
+    sucess = checker.runTest(5, 0); //TODO
+    Timer.delay(0.2);
+
+    if(!sucess)
+    {
+        System.out.println("***************Error in Elevator Motors or Encoders***************");
+        return;
+    }
+
+    if(sucess)
+        System.out.println("***************Everything in Elevator is working***************");
+    else
+        System.out.println("***************Error in Elevator***************");
   }
+
+    
+  
 
   @Override
   public void initDefaultCommand() {

@@ -30,15 +30,14 @@ public class RobotMap {
   public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
 
   //Intake
-  public static final int INTAKE_RETRACT_PISTON_FORWARD = 2;
-  public static final int INTAKE_RETRACT_PISTON_REVERSE = 3;
+  public static final int INTAKE_RETRACT_PISTON = 2;
   public static final int INTAKE_HATCH_PISTON_FORWARD = 0;
   public static final int INTAKE_HATCH_PISTON_REVERSE = 1;
   public static final int INTAKE_LIMIT_SWITCH = 0;
 
 
-  public static final int INTAKE_CARGO_PISTON_FORWARD = 4;
-  public static final int INTAKE_CARGO_PISTON_REVERSE = 5;
+  public static final int INTAKE_CARGO_PISTON_FORWARD = 3;
+  public static final int INTAKE_CARGO_PISTON_REVERSE = 4;
   public static final int INTAKE_CARGO_MOTOR = 4;
   public static final int INTAKE_DISTANCE_SENSOR = 0;
 

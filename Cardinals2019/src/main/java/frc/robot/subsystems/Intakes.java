@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +22,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.RobotMap;
-import frc.robot.lib.TalonChecker;
+//import frc.robot.lib.TalonChecker;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
@@ -30,7 +31,7 @@ public class Intakes extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private DoubleSolenoid retractPiston;
+  private Solenoid retractPiston;
   private DoubleSolenoid hatchPiston;
   private DigitalInput limitSwitch;
 
@@ -40,7 +41,7 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   public Intakes()
   {
-      retractPiston = new DoubleSolenoid(RobotMap.INTAKE_RETRACT_PISTON_FORWARD, RobotMap.INTAKE_RETRACT_PISTON_REVERSE);
+      retractPiston = new Solenoid(RobotMap.INTAKE_RETRACT_PISTON);
       hatchPiston = new DoubleSolenoid(RobotMap.INTAKE_HATCH_PISTON_FORWARD, RobotMap.INTAKE_HATCH_PISTON_REVERSE);
       limitSwitch = new DigitalInput(RobotMap.INTAKE_LIMIT_SWITCH);
 
@@ -52,22 +53,22 @@ public class Intakes extends Subsystem implements ISubsystem{
   //Hatch Intake Methods
   public void retractHatchIntake()
   {
-      retractPiston.set(DoubleSolenoid.Value.kReverse);
+      retractPiston.set(true);
   }
 
   public void extendHatchIntake()
   {
-      retractPiston.set(DoubleSolenoid.Value.kForward);
+      retractPiston.set(false);
   }
 
    public void grabHatch()
   {
-      hatchPiston.set(DoubleSolenoid.Value.kForward);
+      hatchPiston.set(DoubleSolenoid.Value.kReverse);
   }
 
    public void releaseHatch()
   {
-      hatchPiston.set(DoubleSolenoid.Value.kReverse);
+      hatchPiston.set(DoubleSolenoid.Value.kForward);
   }
 
   public boolean hasHatch()
@@ -94,13 +95,13 @@ public class Intakes extends Subsystem implements ISubsystem{
 
    public void intakeCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, 0.25);
+      cargoMotor.set(ControlMode.PercentOutput, 0.4);
       
   }
 
    public void releaseCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, -0.25);
+      cargoMotor.set(ControlMode.PercentOutput, -0.4);
   }
 
   public void stopCargo()
@@ -110,7 +111,7 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   public boolean hasCargo()
   {
-      if(distanceSensor.getVoltage() > 0.8)  //Any object that is 7cm or closer will produce 0.8V or more
+      if(distanceSensor.getVoltage() > 0.9)  //Any object that is 7cm or closer will produce 0.8V or more
         return true;
       else
         return false;
@@ -194,8 +195,8 @@ public class Intakes extends Subsystem implements ISubsystem{
 
         System.out.println("Checking Cargo Motor");
         Timer.delay(0.5);
-        TalonChecker checker = new TalonChecker("Cargo Talon", cargoMotor, false);
-        sucess = checker.runTest(5); //TODO
+        //TalonChecker checker = new TalonChecker("Cargo Talon", cargoMotor, false);
+        //sucess = checker.runTest(5); //TODO
         Timer.delay(0.2);
 
         if(sucess)

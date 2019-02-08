@@ -8,8 +8,7 @@
 package frc.robot.controllers;
 
 import frc.robot.controllers.Utility.*;
-
-import frc.robot.commands.*;
+import frc.robot.commands.Intakes.CommandGroups.*;
 import frc.robot.commands.Intakes.InstantCommands.*;
 
 /**
@@ -57,6 +56,10 @@ public class OI {
       operatorController.bButton.whenPressed(new GrabHatch());
       operatorController.xButton.whenPressed(new ExtendHatchIntake());
       operatorController.yButton.whenPressed(new RetractHatchIntake());  
+      operatorController.rightBumper.whenPressed(new IntakeCargoComp());
+      operatorController.leftBumper.whenPressed(new OuttakeBallComp());
+      operatorController.startButton.whenPressed(new DropCargoIntake());
+      operatorController.selectButton.whenPressed(new BringUpCargoIntake());
 
     }
 
