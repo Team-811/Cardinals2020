@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
@@ -16,12 +18,25 @@ public class Vision extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  private DatagramSocket socket;
+  private boolean running;
+  private byte[] buf = new byte(buf, buf.length);
+
   public Vision()
   {
-
+    // port 5800-5810
+    socket = new DatagramSocket(5800);
   }
 
- 
+  public void onLoop() {
+    DatagramPacket packet = new DatagramPacket(buf, buf.length);
+    socket.receive(packet);
+
+    InetAdress address = packet.getAddress();
+    int port = packet.getPort();
+    packet = new DatagramPacket(buf, buf.length, address, port);
+    
+  }
 
 
 
@@ -60,5 +75,6 @@ public class Vision extends Subsystem implements ISubsystem{
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+
   }
 }
