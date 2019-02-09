@@ -15,5 +15,8 @@ public class Constants
     //TODO
     public static final double wheelbase = 0;
     public static final double trackScrubFactor = 1;
+    public static final double X_DIR_OFFSET_IN_METERS = .18;
+    public static final double Y_DIR_OFFSET_IN_METERS = 0;
+    public static final double INITIAL_Z_AXIS_ROTATION = 0;
 
 }

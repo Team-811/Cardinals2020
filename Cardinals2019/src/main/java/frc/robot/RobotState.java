@@ -1,4 +1,4 @@
-/*
+
 package frc.robot;
 
 import frc.robot.subsystems.Drivetrain;
@@ -22,8 +22,8 @@ public class RobotState {
     private static final int kObservationBufferSize = 100;
 
     private static final Pose2d kVehicleToCamera = new Pose2d(
-            new Translation2d(Constants.kLidarXOffset, Constants.kLidarYOffset), Rotation2d.fromDegrees(Constants
-            .kLidarYawAngleDegrees));
+            new Translation2d(Constants.X_DIR_OFFSET_IN_METERS, Constants.Y_DIR_OFFSET_IN_METERS), Rotation2d.fromDegrees(Constants
+            .INITIAL_Z_AXIS_ROTATION));
 
     // FPGATimestamp -> RigidTransform2d or Rotation2d
     private InterpolatingTreeMap<InterpolatingDouble, Pose2d> field_to_vehicle_;
@@ -39,11 +39,11 @@ public class RobotState {
      * Resets the field to robot transform (robot's position on the field)
      */
 
-     /*
+     
     public synchronized void reset(double start_time, Pose2d initial_field_to_vehicle) {
         field_to_vehicle_ = new InterpolatingTreeMap<>(kObservationBufferSize);
         field_to_vehicle_.put(new InterpolatingDouble(start_time), initial_field_to_vehicle);
-        Drive.getInstance().setHeading(initial_field_to_vehicle.getRotation());
+        //Drive.getInstance().setHeading(initial_field_to_vehicle.getRotation());
         vehicle_velocity_predicted_ = Twist2d.identity();
         vehicle_velocity_measured_ = Twist2d.identity();
         distance_driven_ = 0.0;
@@ -58,7 +58,7 @@ public class RobotState {
      * to fill in the gaps.
      */
 
-     /*
+     
     public synchronized Pose2d getFieldToVehicle(double timestamp) {
         return field_to_vehicle_.getInterpolated(new InterpolatingDouble(timestamp));
     }
@@ -89,10 +89,10 @@ public class RobotState {
     }
 
     public synchronized Twist2d generateOdometryFromSensors(double left_encoder_delta_distance, double
-            right_encoder_delta_distance, Rotation2d current_gyro_angle) {
+            right_encoder_delta_distance, double strafe_encoder_delta_distance, Rotation2d current_gyro_angle) {
         final Pose2d last_measurement = getLatestFieldToVehicle().getValue();
         final Twist2d delta = Kinematics.forwardKinematicsMecanum(last_measurement.getRotation(),
-                left_encoder_delta_distance, right_encoder_delta_distance, strafe_encoder_delta_distance
+                left_encoder_delta_distance, right_encoder_delta_distance, strafe_encoder_delta_distance,
                 current_gyro_angle);
         distance_driven_ += delta.dx; //do we care about dy here?
         return delta;
@@ -118,4 +118,3 @@ public class RobotState {
         SmartDashboard.putNumber("Robot Linear Velocity", vehicle_velocity_measured_.dx);
     }
 }
-*/
