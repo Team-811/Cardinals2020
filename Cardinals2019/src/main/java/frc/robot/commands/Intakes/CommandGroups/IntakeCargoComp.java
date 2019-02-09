@@ -38,9 +38,9 @@ public class IntakeCargoComp extends CommandGroup {
     addSequential(new GrabHatch());
     addSequential(new TimerCommand(0.1));
 
-    //Drop cargo intake
-    addSequential(new DropCargoIntake());
-    addSequential(new TimerCommand(0.2));
+    // //Drop cargo intake
+    // addSequential(new DropCargoIntake());
+    // addSequential(new TimerCommand(0.2));
 
     //Intake ball with sensor
     addSequential(new GrabCargoWithSensor());

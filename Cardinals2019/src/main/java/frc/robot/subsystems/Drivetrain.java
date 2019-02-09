@@ -119,8 +119,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private void configureTalons()
   {
     topLeftMotor.setInverted(false);
-    topRightMotor.setInverted(true);
-    bottomLeftMotor.setInverted(true);
+    topRightMotor.setInverted(false);
+    bottomLeftMotor.setInverted(false);
     bottomRightMotor.setInverted(true);
 
     topLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);

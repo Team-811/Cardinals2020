@@ -47,18 +47,19 @@ public class Intakes extends Subsystem implements ISubsystem{
 
       cargoPiston = new DoubleSolenoid(RobotMap.INTAKE_CARGO_PISTON_FORWARD, RobotMap.INTAKE_CARGO_PISTON_REVERSE);
       cargoMotor = new TalonSRX(RobotMap.INTAKE_CARGO_MOTOR);
+      cargoMotor.setInverted(true);
       distanceSensor = new AnalogInput(RobotMap.INTAKE_DISTANCE_SENSOR);
   }
 
   //Hatch Intake Methods
   public void retractHatchIntake()
   {
-      retractPiston.set(true);
+      retractPiston.set(false);
   }
 
   public void extendHatchIntake()
   {
-      retractPiston.set(false);
+      retractPiston.set(true);
   }
 
    public void grabHatch()
@@ -95,13 +96,13 @@ public class Intakes extends Subsystem implements ISubsystem{
 
    public void intakeCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, 0.4);
+      cargoMotor.set(ControlMode.PercentOutput, 1);
       
   }
 
    public void releaseCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, -0.4);
+      cargoMotor.set(ControlMode.PercentOutput, -1);
   }
 
   public void stopCargo()
@@ -111,7 +112,7 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   public boolean hasCargo()
   {
-      if(distanceSensor.getVoltage() > 0.9)  //Any object that is 7cm or closer will produce 0.8V or more
+      if(distanceSensor.getVoltage() > 0.35)  //Any object that is 7cm or closer will produce 0.8V or more
         return true;
       else
         return false;

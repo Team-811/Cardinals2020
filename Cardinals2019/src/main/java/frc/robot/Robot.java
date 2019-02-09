@@ -47,6 +47,8 @@ public class Robot extends TimedRobot {
     led = new LED();
     vision = new Vision();
     controllers = new OI();
+
+    intakes.outputSmartdashboard();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);
@@ -122,6 +124,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
    // if (m_autonomousCommand != null) {
    //   m_autonomousCommand.cancel();
+   intakes.outputSmartdashboard();
     //}
   }
 

@@ -34,7 +34,7 @@ public class OuttakeBallComp extends CommandGroup {
     // arm.
 
     addSequential(new ReleaseCargo());
-    addSequential(new TimerCommand(5));
+    addSequential(new TimerCommand(2));
     addSequential(new StopCargo());
   }
 }
