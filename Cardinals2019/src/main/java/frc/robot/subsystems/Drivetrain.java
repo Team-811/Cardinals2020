@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -41,6 +43,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   private MecanumDrive drivetrain;
   private PIDController pid;
+
+  private Encoder strafeEncoder;
   
   private int kP;
   private int kI;
@@ -54,6 +58,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       topRightMotor = new TalonSRX(RobotMap.DRIVE_TOP_RIGHT_MOTOR);
       bottomLeftMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
+
+    strafeEncoder = new Encoder(RobotMap.DRIVE_STRAFE_ENCODER_ACHANNEL, RobotMap.DRIVE_STRAFE_ENCODER_BCHANNEL);
 
       configureTalons();
 
@@ -90,6 +96,16 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     return topRightMotor.getSelectedSensorPosition();
   }
 
+  public double getLeftEncoder()
+  {
+    return (getTopLeftEncoder() + getBottomLeftEncoder()) / 2;
+  }
+
+  public double getRightEncoder()
+  {
+    return (getTopRightEncoder() + getBottomRightEncoder()) / 2;
+  }
+
   public double getBottomLeftEncoder()
   {
     return bottomLeftMotor.getSelectedSensorPosition();
@@ -98,6 +114,11 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   public double getBottomRightEncoder()
   {
     return bottomRightMotor.getSelectedSensorPosition();
+  }
+
+  public double getStrafeEncoder()
+  {
+    return strafeEncoder.getDistance();
   }
 
   public double getGyroAngle()
