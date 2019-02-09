@@ -44,6 +44,7 @@ public class RobotMap {
   //Elevator
   public static final int ELEVATOR_MAIN     = 0;
   public static final int ELEVATOR_SLAVE    = 1;
+  public static final int ELEVATOR_BOTTOM_LIMIT_SWITCH = 1;
 
 
   // If you are using multiple modules, make sure to define both the port

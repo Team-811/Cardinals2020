@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -49,6 +50,7 @@ private volatile LiftState state = LiftState.Stationary;
 
 private TalonSRX elevatorLeader = new TalonSRX(RobotMap.ELEVATOR_MAIN);
 private TalonSRX elevatorSlave = new TalonSRX(RobotMap.ELEVATOR_SLAVE);
+private DigitalInput bottomLimitSwitch = new DigitalInput(RobotMap.ELEVATOR_BOTTOM_LIMIT_SWITCH);
 
 private double kP = 0.5; // .3
 private double kI = 0.0;
@@ -139,12 +141,12 @@ public void startMotionMagic(Positions pos) {
     //If the desired position is higher than the current, then the elevator must go up
     if (getEncoderPosition() > pos.getPosition()) {
         setState(LiftState.GoingUp);
-        configMotionMagic(CRUISE_VELOCITY_DOWN, CRUISE_ACCELERATION_DOWN);
+        configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
     
     //If the desired position is lower than the current, then the elevator must going down
     } else if (getEncoderPosition() < pos.getPosition()) {          
         setState(LiftState.GoingDown);
-        configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
+        configMotionMagic(CRUISE_VELOCITY_DOWN, CRUISE_ACCELERATION_DOWN);
     }
 
     elevatorLeader.set(ControlMode.MotionMagic, pos.getPosition());
@@ -201,9 +203,10 @@ private void checkIfToppedOut() {
 }
 
 private void checkIfZeroedOut() {
-    if (getEncoderPosition() <= Positions.Intake.getPosition() && getState() != LiftState.GoingUp) {
+    if (bottomLimitSwitch.get()) {
         setState(LiftState.BottomedOut);
         setPosition(Positions.Intake);
+        elevatorLeader.setSelectedSensorPosition(0);
         stopElevator();
     }
 }
