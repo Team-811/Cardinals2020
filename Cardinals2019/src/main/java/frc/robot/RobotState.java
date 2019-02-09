@@ -1,3 +1,4 @@
+/*
 package frc.robot;
 
 import frc.robot.subsystems.Drivetrain;
@@ -37,6 +38,8 @@ public class RobotState {
     /**
      * Resets the field to robot transform (robot's position on the field)
      */
+
+     /*
     public synchronized void reset(double start_time, Pose2d initial_field_to_vehicle) {
         field_to_vehicle_ = new InterpolatingTreeMap<>(kObservationBufferSize);
         field_to_vehicle_.put(new InterpolatingDouble(start_time), initial_field_to_vehicle);
@@ -54,6 +57,8 @@ public class RobotState {
      * Returns the robot's position on the field at a certain time. Linearly interpolates between stored robot positions
      * to fill in the gaps.
      */
+
+     /*
     public synchronized Pose2d getFieldToVehicle(double timestamp) {
         return field_to_vehicle_.getInterpolated(new InterpolatingDouble(timestamp));
     }
@@ -113,3 +118,4 @@ public class RobotState {
         SmartDashboard.putNumber("Robot Linear Velocity", vehicle_velocity_measured_.dx);
     }
 }
+*/

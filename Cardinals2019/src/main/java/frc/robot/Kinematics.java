@@ -4,6 +4,8 @@ import frc.robot.lib.geometry.Pose2d;
 import frc.robot.lib.geometry.Rotation2d;
 import frc.robot.lib.geometry.Twist2d;
 
+import frc.robot.Constants;
+
 /**
  * Provides forward and inverse kinematics equations for the robot modeling the wheelbase as a differential drive (with
  * a corrective factor to account for skidding).
@@ -17,13 +19,13 @@ public class Kinematics {
      * motion)
      */
     public static Twist2d forwardKinematicsDifferential(double left_wheel_delta, double right_wheel_delta) {
-        double delta_rotation = (right_wheel_delta - left_wheel_delta) / (Constants.kDriveWheelTrackWidthInches * Constants.kTrackScrubFactor);
+        double delta_rotation = (right_wheel_delta - left_wheel_delta) / (Constants.wheelbase * Constants.trackScrubFactor);
         return forwardKinematicsDifferential(left_wheel_delta, right_wheel_delta, delta_rotation);
     }
 
     //Take the diagonal wheels so strafing does not impact rotation calculation
     public static Twist2d forwardKinematicsMecanum(double left_top_wheel_delta, double right_bottom_wheel_delta, double strafe_wheel_delta) {
-        double delta_rotation = (right_bottom_wheel_delta - left_top_wheel_delta) / (Constants.kDriveWheelTrackWidthInches * Constants.kTrackScrubFactor);
+        double delta_rotation = (right_bottom_wheel_delta - left_top_wheel_delta) / (Constants.wheelbase * Constants.trackScrubFactor);
         return forwardKinematicsMecanum(left_top_wheel_delta, right_bottom_wheel_delta, strafe_wheel_delta, delta_rotation);
     }
 

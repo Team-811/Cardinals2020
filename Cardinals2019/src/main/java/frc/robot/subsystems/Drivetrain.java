@@ -7,22 +7,26 @@
 
 package frc.robot.subsystems;
 
-
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.lib.MecanumDrive;
 import frc.robot.lib.Output;
-//import frc.robot.lib.TalonChecker;
+import frc.robot.lib.PIDController;
 import frc.robot.commands.Drivetrain.*;
 
+import javax.lang.model.util.ElementScanner6;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.AHRSProtocol;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
- * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
+ * Add your docs here.
  */
 public class Drivetrain extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
@@ -36,6 +40,13 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private AHRS gyro;
 
   private MecanumDrive drivetrain;
+  private PIDController pid;
+  
+  private int kP;
+  private int kI;
+  private int kD;
+  private int kF;
+  private int kTimeoutMs;
 
   public Drivetrain()
   {
@@ -44,11 +55,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       bottomLeftMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
-      //topRightMotor.setInverted(false);
-      bottomRightMotor.setInverted(true);
+      configureTalons();
 
-
-      gyro = new AHRS(RobotMap.GYRO_PORT);
+      gyro = new AHRS(SerialPort.Port.kMXP);
       gyro.reset();
 
       drivetrain = new MecanumDrive();
@@ -71,6 +80,82 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   }
 
+  public double getTopLeftEncoder()
+  {
+    return topLeftMotor.getSelectedSensorPosition();
+  }
+
+  public double getTopRightEncoder()
+  {
+    return topRightMotor.getSelectedSensorPosition();
+  }
+
+  public double getBottomLeftEncoder()
+  {
+    return bottomLeftMotor.getSelectedSensorPosition();
+  }
+
+  public double getBottomRightEncoder()
+  {
+    return bottomRightMotor.getSelectedSensorPosition();
+  }
+
+  public double getGyroAngle()
+  {
+      return gyro.getAngle();
+  }
+
+  public double getInvertedGyroAngle()
+  {
+      return -gyro.getAngle();
+  }
+
+
+
+
+
+
+
+  private void configureTalons()
+  {
+    topLeftMotor.setInverted(false);
+    topRightMotor.setInverted(true);
+    bottomLeftMotor.setInverted(true);
+    bottomRightMotor.setInverted(true);
+
+    topLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    topRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    bottomLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    bottomRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    topLeftMotor.setSensorPhase(true);
+    topRightMotor.setSensorPhase(true);
+    bottomLeftMotor.setSensorPhase(true);
+    bottomRightMotor.setSensorPhase(true);
+
+    bottomLeftMotor.setSelectedSensorPosition(0);
+    bottomRightMotor.setSelectedSensorPosition(0);
+
+    bottomLeftMotor.configNominalOutputForward(0);
+    bottomLeftMotor.configNominalOutputReverse(0);
+    bottomLeftMotor.configPeakOutputForward(1);
+    bottomLeftMotor.configPeakOutputReverse(-1);
+  }
+
+
+  public void zeroEncoders()
+  {
+    topLeftMotor.setSelectedSensorPosition(0);
+    topRightMotor.setSelectedSensorPosition(0);
+    bottomRightMotor.setSelectedSensorPosition(0);
+    bottomRightMotor.setSelectedSensorPosition(0);
+  }
+
+  public void zeroGyro()
+  {
+      gyro.zeroYaw();
+  }
+
 
   @Override
   public void outputSmartdashboard() 
@@ -81,13 +166,20 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   @Override
   public void zeroSensors() 
   {
-    
+    zeroEncoders();
+    zeroGyro();
   }
 
   @Override
   public void resetSubsystem() 
   {
-    
+    topLeftMotor.set(ControlMode.PercentOutput, 0);
+    topRightMotor.set(ControlMode.PercentOutput, 0);
+    bottomLeftMotor.set(ControlMode.PercentOutput, 0);
+    bottomRightMotor.set(ControlMode.PercentOutput, 0);
+
+    zeroSensors();
+    configureTalons();
   }
 
   @Override
@@ -98,82 +190,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   @Override
   public void testSubsystem() {
-    boolean sucess = true;
-
-    Timer delay = new Timer();
-    System.out.println("///////////////////////////////////////////////////");
-    System.out.println("***************Beginning Drivetrain Test***************");
-    Timer.delay(0.2);
-
-
-    //Test top left wheel
-    System.out.println("Testing Top Left Wheel");
-    Timer.delay(0.5);
-    //TalonChecker checker = new TalonChecker("Top Left Wheel Talon", topLeftMotor, false);
-    //sucess = checker.runTest(5, 0); //TODO
-    Timer.delay(0.2);
-
-    if(!sucess)
-    {
-        System.out.println("***************Error in Top Left Wheel***************");
-        return;
-    }
-
-    //Test top right wheel
-    System.out.println("Testing Top Right Wheel");
-    Timer.delay(0.5);
-    //checker = new TalonChecker("Top Right Wheel Talon", topRightMotor, false);
-    //sucess = checker.runTest(5, 0); //TODO
-    Timer.delay(0.2);
-
-    if(!sucess)
-    {
-        System.out.println("***************Error in Top Right Wheel***************");
-        return;
-    }
-
-    //Test bottom left wheel
-    System.out.println("Testing Bottom Left Wheel");
-    Timer.delay(0.5);
-    //checker = new TalonChecker("Bottom Left Wheel Talon", bottomLeftMotor, false);
-    //sucess = checker.runTest(5, 0); //TODO
-    Timer.delay(0.2);
-
-    if(!sucess)
-    {
-        System.out.println("***************Error in Bottom Left Wheel***************");
-        return;
-    }
-
-    //Test bottom right wheel
-    System.out.println("Testing Bottom Right Motor");
-    Timer.delay(0.5);
-    //checker = new TalonChecker("Cargo Talon", bottomRightMotor, false);
-    //sucess = checker.runTest(5, 0); //TODO
-    Timer.delay(0.2);
-
-    if(!sucess)
-    {
-        System.out.println("***************Error in Bottom Right Wheel***************");
-        return;
-    }
-
-    //Test Gyro Presence
-    System.out.println("Testing Gyro Presence");
-    Timer.delay(0.5);
-    sucess = gyro.isConnected();
-    Timer.delay(0.2);
-
-    if(!sucess)
-    {
-        System.out.println("***************Error in Gyro***************");
-        return;
-    }
-
-    if(sucess)
-        System.out.println("***************Everything in drivetrain is working***************");
-    else
-        System.out.println("***************Error in Drivetrain***************");
+    
   }
 
   @Override

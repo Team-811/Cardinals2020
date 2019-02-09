@@ -41,7 +41,7 @@ public class TalonChecker
         this.inverted = inverted;
 	}
 
-	//A test or a motor without an encoder
+	//A test for a motor without an encoder
 	public boolean runTest(double currentThreshold) {
 		// testingSpeedController.configForwardSoftLimitEnable(false, 20);
 		// testingSpeedController.configReverseSoftLimitEnable(false, 20);
@@ -78,6 +78,7 @@ public class TalonChecker
 
 	}
 
+	//A test for a motor with an encoder
 	public boolean runTest(double currentThreshold, double RPMThreshold) {
 		// testingSpeedController.configForwardSoftLimitEnable(false, 20);
 		// testingSpeedController.configReverseSoftLimitEnable(false, 20);
