@@ -73,10 +73,10 @@ public class MecanumDrive
         double m_quickStopAlpha = 0.1;
         double m_quickStopAccumulator = 0;
 
-        forwardValue = limit(forwardValue, 1);
+        forwardValue = handleLimits(forwardValue);
         forwardValue = handleDeadband(forwardValue, deadbandValue);
 
-        rotationValue = limit(rotationValue, 1);
+        rotationValue = handleLimits(rotationValue);
         rotationValue = handleDeadband(rotationValue, deadbandValue);
 
     double angularPower;
@@ -85,7 +85,7 @@ public class MecanumDrive
     if (isQuickTurn) {
       if (Math.abs(forwardValue) < m_quickStopThreshold) {
         m_quickStopAccumulator = (1 - m_quickStopAlpha) * m_quickStopAccumulator
-            + m_quickStopAlpha * limit(rotationValue, 1) * 2;
+            + m_quickStopAlpha * handleLimits(rotationValue) * 2;
       }
       overPower = true;
       angularPower = rotationValue;
@@ -206,22 +206,6 @@ public class MecanumDrive
 
     private double handleDeadband(double val, double deadband) {
         return (Math.abs(val) > Math.abs(deadband)) ? val : 0.0;
-    }
-
-    private double limit(double input, double limit)
-    {
-        if(input > limit )
-        {
-            return limit;
-        }
-        else if(input < -limit)
-        {
-            return -limit;
-        }
-        else
-        {
-            return input;
-        }
     }
 
     private double handleLimits(double input)

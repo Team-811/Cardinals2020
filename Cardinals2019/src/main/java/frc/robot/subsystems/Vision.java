@@ -61,11 +61,7 @@ public class Vision extends Subsystem implements ISubsystem{
     
   }
 
-  @Override
-  public void checkSubsystem()
-  {
-    
-  }
+
 
   @Override
   public void testSubsystem() {

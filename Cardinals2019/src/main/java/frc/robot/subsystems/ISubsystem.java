@@ -17,5 +17,4 @@ public interface ISubsystem
     public abstract void zeroSensors();
     public abstract void resetSubsystem();
     public abstract void testSubsystem();
-    public abstract void checkSubsystem();
 }

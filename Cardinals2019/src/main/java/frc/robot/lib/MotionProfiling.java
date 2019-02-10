@@ -11,6 +11,9 @@ import jaci.pathfinder.*;
 import jaci.pathfinder.Trajectory.Segment;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * This class contains the motion profiling controller.  It first loads and initializes trajectories based on waypoints.  If the 
@@ -70,9 +73,9 @@ public class MotionProfiling
     }
 
 
+    //Trajectory Methods
 
-
-    public void loadTrajectory(Waypoint[] path) {
+    public void loadTrajectory(Waypoint[] path, boolean reverse) {
         Trajectory.Config cfg = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH,
                 dt, maxVelocity, maxAcceleration, maxJerk);
 
@@ -88,9 +91,29 @@ public class MotionProfiling
             trajectory = Pathfinder.readFromCSV(trajectoryFile);
         }        
 
+        if(reverse)
+            trajectory = reversePath(trajectory);
+
         segmentIndex = 0;
         setInitialOdometry();
     }
+
+    public Trajectory reversePath(Trajectory original){
+        ArrayList<Segment> segments = new ArrayList<>(Arrays.asList(original.segments));
+        Collections.reverse(segments);
+
+        double distance = segments.get(0).position;
+
+        return new Trajectory(segments.stream()
+                .map(segment -> new Segment(segment.dt, segment.x, segment.y, distance - segment.position, -segment.velocity, -segment.acceleration, -segment.jerk, segment.heading))
+                .toArray(Segment[]::new));
+    }
+
+
+
+
+
+    //Ramsete Methods
 
      public Output getNextDriveSignal(boolean reverse, double leftEncoderMeters, double rightEncoderMeters, double gyroAngle, boolean inRadians){
 

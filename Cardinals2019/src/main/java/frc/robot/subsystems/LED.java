@@ -106,11 +106,6 @@ public class LED extends Subsystem implements ISubsystem{
     LEDPort.reset();
   }
 
-  @Override
-  public void checkSubsystem()
-  {
-    
-  }
 
   @Override
   public void testSubsystem() {

@@ -14,7 +14,15 @@ public class Constants
 {
     //TODO
     public static final double wheelbase = 0;
+    public static final double wheelDiameter = 0.1;
+    public static final double smallWheelDiameter = 0.1;
+    public static final double maxVelocity = 1;
+    public static final double maxAcceleration = 1;
+    public static final double maxJerk = 50;
     public static final double trackScrubFactor = 1;
+    public static final double ticksPerRotation = 1024;
+
+    //camera location
     public static final double X_DIR_OFFSET_IN_METERS = .18;
     public static final double Y_DIR_OFFSET_IN_METERS = 0;
     public static final double INITIAL_Z_AXIS_ROTATION = 0;

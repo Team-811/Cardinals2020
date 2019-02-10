@@ -93,7 +93,7 @@ public class RobotState {
         final Twist2d delta = Kinematics.forwardKinematicsMecanum(last_measurement.getRotation(),
                 left_encoder_delta_distance, right_encoder_delta_distance, strafe_encoder_delta_distance,
                 current_gyro_angle);
-        distance_driven_ += delta.dx; //do we care about dy here?
+        distance_driven_ += Math.sqrt(Math.pow(delta.dx, 2) + Math.pow(delta.dy, 2));
         return delta;
     }
 

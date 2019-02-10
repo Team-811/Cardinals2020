@@ -146,12 +146,6 @@ public class Intakes extends Subsystem implements ISubsystem{
   }
 
   @Override
-  public void checkSubsystem()
-  {
-        
-  }
-
-  @Override
   public void testSubsystem() 
   {
         boolean sucess = true;

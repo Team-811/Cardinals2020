@@ -61,10 +61,12 @@ private double kF = 0.1165 * 2; // 0.1165 * 2
 //Gear is 42:26 geared up
 //4096 ticks per rev
 //233 ticks per inch
-private static final int CRUISE_VELOCITY = 17600; // 1024
-private static final int CRUISE_ACCELERATION = 11000; // 1024
-private static final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); // 1024
-private static final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.6); // 1024
+private final int CRUISE_VELOCITY = 17600; // 1024
+private final int CRUISE_ACCELERATION = 11000; // 1024
+private final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); // 1024
+private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.6); // 1024
+
+private final int joyRate = 10;
 
 public enum Positions {
     //TODO
@@ -75,25 +77,29 @@ public enum Positions {
     Level2Cargo(75001),
     Level3Cargo(0),
     Top(75000);
-    private int position;
+    private double position;
 
-    Positions(int encPos) {
+    Positions(double encPos) {
         this.position = encPos;
     }
 
-    public int getPosition() {
+    public double getPosition() {
         return this.position;
     }
 }
 
-private Positions position = Positions.Intake;
+private double position = Positions.Intake.position;
 
-public Positions getPosition() {
+public double getDesiredPosition() {
     return position;
 }
 
-private void setPosition(Positions newPos) {
+private void setPosition(double newPos) {
     this.position = newPos;
+}
+
+public void setPositionWithJoy(double joy) {
+    setPosition(getDesiredPosition() + joy * 10);
 }
 
 private final int MOTION_MAGIC_TOLERANCE = 150;
@@ -130,26 +136,23 @@ public Elevator() {
 
 }
 
-
-
-
-public int getEncoderPosition() {
+public double getEncoderPosition() {
     return elevatorLeader.getSelectedSensorPosition(0);
 }
 
-public void startMotionMagic(Positions pos) { 
+public void startMotionMagic() { 
     //If the desired position is higher than the current, then the elevator must go up
-    if (getEncoderPosition() > pos.getPosition()) {
+    if (getEncoderPosition() > position) {
         setState(LiftState.GoingUp);
         configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
     
     //If the desired position is lower than the current, then the elevator must going down
-    } else if (getEncoderPosition() < pos.getPosition()) {          
+    } else if (getEncoderPosition() < position) {          
         setState(LiftState.GoingDown);
         configMotionMagic(CRUISE_VELOCITY_DOWN, CRUISE_ACCELERATION_DOWN);
     }
 
-    elevatorLeader.set(ControlMode.MotionMagic, pos.getPosition());
+    elevatorLeader.set(ControlMode.MotionMagic, position);
 }
 
 public void checkMotionMagicTermination(Positions pos) {
@@ -157,13 +160,16 @@ public void checkMotionMagicTermination(Positions pos) {
         if (getEncoderPosition() <= (MOTION_MAGIC_TOLERANCE * 2)) {
             state = LiftState.Stationary;
             stopElevator();
-            position = pos;
+            position = pos.getPosition();
         }
     } else if (Math.abs(pos.getPosition() - getEncoderPosition()) <= MOTION_MAGIC_TOLERANCE) {
         state = LiftState.Stationary;
         stopElevator();
-        position = pos;
+        position = pos.getPosition();
     }
+    checkIfToppedOut();
+    checkIfZeroedOut();
+
     SmartDashboard.putString("Desired elevator position enum", pos.toString());
     SmartDashboard.putNumber("Motion Magic set position", elevatorLeader.getClosedLoopTarget(0));
     SmartDashboard.putNumber("CTRError", elevatorLeader.getClosedLoopError(0));
@@ -175,29 +181,10 @@ public void stopElevator() {
     elevatorLeader.set(ControlMode.PercentOutput, 0.0);
 }
 
-public void directElevate(double pow) {
-    if (getState() == LiftState.BottomedOut && pow < 0.0) {
-        return;
-    }
-    if (getState() == LiftState.ToppedOut && pow > 0.0) {
-        return;
-    }
-    if (pow > 0.0) {
-        setState(LiftState.GoingUp);
-    }
-    if (pow < 0.0) {
-        setState(LiftState.GoingDown);
-    }
-    if (pow == 0.0) {
-        setState(LiftState.Stationary);
-    }
-    elevatorLeader.set(ControlMode.PercentOutput, pow);
-}
-
 private void checkIfToppedOut() {
     if (getEncoderPosition() >= Positions.Top.getPosition() && getState() != LiftState.GoingDown) {
         setState(LiftState.ToppedOut);
-        setPosition(Positions.Top);
+        setPosition(Positions.Top.position);
         stopElevator();
     }
 }
@@ -205,7 +192,7 @@ private void checkIfToppedOut() {
 private void checkIfZeroedOut() {
     if (bottomLimitSwitch.get()) {
         setState(LiftState.BottomedOut);
-        setPosition(Positions.Intake);
+        setPosition(Positions.Intake.position);
         elevatorLeader.setSelectedSensorPosition(0);
         stopElevator();
     }
@@ -266,11 +253,7 @@ public void updatePIDFFromDashboard() {
     elevatorLeader.set(ControlMode.PercentOutput, 0.0);
   }
 
-  @Override
-  public void checkSubsystem()
-  {
-    
-  }
+
 
   @Override
   public void testSubsystem() {

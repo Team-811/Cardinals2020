@@ -37,11 +37,7 @@ public class Climber extends Subsystem implements ISubsystem{
     
   }
 
-  @Override
-  public void checkSubsystem()
-  {
-    
-  }
+
 
   @Override
   public void testSubsystem() {

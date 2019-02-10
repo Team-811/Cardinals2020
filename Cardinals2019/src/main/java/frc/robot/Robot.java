@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -149,6 +150,25 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  @Override
+  public void testInit() {
+    //Initial Print
+    System.out.println("/////////////////////////////////////////////////////");
+    System.out.println("***********Robot has now entered test mode***********");
+    System.out.println("*****Warning: Robot will move durig this period*****");
+    System.out.println("*******Please move out of the way of the Robot*******");
+    System.out.println("/////////////////////////////////////////////////////");
+    Timer.delay(10);
+
+    //Run tests
+    drivetrain.testSubsystem();
+    elevator.testSubsystem();
+    intakes.testSubsystem();
+
+
+    
   }
 
 
