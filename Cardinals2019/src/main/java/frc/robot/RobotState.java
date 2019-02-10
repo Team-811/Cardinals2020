@@ -22,8 +22,7 @@ public class RobotState {
     private static final int kObservationBufferSize = 100;
 
     private static final Pose2d kVehicleToCamera = new Pose2d(
-            new Translation2d(Constants.X_DIR_OFFSET_IN_METERS, Constants.Y_DIR_OFFSET_IN_METERS), Rotation2d.fromDegrees(Constants
-            .INITIAL_Z_AXIS_ROTATION));
+            new Translation2d(Constants.X_DIR_OFFSET_IN_METERS, Constants.Y_DIR_OFFSET_IN_METERS), Rotation2d.fromDegrees(Constants.INITIAL_Z_AXIS_ROTATION));
 
     // FPGATimestamp -> RigidTransform2d or Rotation2d
     private InterpolatingTreeMap<InterpolatingDouble, Pose2d> field_to_vehicle_;

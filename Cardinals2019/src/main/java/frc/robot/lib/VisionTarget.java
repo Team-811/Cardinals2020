@@ -16,6 +16,7 @@ public class VisionTarget
     private int id;
     private double offCenter; //In meters
     private double distance; //In meters
+    private double angle; //In radians
 
     //Constructors
     public VisionTarget()
@@ -23,13 +24,15 @@ public class VisionTarget
         id = 0;
         offCenter = 0;
         distance = 0;
+        angle = 0;
     }
 
-    public VisionTarget(int targetID, double metersOffCenter, double metersDistance)
+    public VisionTarget(int targetID, double metersOffCenter, double metersDistance, double angleInRadians)
     {
         id = targetID;
         offCenter = metersOffCenter;
         distance = metersDistance;
+        angle = angleInRadians;
     }
 
 
@@ -50,6 +53,16 @@ public class VisionTarget
         return distance;
     }
 
+    public double getAngleInDegrees()
+    {
+        return Math.toDegrees(angle);
+    }
+
+    public double getAngleInRadians()
+    {
+        return angle;
+    }
+
     public void setID(int targetID)
     {
         id = targetID;
@@ -63,6 +76,16 @@ public class VisionTarget
     public void setDistance(double metersDistance)
     {
         distance = metersDistance;
+    }
+
+    public void setAngleFromDegrees(double degreesAngle)
+    {
+        angle =  Math.toRadians(degreesAngle);
+    }
+
+    public void setAngleFromRadians(double radiansAngle)
+    {
+        angle = radiansAngle;
     }
 
 

@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     vision = new Vision();
     controllers = new OI();
 
-    intakes.outputSmartdashboard();
+    updateSmartdashboard();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);
@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+      updateSmartdashboard();
   }
 
   /**
@@ -106,6 +107,8 @@ public class Robot extends TimedRobot {
     //if (m_autonomousCommand != null) {
     //m_autonomousCommand.start();
     //}
+
+    updateSmartdashboard();
   }
 
   /**
@@ -114,6 +117,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+
+    updateSmartdashboard();
   }
 
   @Override
@@ -124,8 +129,9 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
    // if (m_autonomousCommand != null) {
    //   m_autonomousCommand.cancel();
-   intakes.outputSmartdashboard();
     //}
+
+      updateSmartdashboard();
   }
 
   /**
@@ -135,7 +141,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-    intakes.outputSmartdashboard();
+    updateSmartdashboard();
   }
 
   /**
@@ -144,6 +150,26 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
+
+  private void updateSmartdashboard()
+  {
+      drivetrain.outputSmartdashboard();
+      elevator.outputSmartdashboard();
+      intakes.outputSmartdashboard();
+      led.outputSmartdashboard();
+      vision.outputSmartdashboard();
+  }
+
+
+
+
+
+
+
+
+
+
 
   public class RunNetwork implements Runnable
   {
