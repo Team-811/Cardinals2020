@@ -12,12 +12,12 @@ package frc.robot.lib;
  */
 public class UnitConverter 
 {
-    public double metersPerSecondToFeetPerSecond(double metersPerSecond)
+    public static double metersPerSecondToFeetPerSecond(double metersPerSecond)
     {
         return metersPerSecond * 3.281;
     }
 
-    public double feetPerSecondToMetersPerSecond(double feetPerSecond)
+    public static double feetPerSecondToMetersPerSecond(double feetPerSecond)
     {
         return feetPerSecond / 3.281;
     }
@@ -26,52 +26,52 @@ public class UnitConverter
 
     //A talon unit is 1 tick per 100ms
 
-    public double talonUnitsToMetersPerSecond(double talonUnits, double wheelDiameterInMeters, double EncoderTicksPerRotation)
+    public static double talonUnitsToMetersPerSecond(double talonUnits, double wheelDiameterInMeters, double EncoderTicksPerRotation)
     {
         return talonUnits * 10 / EncoderTicksPerRotation * (Math.PI * wheelDiameterInMeters);
     }
 
-    public double metersPerSecondToTalonUnits(double metersPerSecond, double wheelDiameterInMeters, double EncoderTicksPerRotation)
+    public static double metersPerSecondToTalonUnits(double metersPerSecond, double wheelDiameterInMeters, double EncoderTicksPerRotation)
     {
         return metersPerSecond / 10 * EncoderTicksPerRotation / (Math.PI * wheelDiameterInMeters);
     }
 
-    public double talonUnitsToRotationsPerSecond(double talonUnits, double EncoderTicksPerRotation)
+    public static double talonUnitsToRotationsPerSecond(double talonUnits, double EncoderTicksPerRotation)
     {
         return talonUnits * 10 / EncoderTicksPerRotation;
     }
 
-    public double rotationsPerSecondToTalonUnits(double rotations, double EncoderTicksPerRotation)
+    public static double rotationsPerSecondToTalonUnits(double rotations, double EncoderTicksPerRotation)
     {
         return rotations / 10 * EncoderTicksPerRotation;
     }
 
-    public double talonUnitsToRPM(double talonUnits, double EncoderTicksPerRotation)
+    public static double talonUnitsToRPM(double talonUnits, double EncoderTicksPerRotation)
     {
         return talonUnitsToRotationsPerSecond(talonUnits, EncoderTicksPerRotation) / 60;
     }   
 
-    public double RPMToTalonUnits(double talonUnits, double EncoderTicksPerRotation)
+    public static double RPMToTalonUnits(double talonUnits, double EncoderTicksPerRotation)
     {
         return rotationsPerSecondToTalonUnits(talonUnits, EncoderTicksPerRotation) * 60;
     }
 
-    public double ticksToMeters(double ticks, double EncoderTicksPerRotation, double wheelDiameterInMeters)
+    public static double ticksToMeters(double ticks, double EncoderTicksPerRotation, double wheelDiameterInMeters)
     {
         return ticks / EncoderTicksPerRotation * (Math.PI * wheelDiameterInMeters);
     }
 
-    public double metersToTicks(double meters, double EncoderTicksPerRotation, double wheelDiameterInMeters)
+    public static double metersToTicks(double meters, double EncoderTicksPerRotation, double wheelDiameterInMeters)
     {
         return meters * EncoderTicksPerRotation / (Math.PI * wheelDiameterInMeters);
     }
 
-    public double ticksToRotations(double ticks, double EncoderTicksPerRotation)
+    public static double ticksToRotations(double ticks, double EncoderTicksPerRotation)
     {
         return ticks / EncoderTicksPerRotation;
     }
 
-    public double rotationsToTicks(double meters, double EncoderTicksPerRotation)
+    public static double rotationsToTicks(double meters, double EncoderTicksPerRotation)
     {
         return meters * EncoderTicksPerRotation;
     }

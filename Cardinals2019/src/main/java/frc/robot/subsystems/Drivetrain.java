@@ -13,10 +13,14 @@ import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.lib.MecanumDrive;
+import frc.robot.lib.MotionProfiling;
 import frc.robot.lib.Output;
 import frc.robot.lib.PIDController;
+import frc.robot.lib.UnitConverter;
+import jaci.pathfinder.Waypoint;
 import frc.robot.commands.Drivetrain.*;
 
 import javax.lang.model.util.ElementScanner6;
@@ -43,6 +47,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   private MecanumDrive drivetrain;
   private PIDController pid;
+  private MotionProfiling motionProfile;
 
   private Encoder strafeEncoder;
   
@@ -59,7 +64,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       bottomLeftMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
-    strafeEncoder = new Encoder(RobotMap.DRIVE_STRAFE_ENCODER_ACHANNEL, RobotMap.DRIVE_STRAFE_ENCODER_BCHANNEL);
+      strafeEncoder = new Encoder(RobotMap.DRIVE_STRAFE_ENCODER_ACHANNEL, RobotMap.DRIVE_STRAFE_ENCODER_BCHANNEL);
 
       configureTalons();
 
@@ -67,6 +72,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       gyro.reset();
 
       drivetrain = new MecanumDrive();
+      motionProfile = new MotionProfiling(1, 1, 60, Constants.wheelbase);
 
       drivetrain.invertForwardBackward(true);
       drivetrain.invertStrafing(true);
@@ -84,6 +90,39 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
 
+  }
+
+  public void loadTrajectory(Waypoint[] path)
+  {
+      motionProfile.loadTrajectory(path);
+  }
+
+  public void followTrajectory(boolean reverse)
+  {
+
+    double leftEncoderMeters = encoderTicksToMeters(bottomLeftMotor.getSelectedSensorPosition(), wheelDiameter);
+    double rightEncoderMeters = encoderTicksToMeters(bottomRightMotor.getSelectedSensorPosition(), wheelDiameter);
+
+    Output driveOutput = motionProfile.getNextDriveSignal(reverse, topLeftMotor.getSelectedSensorPosition(), topRightMotor.getSelectedSensorPosition(), gyro.getAngle(), false);
+
+    double velocityLeft = metersPerSecondToUnitsPer100MS(driveOutput.getLeftValue(), wheelDiameter);
+    double velocityRight = metersPerSecondToUnitsPer100MS(driveOutput.getLeftValue(), wheelDiameter);
+
+    topLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    topRightMotor.set(ControlMode.Velocity, velocityRight);
+    bottomLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    bottomRightMotor.set(ControlMode.Velocity, velocityRight);
+  }
+
+  public void setVelocity(double velocityInMetersPerSec)
+  {
+    double velocityLeft = metersPerSecondToUnitsPer100MS(velocityInMetersPerSec, wheelDiameter);
+    double velocityRight = metersPerSecondToUnitsPer100MS(velocityInMetersPerSec, wheelDiameter);
+
+    topLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    topRightMotor.set(ControlMode.Velocity, velocityRight);
+    bottomLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    bottomRightMotor.set(ControlMode.Velocity, velocityRight);
   }
 
   public double getTopLeftEncoder()
