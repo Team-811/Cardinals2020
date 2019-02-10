@@ -8,6 +8,7 @@
 package frc.robot.commands.LED;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
@@ -20,13 +21,13 @@ public class BlueYellowSnake extends InstantCommand {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.LED);
+    requires(Robot.led);
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.LED.setLEDs(6);
+    Robot.led.setLEDs(6);
     }
   
   }

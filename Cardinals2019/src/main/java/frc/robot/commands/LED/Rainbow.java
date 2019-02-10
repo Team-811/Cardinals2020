@@ -8,25 +8,26 @@
 package frc.robot.commands.LED;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class RainbowDotTrail extends InstantCommand {
+public class Rainbow extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public RainbowDotTrail() {
+  public Rainbow() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.LED);
+    requires(Robot.led);
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.LED.setLEDs(2);
+    Robot.led.setLEDs(2);
   }
 
 }

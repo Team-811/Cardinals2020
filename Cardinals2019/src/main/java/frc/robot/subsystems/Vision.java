@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.DatagramPacket;
 
 /**
@@ -32,7 +33,7 @@ public class Vision extends Subsystem implements ISubsystem{
     DatagramPacket packet = new DatagramPacket(buf, buf.length);
     socket.receive(packet);
 
-    InetAdress address = packet.getAddress();
+    InetAddress address = packet.getAddress();
     int port = packet.getPort();
     packet = new DatagramPacket(buf, buf.length, address, port);
     

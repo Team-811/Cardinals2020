@@ -26,7 +26,7 @@ public class LED extends Subsystem implements ISubsystem{
 
   public void setLEDs(int preset)
   {
-=   switch(preset)
+      switch(preset)
       {
         //RainbowDotTrail
         case 1:
@@ -103,7 +103,7 @@ public class LED extends Subsystem implements ISubsystem{
   @Override
   public void resetSubsystem() 
   {
-    
+    LEDPort.reset();
   }
 
   @Override
@@ -114,7 +114,6 @@ public class LED extends Subsystem implements ISubsystem{
 
   @Override
   public void testSubsystem() {
-    
   }
 
   @Override
