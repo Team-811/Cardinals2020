@@ -23,7 +23,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  This subsystem deals with the
+ * linear lift part of the robot.  The linear lift contains two motors for lifting, an encoder to track the position, and a 
+ * limit switch at the bottom to stop the elevator and zero the encoder.  To control the elevator, the motors use motion magic
+ * to do on the fly motion profiling.  The joystick control will just change the desired position of the elevator and the 
+ * motion magic will move the evelvator to that postion.
  */
 
 

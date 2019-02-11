@@ -31,7 +31,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
- * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  This subsystem deals with the 
+ * mecanum drivetrain.  The drivetrain includes 4 motors with encoders on each, an encoder on a dead wheel to track strafing, and 
+ * a gyro to measure the angle of the robot.  For controlling the subsystem, there are methods that do field oriented driving with
+ * gyro correction for joystick control, PID loops for the vision, and Motion Profiling for auto driving.
  */
 public class Drivetrain extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
