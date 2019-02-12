@@ -165,7 +165,7 @@ public void stopElevator() {
     elevatorLeader.set(ControlMode.PercentOutput, 0.0);
 }
 
-private void checkIfToppedOut() {
+private void checkIfToppedOut(){
     if (getEncoderPosition() >= Positions.Top.getPosition() && getState() != LiftState.GoingDown) {
         setState(LiftState.ToppedOut);
         setPosition(Positions.Top.position);
