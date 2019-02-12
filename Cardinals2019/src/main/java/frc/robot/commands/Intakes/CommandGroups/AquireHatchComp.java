@@ -10,6 +10,7 @@ package frc.robot.commands.Intakes.CommandGroups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Utility.*;
 import frc.robot.commands.Intakes.InstantCommands.*;
+import frc.robot.commands.LED.*;
 
 public class AquireHatchComp extends CommandGroup {
   /**
@@ -33,11 +34,13 @@ public class AquireHatchComp extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
+    addSequential(new Confetti());
     addSequential(new ExtendHatchIntake());
     addSequential(new ReleaseHatch());
     addSequential(new TimerCommand(0.2));
     addSequential(new GrabHatch());
     addSequential(new TimerCommand(0.2));
     addSequential(new RetractHatchIntake());
+    addSequential(new BGFlame());
   }
 }

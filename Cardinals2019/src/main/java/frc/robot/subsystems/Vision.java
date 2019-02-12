@@ -9,15 +9,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.DatagramPacket;
-
-import java.util.Arrays;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
  */
-public class Vision extends Subsystem implements ISubsystem{
+public class Vision extends Subsystem implements ISubsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -26,7 +23,6 @@ public class Vision extends Subsystem implements ISubsystem{
 
   // Network temporary variables
   private DatagramSocket socket;
-  private boolean running;
   private byte[] buf = new byte[28];
   private String[] data = new String[4];
 
@@ -36,8 +32,7 @@ public class Vision extends Subsystem implements ISubsystem{
   private double distance = -1;
   private double angle = -1;
 
-  public Vision()
-  {
+  public Vision() {
     try {
       // port 5800-5810
       socket = new DatagramSocket(PORT);
@@ -82,20 +77,17 @@ public class Vision extends Subsystem implements ISubsystem{
   }
 
   @Override
-  public void outputSmartdashboard() 
-  {
+  public void outputSmartdashboard() {
     
   }
 
   @Override
-  public void zeroSensors() 
-  {
+  public void zeroSensors() {
     
   }
 
   @Override
-  public void resetSubsystem() 
-  {
+  public void resetSubsystem() {
     
   }
 

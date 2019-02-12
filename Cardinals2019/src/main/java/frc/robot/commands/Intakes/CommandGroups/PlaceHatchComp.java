@@ -9,9 +9,8 @@ package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Utility.*;
-import frc.robot.commands.Intakes.InstantCommands.ExtendHatchIntake;
-import frc.robot.commands.Intakes.InstantCommands.ReleaseHatch;
-import frc.robot.commands.Intakes.InstantCommands.RetractHatchIntake;
+import frc.robot.commands.Intakes.InstantCommands.*;
+import frc.robot.commands.LED.*;
 
 public class PlaceHatchComp extends CommandGroup {
   /**
@@ -40,6 +39,7 @@ public class PlaceHatchComp extends CommandGroup {
     addSequential(new ReleaseHatch());
     addSequential(new TimerCommand(0.2));
     addSequential(new RetractHatchIntake());
+    addSequential(new BGFlame());
 
   }
 }
