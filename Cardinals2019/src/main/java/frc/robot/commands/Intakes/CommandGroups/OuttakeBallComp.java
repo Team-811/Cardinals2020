@@ -9,6 +9,7 @@ package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Intakes.InstantCommands.*;
+import frc.robot.commands.LED.*;
 import frc.robot.commands.Utility.*;
 
 public class OuttakeBallComp extends CommandGroup {
@@ -33,8 +34,10 @@ public class OuttakeBallComp extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
+    addSequential(new Rainbow());
     addSequential(new ReleaseCargo());
     addSequential(new TimerCommand(2));
     addSequential(new StopCargo());
+    addSequential(new BGFlame());
   }
 }

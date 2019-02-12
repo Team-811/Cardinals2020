@@ -8,6 +8,8 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Robot;
+import frc.robot.subsystems.Elevator.Positions;
 
 /**
  * Add your docs here.
@@ -20,13 +22,13 @@ public class GoToLevel2Hatch extends InstantCommand {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.Elevator);
+    requires(Robot.elevator);
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.Elevator.setDesiredPosition(Level2Hatch.getposition);
+    Robot.elevator.setPosition(Positions.Level2Hatch.getPosition());
   }
 
 }
