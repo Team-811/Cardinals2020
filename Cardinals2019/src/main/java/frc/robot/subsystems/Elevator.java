@@ -98,7 +98,7 @@ public double getDesiredPosition() {
     return position;
 }
 
-private void setPosition(double newPos) {
+public void setPosition(double newPos) {
     this.position = newPos;
 }
 
