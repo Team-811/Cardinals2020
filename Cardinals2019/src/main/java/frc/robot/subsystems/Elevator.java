@@ -50,7 +50,7 @@ private void setState(LiftState newState) {
     this.state = newState;
 }
 
-private volatile LiftState state = LiftState.Stationary;
+private LiftState state = LiftState.Stationary;
 
 private TalonSRX elevatorLeader = new TalonSRX(RobotMap.ELEVATOR_MAIN);
 private TalonSRX elevatorSlave = new TalonSRX(RobotMap.ELEVATOR_SLAVE);
@@ -159,26 +159,13 @@ public void startMotionMagic() {
     elevatorLeader.set(ControlMode.MotionMagic, position);
 }
 
-public void checkMotionMagicTermination(Positions pos) {
-    if (pos == Positions.Intake) {
-        if (getEncoderPosition() <= (MOTION_MAGIC_TOLERANCE * 2)) {
-            state = LiftState.Stationary;
-            stopElevator();
-            position = pos.getPosition();
-        }
-    } else if (Math.abs(pos.getPosition() - getEncoderPosition()) <= MOTION_MAGIC_TOLERANCE) {
+public void checkMotionMagicTermination() {
+    if (Math.abs(getDesiredPosition() - getEncoderPosition()) <= MOTION_MAGIC_TOLERANCE) {
         state = LiftState.Stationary;
         stopElevator();
-        position = pos.getPosition();
     }
     checkIfToppedOut();
     checkIfZeroedOut();
-
-    SmartDashboard.putString("Desired elevator position enum", pos.toString());
-    SmartDashboard.putNumber("Motion Magic set position", elevatorLeader.getClosedLoopTarget(0));
-    SmartDashboard.putNumber("CTRError", elevatorLeader.getClosedLoopError(0));
-    SmartDashboard.putNumber("Desired elevator position", pos.getPosition());
-    SmartDashboard.putNumber("Closed loop error", Math.abs(pos.getPosition() - getEncoderPosition()));
 }
 
 public void stopElevator() {
@@ -216,10 +203,16 @@ public void configPIDF(double kP, double kI, double kD, double kF) {
  * @param acceleration   cruise acceleration in sensorUnits per 100ms
  */
 
+private int previousCruiseVelocity;
+private int previousCruiseAcceleration;
 
 public void configMotionMagic(int cruiseVelocity, int acceleration) {
-    elevatorLeader.configMotionCruiseVelocity(cruiseVelocity, 0);
-    elevatorLeader.configMotionAcceleration(acceleration, 0);
+
+    if(previousCruiseVelocity != cruiseVelocity || previousCruiseAcceleration != acceleration)
+    {
+        elevatorLeader.configMotionCruiseVelocity(cruiseVelocity, 0);
+        elevatorLeader.configMotionAcceleration(acceleration, 0);
+    }
 }
 
 public void updatePIDFOnDashboard() {
@@ -243,6 +236,11 @@ public void updatePIDFFromDashboard() {
   public void outputSmartdashboard() 
   {
     updatePIDFOnDashboard();
+    SmartDashboard.putString("Desired elevator position enum", pos.toString());
+    SmartDashboard.putNumber("Motion Magic set position", elevatorLeader.getClosedLoopTarget(0));
+    SmartDashboard.putNumber("CTRError", elevatorLeader.getClosedLoopError(0));
+    SmartDashboard.putNumber("Desired elevator position", pos.getPosition());
+    SmartDashboard.putNumber("Closed loop error", Math.abs(pos.getPosition() - getEncoderPosition()));
   }
 
   @Override
@@ -265,14 +263,14 @@ public void updatePIDFFromDashboard() {
 
     Timer delay = new Timer();
     System.out.println("///////////////////////////////////////////////////");
-    System.out.println("***************Beginning Drivetrain Test***************");
+    System.out.println("***************Beginning Elevator Test***************");
     Timer.delay(0.2);
 
 
     //Test elevator motors
     System.out.println("Testing Elevator Motors and Encoders");
     Timer.delay(0.5);
-    TalonChecker checker = new TalonChecker("Top Left Wheel Talon", elevatorLeader, false);
+    TalonChecker checker = new TalonChecker("Elevator Talons", elevatorLeader, false);
     sucess = checker.runTest(5, 0); //TODO
     Timer.delay(0.2);
 
