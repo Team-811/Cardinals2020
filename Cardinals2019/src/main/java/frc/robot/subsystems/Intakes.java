@@ -22,12 +22,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.RobotMap;
-//import frc.robot.lib.TalonChecker;
 import frc.robot.lib.TalonChecker;
 
 /**
- * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  This subsystem deals with both
+ * intakes on the robot.  First the hatch intake uses two pneumatic pistons and a limit switch.  One pneumatic piston is used to 
+ * hold the hatch by extending in the center of the hatch.  The other piston is used to extend and retract the whole hatch 
+ * holding mechanism.  The limit switch is used to detect the presence of a hatch in the mechanism.  The cargo intake contains one
+ * pneumatic piston, a motor, and a distance sensor.  The pneumatic piston is used to drop down and raise the intake.  The motor
+ * is used to suck in and spit out the cargo.  The distance sensor is used  to detect the presence of a cargo.
  */
+
 public class Intakes extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.

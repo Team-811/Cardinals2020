@@ -36,6 +36,7 @@ import com.kauailabs.navx.frc.AHRS;
  * a gyro to measure the angle of the robot.  For controlling the subsystem, there are methods that do field oriented driving with
  * gyro correction for joystick control, PID loops for the vision, and Motion Profiling for auto driving.
  */
+
 public class Drivetrain extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.

@@ -26,12 +26,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  This subsystem deals with the
- * linear lift part of the robot.  The linear lift contains two motors for lifting, an encoder to track the position, and a 
+ * linear lift part of the robot.  The linear lift contains one motor for lifting, an encoder to track the position, and a 
  * limit switch at the bottom to stop the elevator and zero the encoder.  To control the elevator, the motors use motion magic
  * to do on the fly motion profiling.  The joystick control will just change the desired position of the elevator and the 
  * motion magic will move the evelvator to that postion.
  */
-
 
 public class Elevator extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
@@ -55,7 +54,6 @@ private void setState(LiftState newState) {
 private LiftState state = LiftState.Stationary;
 
 private TalonSRX elevatorLeader = new TalonSRX(RobotMap.ELEVATOR_MAIN);
-private TalonSRX elevatorSlave = new TalonSRX(RobotMap.ELEVATOR_SLAVE);
 private DigitalInput bottomLimitSwitch = new DigitalInput(RobotMap.ELEVATOR_BOTTOM_LIMIT_SWITCH);
 
 private double kP = 0.5; // .3
@@ -114,15 +112,10 @@ private static final double ELEVATOR_LOW_POW = -ELEVATOR_HI_POW;
 
 public Elevator() {
     //configure motors
-    this.elevatorSlave.follow(elevatorLeader);
     this.elevatorLeader.configPeakOutputForward(ELEVATOR_HI_POW, 0);
     this.elevatorLeader.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
     this.elevatorLeader.configNominalOutputForward(0.0, 0);
     this.elevatorLeader.configNominalOutputReverse(0.0, 0);
-    this.elevatorSlave.configPeakOutputForward(ELEVATOR_HI_POW, 0);
-    this.elevatorSlave.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
-    this.elevatorSlave.configNominalOutputForward(0.0, 0);
-    this.elevatorSlave.configNominalOutputReverse(0.0, 0);
 
     //Encoder
     this.elevatorLeader.setSensorPhase(true);
@@ -132,10 +125,8 @@ public Elevator() {
 
     //Neutral mode
     this.elevatorLeader.setNeutralMode(NeutralMode.Brake);
-    this.elevatorSlave.setNeutralMode(NeutralMode.Brake);
 
     this.elevatorLeader.setInverted(false);
-    this.elevatorSlave.setInverted(false);
 
     configPIDF(kP, kI, kD, kF);
     configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
@@ -183,7 +174,7 @@ private void checkIfToppedOut() {
 }
 
 private void checkIfZeroedOut() {
-    if (bottomLimitSwitch.get()) {
+    if (bottomLimitSwitch.get() && getState() != LiftState.GoingUp) {
         setState(LiftState.BottomedOut);
         setPosition(Positions.Intake.position);
         elevatorLeader.setSelectedSensorPosition(0);
@@ -239,7 +230,7 @@ public void updatePIDFFromDashboard() {
   {
     updatePIDFOnDashboard();
     SmartDashboard.putNumber("Desired elevator position", getDesiredPosition());
-    SmartDashboard.putNumber("CTRError", elevatorLeader.getClosedLoopError(0));
+    SmartDashboard.putNumber("Actual elevator position", getEncoderPosition());
     SmartDashboard.putNumber("Closed loop error", Math.abs(getDesiredPosition() - getEncoderPosition()));
   }
 
