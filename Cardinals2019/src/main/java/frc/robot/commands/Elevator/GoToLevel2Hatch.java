@@ -20,11 +20,13 @@ public class GoToLevel2Hatch extends InstantCommand {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    requires(Robot.Elevator);
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
+    Robot.Elevator.setDesiredPosition(Level2Hatch.getposition);
   }
 
 }
