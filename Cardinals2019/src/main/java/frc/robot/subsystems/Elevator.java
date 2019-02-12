@@ -67,8 +67,8 @@ private double kF = 0.1165 * 2; // 0.1165 * 2
 //max motor RPM: 4500
 //16:1 geared down
 //
-private final int CRUISE_VELOCITY = (int) UnitConverter.metersPerSecondToTalonUnits(0.888, 0.060325, 4096);
-private final int CRUISE_ACCELERATION = (int) (CRUISE_VELOCITY * 0.7);
+private final int CRUISE_VELOCITY = 1920;
+private final int CRUISE_ACCELERATION = 1600;
 private final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); // 1024
 private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.6); // 1024
 
