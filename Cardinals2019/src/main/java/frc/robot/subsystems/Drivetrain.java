@@ -48,8 +48,15 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private AHRS gyro;
 
   private MecanumDrive drivetrain;
-  private PIDController pid;
   private MotionProfiling motionProfile;
+
+  private PIDController pidDistance;
+  private PIDController pidStrafe;
+  private PIDController pidRotation;
+  private double distanceOffset;
+  private double strafeOffset;
+  private double rotationOffset;
+
 
   private Encoder strafeEncoder;
   
@@ -75,7 +82,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       drivetrain = new MecanumDrive();
       motionProfile = new MotionProfiling(Constants.maxVelocity, Constants.maxAcceleration, Constants.maxJerk, Constants.wheelbase);
-      pid = new PIDController(kP, kI, kD);
+      pidDistance = new PIDController(kP, kI, kD);
+      pidStrafe = new PIDController(kP, kI, kD);
+      pidRotation  = new PIDController(kP, kI, kD);
 
       drivetrain.invertForwardBackward(true);
       drivetrain.invertStrafing(true);
@@ -129,28 +138,31 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   }
 
-  public void rotateToAngle(double goalAngleInDegrees)
+  public void PIDControl()
   {
-      double rotation = pid.updatePID(getGyroAngle(), goalAngleInDegrees);
-      Output driveOutput = drivetrain.arcadeMecanumDrive(0, rotation, 0);
+      
+      //Pick any encoder to track istance
+      double distance = pidDistance.updatePID(getLeftEncoder(), distanceOffset);
+      //Strafe encoder to track strafing
+      double strafe = pidStrafe.updatePID(getStrafeEncoder(), strafeOffset);
+      //Gyro to track rotation
+      double rotation = pidRotation.updatePID(getGyroAngle(), rotationOffset);
+
+      Output driveOutput = drivetrain.arcadeMecanumDrive(distance, rotation, strafe);
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
 
-
   }
 
-  public void strafeToSetpoint(double goalInMeters)
+  public void setPIDGoals(double goalDistance, double goalStrafe, double goalAngleInDegrees)
   {
-    double rotation = pid.updatePID(getGyroAngle(), goalInMeters);
-    Output driveOutput = drivetrain.arcadeMecanumDrive(0, rotation, 0);
+      distanceOffset = getLeftEncoder() + goalDistance;
+      rotationOffset = getGyroAngle() + goalAngleInDegrees;
+      strafeOffset = getStrafeEncoder() + goalStrafe;
 
-    topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
-    topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
-    bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
-    bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
   }
 
 
@@ -189,6 +201,14 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   public double getStrafeEncoder()
   {
     return UnitConverter.ticksToMeters(strafeEncoder.getDistance(), Constants.ticksPerRotation, Constants.smallWheelDiameter);
+  }
+
+  public void zeroEncoders()
+  {
+    topLeftMotor.setSelectedSensorPosition(0);
+    topRightMotor.setSelectedSensorPosition(0);
+    bottomRightMotor.setSelectedSensorPosition(0);
+    bottomRightMotor.setSelectedSensorPosition(0);
   }
 
 
@@ -249,8 +269,10 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       return -gyro.getAngle();
   }
 
-
-
+  public void zeroGyro()
+  {
+      gyro.zeroYaw();
+  }
 
 
 
@@ -281,25 +303,18 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     bottomLeftMotor.configPeakOutputReverse(-1);
   }
 
-
-  public void zeroEncoders()
-  {
-    topLeftMotor.setSelectedSensorPosition(0);
-    topRightMotor.setSelectedSensorPosition(0);
-    bottomRightMotor.setSelectedSensorPosition(0);
-    bottomRightMotor.setSelectedSensorPosition(0);
-  }
-
-  public void zeroGyro()
-  {
-      gyro.zeroYaw();
-  }
+  
 
 
   @Override
   public void outputSmartdashboard() 
   {
-    
+      SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
+      SmartDashboard.putNumber("Top Left Encoder", getTopLeftEncoder());
+      SmartDashboard.putNumber("Top Right Encoder", getGyroAngle());
+      SmartDashboard.putNumber("Bottom Left Encoder", getGyroAngle());
+      SmartDashboard.putNumber("Bottom Right Encoder", getGyroAngle());
+      SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
   }
 
   @Override

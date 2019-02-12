@@ -23,6 +23,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.RobotMap;
 //import frc.robot.lib.TalonChecker;
+import frc.robot.lib.TalonChecker;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
@@ -128,12 +129,15 @@ public class Intakes extends Subsystem implements ISubsystem{
   public void outputSmartdashboard() 
   {
     SmartDashboard.putNumber("Intake Distance", distanceSensor.getVoltage());
+    SmartDashboard.putBoolean("Have Hatch", hasHatch());
+    SmartDashboard.putBoolean("Have Cargo", hasCargo());
+
   }
 
   @Override
   public void zeroSensors() 
   {
-      
+      //The sensors are not supposed to be reset on here
   }
 
   @Override
@@ -190,9 +194,29 @@ public class Intakes extends Subsystem implements ISubsystem{
 
         System.out.println("Checking Cargo Motor");
         Timer.delay(0.5);
-        //TalonChecker checker = new TalonChecker("Cargo Talon", cargoMotor, false);
-        //sucess = checker.runTest(5); //TODO
+        TalonChecker checker = new TalonChecker("Cargo Talon", cargoMotor, false);
+        sucess = checker.runTest(5);
         Timer.delay(0.2);
+
+        if(!sucess)
+        {
+        System.out.println("***************Error in Cargo Motor***************");
+        return;
+        }
+
+        System.out.println("Checking Distance Sensor");
+        Timer.delay(0.5);
+        if(distanceSensor.getVoltage() > 0)
+            sucess = true;
+        else
+            sucess = false;
+        Timer.delay(0.2);
+
+        if(!sucess)
+        {
+        System.out.println("***************Error in Distance Sensor***************");
+        return;
+        }
 
         if(sucess)
             System.out.println("***************Everything in intake is working***************");
