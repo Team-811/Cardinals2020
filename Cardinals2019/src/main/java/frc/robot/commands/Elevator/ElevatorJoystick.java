@@ -8,12 +8,13 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
 public class ElevatorJoystick extends Command {
   public ElevatorJoystick() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.Elevator);
+    requires(Robot.elevator);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +25,7 @@ public class ElevatorJoystick extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.Elevator.setJoystickPosition(operaterController.rightJoy.GetY());
+    Robot.elevator.setPositionWithJoy(Robot.controllers.operatorController.rightStick.getY());
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -11,6 +11,7 @@ package frc.robot.subsystems;
 import frc.robot.RobotMap;
 import frc.robot.lib.TalonChecker;
 import frc.robot.commands.Elevator.*;
+import frc.robot.lib.UnitConverter;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -62,12 +63,12 @@ private double kI = 0.0;
 private double kD = 4.0; // 4.0
 private double kF = 0.1165 * 2; // 0.1165 * 2
 
-//81.2 inches per/s
-//Gear is 42:26 geared up
-//4096 ticks per rev
-//233 ticks per inch
-private final int CRUISE_VELOCITY = 17600; // 1024
-private final int CRUISE_ACCELERATION = 11000; // 1024
+//max velocity of elevator: 0.888 m/s
+//max motor RPM: 4500
+//16:1 geared down
+//
+private final int CRUISE_VELOCITY = (int) UnitConverter.metersPerSecondToTalonUnits(0.888, 0.060325, 4096);
+private final int CRUISE_ACCELERATION = (int) (CRUISE_VELOCITY * 0.7);
 private final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); // 1024
 private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.6); // 1024
 
@@ -125,7 +126,7 @@ public Elevator() {
 
     //Encoder
     this.elevatorLeader.setSensorPhase(true);
-    this.elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    this.elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
     zeroSensors();
 
