@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
 import frc.robot.lib.TalonChecker;
+import frc.robot.commands.Elevator.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -236,11 +237,9 @@ public void updatePIDFFromDashboard() {
   public void outputSmartdashboard() 
   {
     updatePIDFOnDashboard();
-    SmartDashboard.putString("Desired elevator position enum", pos.toString());
-    SmartDashboard.putNumber("Motion Magic set position", elevatorLeader.getClosedLoopTarget(0));
+    SmartDashboard.putNumber("Desired elevator position", getDesiredPosition());
     SmartDashboard.putNumber("CTRError", elevatorLeader.getClosedLoopError(0));
-    SmartDashboard.putNumber("Desired elevator position", pos.getPosition());
-    SmartDashboard.putNumber("Closed loop error", Math.abs(pos.getPosition() - getEncoderPosition()));
+    SmartDashboard.putNumber("Closed loop error", Math.abs(getDesiredPosition() - getEncoderPosition()));
   }
 
   @Override
@@ -293,6 +292,9 @@ public void updatePIDFFromDashboard() {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+
+    setDefaultCommand(new MainElevator());
+    setDefaultCommand(new ElevatorJoystick());
   }
 }
 
