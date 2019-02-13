@@ -92,16 +92,17 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   }
 
 
-  public void DriveWithJoy(double leftJoy, double rightJoy, double strafe)
+  public void DriveWithJoy(double forward, double rotation, double strafe)
   {
       Output driveOutput;
 
       if(gyro.isConnected())
       {
-        driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, getInvertedGyroAngle());
+        double correction = gyroCorrection(Constants.maxVelocity * rotation);
+        driveOutput = drivetrain.fieldOrientedDrive(forward, strafe, rotation, getGyroAngle());
       }
       else
-        driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe);
+        driveOutput = drivetrain.arcadeMecanumDrive(forward, rotation, strafe);
       
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
@@ -164,6 +165,14 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       rotationOffset = getGyroAngle() + goalAngleInDegrees;
       strafeOffset = getStrafeEncoder() + goalStrafe;
 
+  }
+
+
+  private double gyroCorrectRate = 0.02;
+
+  public double gyroCorrection(double tangentialVelocity)
+  {
+      return ( (tangentialVelocity/(Constants.wheelbase/2)) - Math.toRadians(getAngularVelocity()) ) * gyroCorrectRate;
   }
 
 
@@ -260,14 +269,24 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   //Gyro angles
 
+  private int gyroInversion = 1;
+
   public double getGyroAngle()
   {
-      return gyro.getAngle();
+      return gyroInversion *gyro.getAngle();
   }
 
-  public double getInvertedGyroAngle()
+  public double getAngularVelocity()
   {
-      return -gyro.getAngle();
+      return gyroInversion * gyro.getRate();
+  }
+
+  public void invertGyro(boolean inverted)
+  {
+      if(inverted)
+        gyroInversion = -1;
+      else
+        gyroInversion = 1;
   }
 
   public void zeroGyro()
