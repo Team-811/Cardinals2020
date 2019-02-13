@@ -112,21 +112,21 @@ private static final double ELEVATOR_LOW_POW = -ELEVATOR_HI_POW;
 
 public Elevator() {
     //configure motors
-    this.elevatorLeader.configPeakOutputForward(ELEVATOR_HI_POW, 0);
-    this.elevatorLeader.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
-    this.elevatorLeader.configNominalOutputForward(0.0, 0);
-    this.elevatorLeader.configNominalOutputReverse(0.0, 0);
+    elevatorLeader.configPeakOutputForward(ELEVATOR_HI_POW, 0);
+    elevatorLeader.configPeakOutputReverse(ELEVATOR_LOW_POW, 0);
+    elevatorLeader.configNominalOutputForward(0.0, 0);
+    elevatorLeader.configNominalOutputReverse(0.0, 0);
 
     //Encoder
-    this.elevatorLeader.setSensorPhase(true);
-    this.elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+    elevatorLeader.setSensorPhase(true);
+    elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
     zeroSensors();
 
     //Neutral mode
-    this.elevatorLeader.setNeutralMode(NeutralMode.Brake);
+    elevatorLeader.setNeutralMode(NeutralMode.Brake);
 
-    this.elevatorLeader.setInverted(false);
+    elevatorLeader.setInverted(false);
 
     configPIDF(kP, kI, kD, kF);
     configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
@@ -136,6 +136,9 @@ public Elevator() {
 public double getEncoderPosition() {
     return elevatorLeader.getSelectedSensorPosition(0);
 }
+
+
+//Motion Magic Methods
 
 public void startMotionMagic() { 
     //If the desired position is higher than the current, then the elevator must go up
@@ -160,6 +163,16 @@ public void checkMotionMagicTermination() {
     checkIfToppedOut();
     checkIfZeroedOut();
 }
+
+
+
+//Direct Control
+
+public void directJoyControl(double joystick)
+{
+    elevatorLeader.set(ControlMode.PercentOutput, joystick);
+}
+
 
 public void stopElevator() {
     elevatorLeader.set(ControlMode.PercentOutput, 0.0);
