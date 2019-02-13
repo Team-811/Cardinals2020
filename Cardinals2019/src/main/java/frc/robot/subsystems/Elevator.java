@@ -298,8 +298,10 @@ public void updatePIDFFromDashboard() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
 
-    setDefaultCommand(new MainElevator());
-    setDefaultCommand(new ElevatorJoystick());
+    setDefaultCommand(new DirectElevator());
+
+    //setDefaultCommand(new MainElevator());
+    //setDefaultCommand(new ElevatorJoystick());
   }
 }
 
