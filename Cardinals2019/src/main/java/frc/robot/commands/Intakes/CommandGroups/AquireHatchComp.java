@@ -34,13 +34,19 @@ public class AquireHatchComp extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
+    //set command led
     addSequential(new Confetti());
+    //Ensure that cargo intake is not in the way in the beginning
+    addSequential(new BringUpCargoIntake());
+    addSequential(new TimerCommand(0.1));
+    //Sequence to grab hatch
     addSequential(new ExtendHatchIntake());
     addSequential(new ReleaseHatch());
     addSequential(new TimerCommand(0.2));
     addSequential(new GrabHatch());
     addSequential(new TimerCommand(0.2));
     addSequential(new RetractHatchIntake());
+    //set default led
     addSequential(new BGFlame());
   }
 }

@@ -8,6 +8,7 @@
 package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
 import frc.robot.commands.Intakes.InstantCommands.*;
 import frc.robot.commands.LED.*;
 import frc.robot.commands.Utility.TimerCommand;
@@ -35,19 +36,28 @@ public class IntakeCargoComp extends CommandGroup {
     // arm.
 
     // Set LEDs
-    addSequential(new BlueFlame());
+    addSequential(new Red());
 
     //Make sure that hatch intake is out of the way
     addSequential(new RetractHatchIntake());
-    addSequential(new GrabHatch());
+    addSequential(new ReleaseHatch());
     addSequential(new TimerCommand(0.1));
 
-    // //Drop cargo intake 
+    //Drop cargo intake 
     addSequential(new DropCargoIntake());
     addSequential(new TimerCommand(0.2));
 
+    //Extend Hatch intake to cradle the ball
+    addSequential(new GrabHatch());
+
     //Intake ball with sensor
     addSequential(new GrabCargoWithSensor());
+
+    if(Robot.intakes.hasCargo())
+    {
+      addSequential(new Green());
+      addSequential(new TimerCommand(2));
+    }
 
     // Set LEDs
     addSequential(new BGFlame());

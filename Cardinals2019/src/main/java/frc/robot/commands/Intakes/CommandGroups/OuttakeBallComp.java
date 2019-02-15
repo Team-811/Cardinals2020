@@ -35,7 +35,9 @@ public class OuttakeBallComp extends CommandGroup {
     // arm.
 
     addSequential(new Rainbow());
+    //Just to eensure that the intake is down even though it should be down anyway
     addSequential(new DropCargoIntake());
+    
     addSequential(new ReleaseCargo());
     addSequential(new TimerCommand(2));
     addSequential(new StopCargo());
