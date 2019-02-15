@@ -241,10 +241,11 @@ public void updatePIDFFromDashboard() {
   @Override
   public void outputSmartdashboard() 
   {
-    updatePIDFOnDashboard();
+    //updatePIDFOnDashboard();
     SmartDashboard.putNumber("Desired elevator position", getDesiredPosition());
     SmartDashboard.putNumber("Actual elevator position", getEncoderPosition());
     SmartDashboard.putNumber("Closed loop error", Math.abs(getDesiredPosition() - getEncoderPosition()));
+    SmartDashboard.putBoolean("Elevator Bottomed out", bottomLimitSwitch.get());
   }
 
   @Override
