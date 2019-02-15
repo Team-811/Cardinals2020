@@ -8,6 +8,7 @@
 package frc.robot.commands.LED;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
@@ -18,6 +19,8 @@ public class Green extends InstantCommand {
    */
   public Green() {
     super();
+    requires(Robot.led);
+
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -25,6 +28,7 @@ public class Green extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
+    Robot.led.setLEDs(15);
   }
 
 }

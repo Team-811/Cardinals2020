@@ -80,7 +80,14 @@ public class LED extends Subsystem implements ISubsystem{
         case 13:
           LEDPort.writeString("13");
           break;
-        
+        //Red
+        case 14:
+        LEDPort.writeString("14");
+        break;
+        //Green
+        case 15:
+          LEDPort.writeString("15");
+          break;
         
 
 
