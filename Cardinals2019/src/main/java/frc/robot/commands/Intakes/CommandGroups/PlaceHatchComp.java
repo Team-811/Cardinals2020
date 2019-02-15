@@ -34,6 +34,7 @@ public class PlaceHatchComp extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
+    addSequential(new RedYellowSnake());
     addSequential(new ExtendHatchIntake());
     addSequential(new TimerCommand(0.2));
     addSequential(new ReleaseHatch());
