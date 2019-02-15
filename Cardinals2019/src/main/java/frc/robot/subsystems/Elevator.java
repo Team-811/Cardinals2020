@@ -259,6 +259,7 @@ public void updatePIDFFromDashboard() {
     SmartDashboard.putNumber("Actual elevator position", getEncoderPosition());
     SmartDashboard.putNumber("Elevator Velocity", getEncoderVeloctiy());
     SmartDashboard.putNumber("Closed loop error", Math.abs(getDesiredPosition() - getEncoderPosition()));
+    SmartDashboard.putBoolean("Elevator Bottomed out", bottomLimitSwitch.get());
   }
 
   @Override

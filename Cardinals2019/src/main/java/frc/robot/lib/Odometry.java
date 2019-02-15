@@ -18,13 +18,9 @@ public class Odometry
     private double yCoordinate;
     private double theta; //in radians
 
-    private double initialXCoordinate;
-    private double initialYCoordinate;
-    private double initialTheta;
-
-    private double initialEncoderLeft;
-    private double initialEncoderRight;
-    private double initialGyroAngle;
+    private double prevEncoderLeft;
+    private double prevEncoderRight;
+    private double prevGyroAngle;
 
     //Default Constructor
     public Odometry()
@@ -32,10 +28,6 @@ public class Odometry
         xCoordinate = 0;
         yCoordinate = 0;
         theta = 0;
-
-        initialXCoordinate = 0;
-        initialYCoordinate = 0;
-        initialTheta = 0;
 
 
     }
@@ -51,10 +43,6 @@ public class Odometry
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.theta = theta;
-
-        initialXCoordinate = 0;
-        initialYCoordinate = 0;
-        initialTheta = 0;
     }
 
     
@@ -118,16 +106,22 @@ public class Odometry
 
     //Setting Odometries based on robot sensors
 
-    public void setRobotOdometry(double encoderLeft, double encoderRight, double gyroAngle, boolean inRadians)
+    public void updateRobotOdometry(double encoderLeft, double encoderRight, double gyroAngle, boolean inRadians)
     {
         if(!inRadians)
         {
             gyroAngle = Math.toRadians(gyroAngle);
         }
 
-        this.xCoordinate = (Math.cos(gyroAngle) * ((getDeltaEncoderLeft(encoderLeft) + getDeltaEncoderRight(encoderRight))/2)) + initialXCoordinate;
-        this.yCoordinate = (Math.sin(gyroAngle) * ((getDeltaEncoderLeft(encoderLeft) + getDeltaEncoderRight(encoderRight))/2)) + initialYCoordinate;
-        this.theta = getDeltaGyro(gyroAngle) + initialTheta; 
+        //summation of the average change in the encoders and broken into components for the directions
+        this.xCoordinate += (Math.cos(gyroAngle) * ((getDeltaEncoderLeft(encoderLeft) + getDeltaEncoderRight(encoderRight))/2));
+        this.yCoordinate += (Math.sin(gyroAngle) * ((getDeltaEncoderLeft(encoderLeft) + getDeltaEncoderRight(encoderRight))/2));
+
+        this.theta = getDeltaGyro(gyroAngle); 
+
+        this.prevEncoderLeft = encoderLeft;
+        this.prevEncoderRight = encoderRight;
+
     }
 
     public void setInitialRobotOdometry(double x, double y, double theta, boolean inRadians)
@@ -137,9 +131,9 @@ public class Odometry
             theta = Math.toRadians(theta);
         }
 
-        this.initialXCoordinate = x;
-        this.initialYCoordinate = y;
-        this.initialTheta = theta;
+        setX(x);
+        setY(y);
+        setThetaRadians(theta);
     }
 
     public void setInitialRobotState(double initialEncoderLeft, double initialEncoderRight, double initialGyroAngle, boolean inRadians)
@@ -149,25 +143,25 @@ public class Odometry
             initialGyroAngle = Math.toRadians(theta);
         }
 
-        this.initialEncoderLeft = initialEncoderLeft;
-        this.initialEncoderRight = initialEncoderRight;
-        this.initialGyroAngle = Math.toRadians(initialGyroAngle);
+        this.prevEncoderLeft = initialEncoderLeft;
+        this.prevEncoderRight = initialEncoderRight;
+        this.prevGyroAngle = Math.toRadians(initialGyroAngle);
 
     }
 
     private double getDeltaEncoderLeft(double encoderLeft)
     {
-        return encoderLeft - initialEncoderLeft;
+        return encoderLeft - prevEncoderLeft;
     }
 
     private double getDeltaEncoderRight(double encoderRight)
     {
-        return encoderRight - initialEncoderRight;
+        return encoderRight - prevEncoderRight;
     }
 
     private double getDeltaGyro(double gyroAngle)
     {
-        return gyroAngle - initialGyroAngle;
+        return gyroAngle - prevGyroAngle;
     }
 
 
