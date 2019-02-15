@@ -24,7 +24,7 @@ public class TalonChecker
     
     private static final String TEST_NOT_RUN_STR = "Test not run yet!";
 
-	private double mTestDurationSeconds = 2.0;
+	private double mTestDurationSeconds = 1.5;
 	private double mMotorSpeed = 0.75;
 	private TalonSRX testingSpeedController;
     private String motorName;
