@@ -2,6 +2,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.lib.VisionTarget;
 import frc.robot.lib.geometry.Pose2d;
 import frc.robot.lib.geometry.Rotation2d;
 import frc.robot.lib.geometry.Translation2d;
@@ -10,7 +11,9 @@ import frc.robot.lib.util.InterpolatingDouble;
 import frc.robot.lib.util.InterpolatingTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 public class RobotState {
     private static RobotState instance_ = new RobotState();
@@ -71,7 +74,7 @@ public class RobotState {
                 .transformBy(Pose2d.exp(vehicle_velocity_predicted_.scaled(lookahead_time)));
     }
 
-    public synchronized Pose2d getFieldToLidar(double timestamp) {
+    public synchronized Pose2d getFieldToCamera(double timestamp) {
         return getFieldToVehicle(timestamp).transformBy(kVehicleToCamera);
     }
 
@@ -85,6 +88,24 @@ public class RobotState {
                 Kinematics.integrateForwardKinematics(getLatestFieldToVehicle().getValue(), measured_velocity));
         vehicle_velocity_measured_ = measured_velocity;
         vehicle_velocity_predicted_ = predicted_velocity;
+    }
+
+    public void addVisionUpdate(double timestamp, List<VisionTarget> vision_update) {
+        List<Translation2d> field_to_goals = new ArrayList<>();
+        Pose2d field_to_camera = getFieldToCamera(timestamp);
+        if (!(vision_update == null || vision_update.isEmpty())) {
+            for (VisionTarget target : vision_update) {
+                    field_to_goals.add(field_to_camera
+                            .transformBy(Pose2d
+                                    .fromTranslation(new Translation2d(target.getDistance() * Math.cos(target.getAngleInDegrees()), target.getDistance() * Math.sin(target.getAngleInDegrees()))))
+                            .getTranslation());
+                
+            }
+        }
+        
+        synchronized (this) {
+            //goal_tracker_.update(timestamp, field_to_goals);
+        }
     }
 
     public synchronized Twist2d generateOdometryFromSensors(double left_encoder_delta_distance, double
