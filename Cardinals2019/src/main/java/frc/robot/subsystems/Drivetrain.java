@@ -98,8 +98,16 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       if(gyro.isConnected())
       {
-        double correction = gyroCorrection(Constants.maxVelocity * rotation);
-        driveOutput = drivetrain.fieldOrientedDrive(forward, strafe, rotation, getGyroAngle());
+        if(rotation < 0.2 && rotation > -0.2)
+        {
+          //when not rotating, compare your current gyro pos to the last time you were rotating to get error
+          double correction = gyroCorrection();
+          driveOutput = drivetrain.fieldOrientedDrive(forward, strafe, rotation + correction, getGyroAngle()); 
+        }
+        else{
+          prevAngle = getGyroAngle(); //Stores your angle when rotating
+          driveOutput = drivetrain.fieldOrientedDrive(forward, strafe, rotation, getGyroAngle());
+        }
       }
       else
         driveOutput = drivetrain.arcadeMecanumDrive(forward, rotation, strafe);
@@ -170,9 +178,11 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   private double gyroCorrectRate = 0.02;
 
-  public double gyroCorrection(double tangentialVelocity)
+  private double prevAngle;
+
+  public double gyroCorrection()
   {
-      return ( (tangentialVelocity/(Constants.wheelbase/2)) - Math.toRadians(getAngularVelocity()) ) * gyroCorrectRate;
+      return (getGyroAngle() - prevAngle) * gyroCorrectRate;
   }
 
 
