@@ -19,7 +19,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -68,13 +67,13 @@ private double kF = 0.1165 * 2; // 0.1165 * 2
 private final int CRUISE_VELOCITY = 1920;
 private final int CRUISE_ACCELERATION = 1600;
 private final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); // 1024
-private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.6); // 1024
+private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.7); // 1024
 
 private final int joyRate = 10;
 
 public enum Positions {
     //TODO
-    Intake(300),
+    Intake(0),
     Level2Hatch(50000),
     Level3Hatch(22000),
     Level1Cargo(70000),
@@ -119,7 +118,7 @@ public Elevator() {
 
     //Encoder
     elevatorLeader.setSensorPhase(true);
-    elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+    elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     zeroSensors();
 
@@ -134,13 +133,23 @@ public Elevator() {
 }
 
 public double getEncoderPosition() {
-    return elevatorLeader.getSelectedSensorPosition(0);
+    return elevatorLeader.getSelectedSensorPosition();
+}
+
+public double getEncoderVeloctiy()
+{
+    return elevatorLeader.getSelectedSensorVelocity();
+}
+
+public boolean getBottomLimit()
+{
+    return bottomLimitSwitch.get();
 }
 
 
 //Motion Magic Methods
 
-public void startMotionMagic() { 
+public void runMotionMagic() { 
     //If the desired position is higher than the current, then the elevator must go up
     if (getEncoderPosition() > position) {
         setState(LiftState.GoingUp);
@@ -156,10 +165,11 @@ public void startMotionMagic() {
 }
 
 public void checkMotionMagicTermination() {
+    //If at desired position, then the elevator is considered stationary
     if (Math.abs(getDesiredPosition() - getEncoderPosition()) <= MOTION_MAGIC_TOLERANCE) {
         state = LiftState.Stationary;
-        stopElevator();
     }
+    //If elevator is at limits, then stop the elevator
     checkIfToppedOut();
     checkIfZeroedOut();
 }
@@ -214,10 +224,13 @@ private int previousCruiseAcceleration;
 
 public void configMotionMagic(int cruiseVelocity, int acceleration) {
 
+    //prevents configs from being set the same value multiple times in a loop
     if(previousCruiseVelocity != cruiseVelocity || previousCruiseAcceleration != acceleration)
     {
         elevatorLeader.configMotionCruiseVelocity(cruiseVelocity, 0);
         elevatorLeader.configMotionAcceleration(acceleration, 0);
+        previousCruiseVelocity = cruiseVelocity;
+        previousCruiseAcceleration = acceleration;
     }
 }
 
@@ -241,9 +254,10 @@ public void updatePIDFFromDashboard() {
   @Override
   public void outputSmartdashboard() 
   {
-    updatePIDFOnDashboard();
+    //updatePIDFOnDashboard();
     SmartDashboard.putNumber("Desired elevator position", getDesiredPosition());
     SmartDashboard.putNumber("Actual elevator position", getEncoderPosition());
+    SmartDashboard.putNumber("Elevator Velocity", getEncoderVeloctiy());
     SmartDashboard.putNumber("Closed loop error", Math.abs(getDesiredPosition() - getEncoderPosition()));
   }
 
