@@ -132,12 +132,12 @@ public class MotionProfiling
          left = 0;
          right = 0;
 
-         odometry.setRobotOdometry(leftEncoderMeters, rightEncoderMeters, gyroAngle, inRadians);
-
          if(segmentIndex == 0)
          {
              odometry.setInitialRobotState(leftEncoderMeters, rightEncoderMeters, gyroAngle, inRadians);
          }
+
+         odometry.updateRobotOdometry(leftEncoderMeters, rightEncoderMeters, gyroAngle, inRadians);
  
          current = trajectory.get(segmentIndex);
  
