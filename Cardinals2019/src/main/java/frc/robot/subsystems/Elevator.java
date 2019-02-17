@@ -117,7 +117,7 @@ public Elevator() {
     elevatorLeader.configNominalOutputReverse(0.0, 0);
 
     //Encoder
-    elevatorLeader.setSensorPhase(true);
+    elevatorLeader.setSensorPhase(false);
     elevatorLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     zeroSensors();
@@ -125,7 +125,7 @@ public Elevator() {
     //Neutral mode
     elevatorLeader.setNeutralMode(NeutralMode.Brake);
 
-    elevatorLeader.setInverted(false);
+    elevatorLeader.setInverted(true);
 
     configPIDF(kP, kI, kD, kF);
     configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
@@ -143,7 +143,7 @@ public double getEncoderVeloctiy()
 
 public boolean getBottomLimit()
 {
-    return bottomLimitSwitch.get();
+    return !bottomLimitSwitch.get();
 }
 
 
@@ -180,7 +180,18 @@ public void checkMotionMagicTermination() {
 
 public void directJoyControl(double joystick)
 {
+    
+    if(joystick <= -0.2)
+    {
+        setState(LiftState.GoingUp);
+    }
+    if(joystick >= 0.2)
+    {
+        setState(LiftState.GoingDown);
+    }
+    
     elevatorLeader.set(ControlMode.PercentOutput, joystick);
+    checkIfZeroedOut();
 }
 
 
@@ -197,7 +208,7 @@ private void checkIfToppedOut(){
 }
 
 private void checkIfZeroedOut() {
-    if (bottomLimitSwitch.get() && getState() != LiftState.GoingUp) {
+    if (getBottomLimit() && getState() != LiftState.GoingUp) {
         setState(LiftState.BottomedOut);
         setPosition(Positions.Intake.position);
         elevatorLeader.setSelectedSensorPosition(0);

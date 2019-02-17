@@ -102,13 +102,13 @@ public class Intakes extends Subsystem implements ISubsystem{
 
    public void intakeCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, 1);
+      cargoMotor.set(ControlMode.PercentOutput, -1);
       
   }
 
    public void releaseCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, -1);
+      cargoMotor.set(ControlMode.PercentOutput, 1);
   }
 
   public void stopCargo()
@@ -118,7 +118,7 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   public boolean hasCargo()
   {
-      if(distanceSensor.getVoltage() > 0.35)  //Any object that is 7cm or closer will produce 0.8V or more
+      if(distanceSensor.getVoltage() > 0.828)  //Any object that is 7cm or closer will produce 0.8V or more
         return true;
       else
         return false;

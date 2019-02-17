@@ -10,7 +10,7 @@ package frc.robot.commands.Intakes.CommandGroups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Utility.*;
 import frc.robot.commands.Intakes.InstantCommands.*;
-import frc.robot.commands.LED.*;
+//import frc.robot.commands.LED.*;
 
 public class PlaceHatchComp extends CommandGroup {
   /**
@@ -34,13 +34,13 @@ public class PlaceHatchComp extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addSequential(new RedYellowSnake());
+    //addSequential(new RedYellowSnake());
     addSequential(new ExtendHatchIntake());
     addSequential(new TimerCommand(0.2));
     addSequential(new ReleaseHatch());
     addSequential(new TimerCommand(0.2));
     addSequential(new RetractHatchIntake());
-    addSequential(new BGFlame());
+    //addSequential(new BGFlame());
 
   }
 }

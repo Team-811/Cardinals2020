@@ -96,20 +96,19 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   {
       Output driveOutput;
 
-      if(gyro.isConnected())
-      {
-        if(rotation < 0.2 && rotation > -0.2)
-        {
-          //when not rotating, compare your current gyro pos to the last time you were rotating to get error
-          double correction = gyroCorrection();
-          driveOutput = drivetrain.fieldOrientedDrive(forward, strafe, rotation + correction, getGyroAngle()); 
-        }
-        else{
-          prevAngle = getGyroAngle(); //Stores your angle when rotating
-          driveOutput = drivetrain.fieldOrientedDrive(forward, strafe, rotation, getGyroAngle());
-        }
-      }
-      else
+      // if(gyro.isConnected())
+      // {
+      //   if(rotation < 0.2 && rotation > -0.2)
+      //   {
+      //     //when not rotating, compare your current gyro pos to the last time you were rotating to get error
+      //     double correction = gyroCorrection();
+      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation - correction, strafe, getGyroAngle()); 
+      //   }
+      //   else{
+      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
+      //   }
+      // }
+      // else
         driveOutput = drivetrain.arcadeMecanumDrive(forward, rotation, strafe);
       
 
@@ -117,6 +116,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
+
+      
+      prevAngle = getGyroAngle(); //Stores your angle when rotating
 
   }
 
@@ -310,7 +312,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private void configureTalons()
   {
     topLeftMotor.setInverted(false);
-    topRightMotor.setInverted(false);
+    topRightMotor.setInverted(true);
     bottomLeftMotor.setInverted(false);
     bottomRightMotor.setInverted(true);
 

@@ -10,7 +10,7 @@ package frc.robot.commands.Intakes.CommandGroups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Utility.*;
 import frc.robot.commands.Intakes.InstantCommands.*;
-import frc.robot.commands.LED.*;
+//import frc.robot.commands.LED.*;
 
 public class AquireHatchComp extends CommandGroup {
   /**
@@ -35,7 +35,7 @@ public class AquireHatchComp extends CommandGroup {
     // arm.
 
     //set command led
-    addSequential(new Confetti());
+    //addSequential(new Confetti());
     //Ensure that cargo intake is not in the way in the beginning
     addSequential(new BringUpCargoIntake());
     addSequential(new TimerCommand(0.1));
@@ -47,6 +47,6 @@ public class AquireHatchComp extends CommandGroup {
     addSequential(new TimerCommand(0.2));
     addSequential(new RetractHatchIntake());
     //set default led
-    addSequential(new BGFlame());
+    //addSequential(new BGFlame());
   }
 }

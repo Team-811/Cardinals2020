@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controllers.OI;
 import frc.robot.subsystems.*;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -47,17 +49,23 @@ public class Robot extends TimedRobot {
     intakes = new Intakes();
     climber = new Climber();
     elevator = new Elevator();
-    led = new LED();
+    //led = new LED();
     vision = new Vision();
     controllers = new OI();
+
+    //Robot.intakes.releaseHatch();
+    Robot.intakes.bringUpCargoIntake();
 
     updateSmartdashboard();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);
 
-    CameraServer.getInstance().startAutomaticCapture();
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setVideoMode(PixelFormat.kMJPEG, 320, 240, 30);
     //CameraServer for SmartDashboard
+
+    //led.setLEDs(11); //BGFlame
   }
 
   /**
@@ -182,7 +190,7 @@ public class Robot extends TimedRobot {
       drivetrain.outputSmartdashboard();
       elevator.outputSmartdashboard();
       intakes.outputSmartdashboard();
-      led.outputSmartdashboard();
+      //led.outputSmartdashboard();
       vision.outputSmartdashboard();
   }
 

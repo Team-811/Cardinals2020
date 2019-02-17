@@ -54,8 +54,8 @@ public class OI {
 
       operatorController.aButton.whenPressed(new ReleaseHatch());
       operatorController.bButton.whenPressed(new GrabHatch());
-      operatorController.xButton.whenPressed(new ExtendHatchIntake());
-      operatorController.yButton.whenPressed(new RetractHatchIntake());  
+      operatorController.xButton.whenPressed(new PlaceHatchComp());
+      operatorController.yButton.whenPressed(new AquireHatchComp());  
       operatorController.rightBumper.whenPressed(new IntakeCargoComp());
       operatorController.leftBumper.whenPressed(new OuttakeBallComp());
       operatorController.startButton.whenPressed(new DropCargoIntake());
