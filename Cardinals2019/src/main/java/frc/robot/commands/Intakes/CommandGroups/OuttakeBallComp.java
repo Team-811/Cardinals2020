@@ -9,7 +9,7 @@ package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Intakes.InstantCommands.*;
-//import frc.robot.commands.LED.*;
+import frc.robot.commands.LED.*;
 import frc.robot.commands.Utility.*;
 
 public class OuttakeBallComp extends CommandGroup {
@@ -34,7 +34,7 @@ public class OuttakeBallComp extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    //addSequential(new Rainbow());
+    addSequential(new Rainbow());
     //Just to eensure that the intake is down even though it should be down anyway
     addSequential(new DropCargoIntake());
     
@@ -43,6 +43,6 @@ public class OuttakeBallComp extends CommandGroup {
     addSequential(new StopCargo());
     addSequential(new ReleaseHatch());
     addSequential(new BringUpCargoIntake());
-    //addSequential(new BGFlame());
+    addSequential(new BGFlame());
   }
 }
