@@ -49,23 +49,32 @@ public class Robot extends TimedRobot {
     intakes = new Intakes();
     climber = new Climber();
     elevator = new Elevator();
-    //led = new LED();
+    led = new LED();
     vision = new Vision();
     controllers = new OI();
-
-    //Robot.intakes.releaseHatch();
-    Robot.intakes.bringUpCargoIntake();
 
     updateSmartdashboard();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);
 
+    //CameraServer for SmartDashboard
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
     camera.setVideoMode(PixelFormat.kMJPEG, 320, 240, 30);
-    //CameraServer for SmartDashboard
 
-    //led.setLEDs(11); //BGFlame
+    //Start threads
+    Thread networkThread = new Thread(new RunNetwork());
+    networkThread.start();
+
+    // Thread robotPosition = new Thread(new UpdateRobotPostion());
+    // robotPosition.start();
+
+
+
+    //Robot.intakes.releaseHatch();
+    Robot.intakes.bringUpCargoIntake();
+
+    led.setLEDs(11); //BGFlame
   }
 
   /**
@@ -208,7 +217,19 @@ public class Robot extends TimedRobot {
   {
     public void run()
     {
+      while (true) {
+        try {
+            Thread.sleep(20L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+        if(led.instanceCounter == 0)
+        {
+          led = new LED();
+        }
+
+      }
     }
   }
 

@@ -8,6 +8,7 @@
 package frc.robot.controllers;
 
 import frc.robot.controllers.Utility.*;
+import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Intakes.CommandGroups.*;
 import frc.robot.commands.Intakes.InstantCommands.*;
 
@@ -51,6 +52,8 @@ public class OI {
     {
       driveController = new BobXboxController(0, 0.2, 0.2);
       operatorController = new BobXboxController(1, 0.2, 0.2);
+
+      driveController.leftBumper.whenPressed(new SlowMode());
 
       operatorController.aButton.whenPressed(new ReleaseHatch());
       operatorController.bButton.whenPressed(new GrabHatch());

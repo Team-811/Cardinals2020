@@ -92,6 +92,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   }
 
 
+  private double SpeedScale = 1;
+
+
   public void DriveWithJoy(double forward, double rotation, double strafe)
   {
       Output driveOutput;
@@ -109,7 +112,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       //   }
       // }
       // else
-        driveOutput = drivetrain.arcadeMecanumDrive(forward, rotation, strafe);
+      driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
       
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
@@ -122,6 +125,15 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   }
 
+  public void slowMode(boolean isSlow)
+  {
+    if(isSlow)
+        SpeedScale = 0.5;
+    else
+        SpeedScale = 1;
+
+  }
+
   public void loadTrajectory(Waypoint[] path, boolean reverse)
   {
       motionProfile.loadTrajectory(path, reverse);
@@ -129,9 +141,6 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   public void followTrajectory(boolean reverse)
   {
-
-    double leftEncoderMeters = getLeftEncoder();
-    double rightEncoderMeters = getRightEncoder();
 
     Output driveOutput = motionProfile.getNextDriveSignal(reverse, topLeftMotor.getSelectedSensorPosition(), topRightMotor.getSelectedSensorPosition(), gyro.getAngle(), false);
 
