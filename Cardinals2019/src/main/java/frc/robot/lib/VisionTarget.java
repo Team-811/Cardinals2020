@@ -17,6 +17,7 @@ public class VisionTarget
     private double offCenter; //In meters
     private double distance; //In meters
     private double angle; //In radians
+    private double timestamp;
 
     //Constructors
     public VisionTarget()
@@ -25,14 +26,17 @@ public class VisionTarget
         offCenter = 0;
         distance = 0;
         angle = 0;
+        timestamp = 0;
     }
 
-    public VisionTarget(int targetID, double metersOffCenter, double metersDistance, double angleInRadians)
+    public VisionTarget(int targetID, double metersOffCenter, double metersDistance, double angleInRadians, double robotTimestamp)
     {
         id = targetID;
         offCenter = metersOffCenter;
         distance = metersDistance;
         angle = angleInRadians;
+        timestamp = robotTimestamp;
+
     }
 
 
@@ -63,6 +67,11 @@ public class VisionTarget
         return angle;
     }
 
+    public double getTimestamp()
+    {
+        return timestamp;
+    }
+
     public void setID(int targetID)
     {
         id = targetID;
@@ -86,6 +95,11 @@ public class VisionTarget
     public void setAngleFromRadians(double radiansAngle)
     {
         angle = radiansAngle;
+    }
+
+    public void setTimestamp(double robotTimestamp)
+    {
+        timestamp = robotTimestamp;
     }
 
 

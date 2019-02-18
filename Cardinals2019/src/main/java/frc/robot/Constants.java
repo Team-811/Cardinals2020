@@ -27,4 +27,11 @@ public class Constants
     public static final double Y_DIR_OFFSET_IN_METERS = 0;
     public static final double INITIAL_Z_AXIS_ROTATION = 0;
 
+    //vision stuff
+    public static double kMaxGoalTrackAge = 1.0;
+    public static double kMaxTrackerDistance = 18.0;
+    public static double kCameraFrameRate = 30.0;
+    public static double kTrackReportComparatorStablityWeight = 1.0;
+    public static double kTrackReportComparatorAgeWeight = 1.0;
+
 }
