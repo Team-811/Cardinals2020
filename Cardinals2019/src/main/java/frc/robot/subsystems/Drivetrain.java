@@ -96,6 +96,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       gyro = new AHRS(SerialPort.Port.kMXP);
       gyro.reset();
+      invertGyro(true);
 
       drivetrain = new MecanumDrive();
       motionProfile = new MotionProfiling(Constants.maxVelocity, Constants.maxAcceleration, Constants.maxJerk, Constants.wheelbase);
@@ -124,11 +125,11 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation - correction, strafe, getGyroAngle()); 
       //   }
       //   else{
-      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
+           driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
       //   }
       // }
       // else
-      driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
+      //driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
       
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
