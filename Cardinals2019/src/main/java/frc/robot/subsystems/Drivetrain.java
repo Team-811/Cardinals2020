@@ -61,10 +61,26 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   private Encoder strafeEncoder;
   
-  private int kP;
-  private int kI;
-  private int kD;
-  private int kF;
+  private double kPForward;
+  private double kIForward;
+  private double kDForward;
+  private double kFForward;
+
+  private double kPRotation;
+  private double kIRotation;
+  private double kDRotation;
+  private double kFRotation;
+
+  private double kPStrafe;
+  private double kIStrafe;
+  private double kDStrafe;
+  private double kFStrafe;
+
+  private double kPVelocity;
+  private double kIVelocity;
+  private double kDVelocity;
+  private double kFVelocity;
+
   private int kTimeoutMs;
 
   public Drivetrain()
@@ -80,13 +96,12 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       gyro = new AHRS(SerialPort.Port.kMXP);
       gyro.reset();
-      invertGyro(true);
 
       drivetrain = new MecanumDrive();
       motionProfile = new MotionProfiling(Constants.maxVelocity, Constants.maxAcceleration, Constants.maxJerk, Constants.wheelbase);
-      pidDistance = new PIDController(kP, kI, kD);
-      pidStrafe = new PIDController(kP, kI, kD);
-      pidRotation  = new PIDController(kP, kI, kD);
+      pidDistance = new PIDController(kPForward, kIForward, kDForward);
+      pidStrafe = new PIDController(kPStrafe, kIStrafe, kDStrafe);
+      pidRotation  = new PIDController(kPRotation, kIRotation, kDRotation);
 
       drivetrain.invertForwardBackward(true);
       drivetrain.invertStrafing(true);
@@ -100,20 +115,20 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   {
       Output driveOutput;
 
-      //if(gyro.isConnected())
-      //{
-        //if(rotation < 0.2 && rotation > -0.2)
-        //{
-          //when not rotating, compare your current gyro pos to the last time you were rotating to get error
-          //double correction = gyroCorrection();
-          //driveOutput = drivetrain.fieldOrientedDrive(forward, rotation - correction, strafe, getGyroAngle()); 
-        //}
-        //else{
-          driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
-        //}
-      //}
-      //else
-      //driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
+      // if(gyro.isConnected())
+      // {
+      //   if(rotation < 0.2 && rotation > -0.2)
+      //   {
+      //     //when not rotating, compare your current gyro pos to the last time you were rotating to get error
+      //     double correction = gyroCorrection();
+      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation - correction, strafe, getGyroAngle()); 
+      //   }
+      //   else{
+      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
+      //   }
+      // }
+      // else
+      driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
       
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
@@ -126,9 +141,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   }
 
-  public void slowMode(boolean bumperPress)
+  public void slowMode(boolean isSlow)
   {
-    if(bumperPress)
+    if(isSlow)
         SpeedScale = 0.5;
     else
         SpeedScale = 1;
@@ -343,6 +358,18 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     bottomLeftMotor.configNominalOutputReverse(0);
     bottomLeftMotor.configPeakOutputForward(1);
     bottomLeftMotor.configPeakOutputReverse(-1);
+
+    topLeftMotor.config_kP(0, kPVelocity);
+    topLeftMotor.config_kI(0, kIVelocity);
+    topLeftMotor.config_kD(0, kDVelocity); 
+    topLeftMotor.config_kF(0, kFVelocity);
+
+    topRightMotor.config_kP(0, kPVelocity);
+    topRightMotor.config_kI(0, kIVelocity);
+    topRightMotor.config_kD(0, kDVelocity);
+    topRightMotor.config_kF(0, kFVelocity);
+
+
   }
 
   
