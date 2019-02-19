@@ -80,6 +80,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       gyro = new AHRS(SerialPort.Port.kMXP);
       gyro.reset();
+      invertGyro(true);
 
       drivetrain = new MecanumDrive();
       motionProfile = new MotionProfiling(Constants.maxVelocity, Constants.maxAcceleration, Constants.maxJerk, Constants.wheelbase);
@@ -99,20 +100,20 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   {
       Output driveOutput;
 
-      // if(gyro.isConnected())
-      // {
-      //   if(rotation < 0.2 && rotation > -0.2)
-      //   {
-      //     //when not rotating, compare your current gyro pos to the last time you were rotating to get error
-      //     double correction = gyroCorrection();
-      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation - correction, strafe, getGyroAngle()); 
-      //   }
-      //   else{
-      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
-      //   }
-      // }
-      // else
-      driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
+      //if(gyro.isConnected())
+      //{
+        //if(rotation < 0.2 && rotation > -0.2)
+        //{
+          //when not rotating, compare your current gyro pos to the last time you were rotating to get error
+          //double correction = gyroCorrection();
+          //driveOutput = drivetrain.fieldOrientedDrive(forward, rotation - correction, strafe, getGyroAngle()); 
+        //}
+        //else{
+          driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
+        //}
+      //}
+      //else
+      //driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
       
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
@@ -125,9 +126,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   }
 
-  public void slowMode(boolean isSlow)
+  public void slowMode(boolean bumperPress)
   {
-    if(isSlow)
+    if(bumperPress)
         SpeedScale = 0.5;
     else
         SpeedScale = 1;
