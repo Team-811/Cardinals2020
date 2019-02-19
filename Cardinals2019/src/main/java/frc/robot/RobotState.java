@@ -2,6 +2,8 @@
 package frc.robot;
 
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.GoalTracker.TrackReport;
+import frc.robot.lib.AimingParameters;
 import frc.robot.lib.VisionTarget;
 import frc.robot.lib.geometry.Pose2d;
 import frc.robot.lib.geometry.Rotation2d;
@@ -31,6 +33,7 @@ public class RobotState {
     private InterpolatingTreeMap<InterpolatingDouble, Pose2d> field_to_vehicle_;
     private Twist2d vehicle_velocity_predicted_;
     private Twist2d vehicle_velocity_measured_;
+    private GoalTracker goal_tracker_;
     private double distance_driven_;
 
     private RobotState() {
@@ -48,6 +51,7 @@ public class RobotState {
         //Drive.getInstance().setHeading(initial_field_to_vehicle.getRotation());
         vehicle_velocity_predicted_ = Twist2d.identity();
         vehicle_velocity_measured_ = Twist2d.identity();
+        goal_tracker_ = new GoalTracker();
         distance_driven_ = 0.0;
     }
 
@@ -97,15 +101,41 @@ public class RobotState {
             for (VisionTarget target : vision_update) {
                     field_to_goals.add(field_to_camera
                             .transformBy(Pose2d
-                                    .fromTranslation(new Translation2d(target.getDistance() * Math.cos(target.getAngleInDegrees()), target.getDistance() * Math.sin(target.getAngleInDegrees()))))
+                                    .fromTranslation(new Translation2d(target.getDistance() * Math.cos(target.getAngleInRadians()), target.getDistance() * Math.sin(target.getAngleInRadians()))))
                             .getTranslation());
                 
             }
         }
         
         synchronized (this) {
-            //goal_tracker_.update(timestamp, field_to_goals);
+            goal_tracker_.update(timestamp, field_to_goals);
         }
+    }
+
+    public synchronized List<Pose2d> getCaptureTimeFieldToGoal() {
+        List<Pose2d> rv = new ArrayList<>();
+        for (TrackReport report : goal_tracker_.getTracks()) {
+            rv.add(Pose2d.fromTranslation(report.field_to_goal));
+        }
+        return rv;
+    }
+
+    public synchronized AimingParameters getAimingParameters() {
+        List<TrackReport> reports = goal_tracker_.getTracks();
+        if (!reports.isEmpty()) {
+            TrackReport report = reports.get(0);
+            Translation2d robot_to_goal = getLatestFieldToVehicle().getValue().getTranslation().inverse()
+                    .translateBy(report.field_to_goal);
+            Rotation2d robot_to_goal_rotation = Rotation2d
+                    .fromRadians(Math.atan2(robot_to_goal.y(), robot_to_goal.x()));
+
+            AimingParameters params = new AimingParameters(robot_to_goal.norm(), robot_to_goal_rotation,
+                    report.latest_timestamp, report.stability);
+
+            return params;
+        }
+        else
+            return null;
     }
 
     public synchronized Twist2d generateOdometryFromSensors(double left_encoder_delta_distance, double
@@ -135,6 +165,5 @@ public class RobotState {
         SmartDashboard.putNumber("Robot Pose X", odometry.getTranslation().x());
         SmartDashboard.putNumber("Robot Pose Y", odometry.getTranslation().y());
         SmartDashboard.putNumber("Robot Pose Theta", odometry.getRotation().getDegrees());
-        SmartDashboard.putNumber("Robot Linear Velocity", vehicle_velocity_measured_.dx);
     }
 }
