@@ -60,7 +60,7 @@ public class IntakeCargoComp extends CommandGroup {
     }
 
     // Set LEDs
-    addSequential(new BGFlame());
+    addSequential(new RedFlame());
 
   }
 }

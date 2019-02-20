@@ -47,6 +47,6 @@ public class AquireHatchComp extends CommandGroup {
     addSequential(new TimerCommand(0.2));
     addSequential(new RetractHatchIntake());
     //set default led
-    addSequential(new BGFlame());
+    addSequential(new RedFlame());
   }
 }

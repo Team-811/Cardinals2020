@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
     //Robot.intakes.releaseHatch();
     Robot.intakes.bringUpCargoIntake();
 
-    led.setLEDs(11); //BGFlame
+    led.setLEDs(9); //Red Flame
   }
 
   /**

@@ -40,7 +40,7 @@ public class PlaceHatchComp extends CommandGroup {
     addSequential(new ReleaseHatch());
     addSequential(new TimerCommand(0.2));
     addSequential(new RetractHatchIntake());
-    addSequential(new BGFlame());
+    addSequential(new RedFlame());
 
   }
 }
