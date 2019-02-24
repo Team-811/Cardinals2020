@@ -4,7 +4,7 @@ package frc.robot;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.GoalTracker.TrackReport;
 import frc.robot.lib.AimingParameters;
-import frc.robot.lib.VisionTarget;
+import frc.robot.lib.vision.VisionTarget;
 import frc.robot.lib.geometry.Pose2d;
 import frc.robot.lib.geometry.Rotation2d;
 import frc.robot.lib.geometry.Translation2d;

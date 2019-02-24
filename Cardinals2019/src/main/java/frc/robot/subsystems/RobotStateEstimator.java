@@ -18,11 +18,9 @@ public class RobotStateEstimator extends Subsystem {
 
     public RobotStateEstimator() 
     {
-    
         left_encoder_prev_distance_ = drive.getLeftEncoder();
         right_encoder_prev_distance_ = drive.getRightEncoder();
         strafe_encoder_prev_distance_ = drive.getStrafeEncoder();
-
     }
 
     

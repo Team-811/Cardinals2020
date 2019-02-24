@@ -34,4 +34,6 @@ public class Constants
     public static double kTrackReportComparatorStablityWeight = 1.0;
     public static double kTrackReportComparatorAgeWeight = 1.0;
 
+    public static final double cameraLatency = 0.2; //TODO
+
 }

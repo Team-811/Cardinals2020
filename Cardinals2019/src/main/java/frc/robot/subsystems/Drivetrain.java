@@ -109,28 +109,58 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   }
 
 
+  public enum DriveMode{
+    Arcade(),
+    FieldOriented();
+  }
+
+  private DriveMode mode = DriveMode.FieldOriented;
+
+  public DriveMode getMode() {
+    return mode;
+  }
+
+  public void setDriveMode(DriveMode newMode) {
+    this.mode = newMode;
+  }
+
+  public void toggleDriveMode()
+  {
+    if(mode == DriveMode.Arcade)
+      mode = DriveMode.FieldOriented;
+    else
+      mode = DriveMode.Arcade;
+  }
+
   private double SpeedScale = 1;
 
 
   public void DriveWithJoy(double forward, double rotation, double strafe)
   {
       Output driveOutput;
+      double correction;
 
-      // if(gyro.isConnected())
-      // {
-      //   if(rotation < 0.2 && rotation > -0.2)
-      //   {
-      //     //when not rotating, compare your current gyro pos to the last time you were rotating to get error
-      //     double correction = gyroCorrection();
-      //     driveOutput = drivetrain.fieldOrientedDrive(forward, rotation - correction, strafe, getGyroAngle()); 
-      //   }
-      //   else{
-           driveOutput = drivetrain.fieldOrientedDrive(forward, rotation, strafe, getGyroAngle());
-      //   }
-      // }
-      // else
-      //driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
-      
+      if(rotation < 0.2 && rotation > -0.2)
+          //when not rotating, compare your current gyro pos to the last time you were rotating to get error
+          correction = gyroCorrection();
+        else
+          correction = 0;
+
+
+      if(mode == DriveMode.Arcade)
+      {
+        if(gyro.isConnected())
+          driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, (rotation + correction) * SpeedScale, strafe * SpeedScale);
+        else
+          driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
+      }
+      else
+      {
+        if(gyro.isConnected())
+          driveOutput = drivetrain.fieldOrientedDrive(forward * SpeedScale, (rotation + correction) * SpeedScale, strafe * SpeedScale, getGyroAngle());
+        else
+          driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
+      }
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
@@ -138,7 +168,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
 
       
-      prevAngle = getGyroAngle(); //Stores your angle when rotating
+      prevAngle = getGyroAngle(); //Stores previous angle
 
   }
 

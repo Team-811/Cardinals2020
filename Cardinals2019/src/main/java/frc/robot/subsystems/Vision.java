@@ -7,8 +7,15 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.lib.vision.VisionList;
+import frc.robot.lib.vision.VisionTarget;
+import frc.robot.Constants;
+
 import java.net.DatagramSocket;
+import java.util.ArrayList;
+import java.util.List;
 import java.net.DatagramPacket;
 
 /**
@@ -26,18 +33,16 @@ public class Vision extends Subsystem implements ISubsystem {
   private byte[] buf = new byte[28];
   private String[] data = new String[4];
 
-  // Final data
-  private int targetId = -1;
-  private double offsetX = -1;
-  private double distance = -1;
-  private double angle = -1;
+  private VisionList targets = new VisionList();
+
+
 
   public Vision() {
     try {
       // port 5800-5810
       socket = new DatagramSocket(PORT);
     } catch (Exception e) {
-      e.printStackTrace();
+      System.out.println("Can't initialize vision socket");
     }
   }
 
@@ -47,34 +52,32 @@ public class Vision extends Subsystem implements ISubsystem {
     try {
       socket.receive(packet);
     } catch (Exception e) {
-      e.printStackTrace();
+      //Ignore
     }
-
     // put information into String[]
     data = new String(packet.getData(), 0, packet.getLength()).split(",");
+
+    targets.clearList(); //Clear previous targets before adding more
     
     // parse all data from String[] into variables
-    targetId =   Integer.parseInt(data[0]);
-    offsetX  = Double.parseDouble(data[1]);
-    distance = Double.parseDouble(data[2]);
-    angle    = Double.parseDouble(data[3]);
+    for(int i = 0; i < data.length; i+= 3)
+    {
+      double xOffset = Double.parseDouble(data[i]);
+      double distance = Double.parseDouble(data[i + 1]);
+      double angle = Double.parseDouble(data[i + 2]);
+
+      targets.addTarget(new VisionTarget(xOffset, distance, angle));
+    }
+
+    targets.setTimestamp(Timer.getFPGATimestamp() - Constants.cameraLatency); //Set timestamp of targets
   }
 
-  public int getTargetId() {
-    return targetId;
+  public VisionList getTargets()
+  {
+    return targets;
   }
 
-  public double getOffsetX() {
-    return offsetX;
-  }
-
-  public double getDistance() {
-    return distance;
-  }
-
-  public double getAngle() {
-    return angle;
-  }
+  
 
   @Override
   public void outputSmartdashboard() {
