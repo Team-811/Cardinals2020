@@ -22,6 +22,10 @@ public class Constants
     public static final double trackScrubFactor = 1;
     public static final double ticksPerRotation = 1024;
 
+    public static final double robotLength = 0.8763; //With bumpers
+    public static final double robotWidth = 0.8636; //With bumpers
+
+
     //camera location
     public static final double X_DIR_OFFSET_IN_METERS = .18;
     public static final double Y_DIR_OFFSET_IN_METERS = 0;
