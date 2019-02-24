@@ -211,5 +211,11 @@ public class MotionProfiling
      public boolean isFinished(){
          return segmentIndex == trajectory.length();
      }
+
+     //a percentage of how much of the path has been followed
+     public double percentageDone()
+     {
+        return (segmentIndex / trajectory.length()) * 100;
+     }
  }
 

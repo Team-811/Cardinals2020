@@ -37,6 +37,13 @@ public class Intakes extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  private static Intakes instance = new Intakes();
+
+  public static Intakes getInstance() {
+    return instance;
+  }
+
+
   private Solenoid retractPiston;
   private DoubleSolenoid hatchPiston;
   private DigitalInput limitSwitch;

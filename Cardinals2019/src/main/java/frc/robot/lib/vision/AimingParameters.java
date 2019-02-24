@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.lib;
+package frc.robot.lib.vision;
 
 import frc.robot.lib.geometry.Rotation2d;
 
@@ -32,6 +32,16 @@ public class AimingParameters {
 
     public Rotation2d getRobotToGoal() {
         return robot_to_goal;
+    }
+
+    public double getX()
+    {
+        return range * Math.cos(robot_to_goal.getRadians());
+    }
+
+    public double getY()
+    {
+        return range * Math.sin(robot_to_goal.getRadians());
     }
 
     public double getLastSeenTimestamp() {

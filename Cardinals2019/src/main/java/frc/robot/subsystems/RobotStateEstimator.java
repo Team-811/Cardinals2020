@@ -10,6 +10,14 @@ import frc.robot.lib.geometry.Twist2d;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class RobotStateEstimator extends Subsystem {
+
+    private static RobotStateEstimator instance = new RobotStateEstimator();
+
+    public static RobotStateEstimator getInstance() {
+      return instance;
+    }
+
+
     private RobotState robot_state_ = RobotState.getInstance();
     private Drivetrain drive = Robot.drivetrain;
     private double left_encoder_prev_distance_ = 0.0;

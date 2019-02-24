@@ -34,6 +34,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Elevator extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+
+  private static Elevator instance = new Elevator();
+
+  public static Elevator getInstance() {
+      return instance;
+  }
+
+
   public static enum LiftState {
     GoingUp,
     GoingDown,

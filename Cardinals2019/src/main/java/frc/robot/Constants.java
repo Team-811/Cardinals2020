@@ -20,6 +20,7 @@ public class Constants
     public static final double maxAcceleration = 1;
     public static final double maxJerk = 50;
     public static final double trackScrubFactor = 1;
+    public static final double strafeTrackScrubFactor = 0.8;
     public static final double ticksPerRotation = 1024;
 
     public static final double robotLength = 0.8763; //With bumpers

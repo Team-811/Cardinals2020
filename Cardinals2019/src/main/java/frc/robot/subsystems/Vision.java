@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.lib.vision.VisionList;
 import frc.robot.lib.vision.VisionTarget;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 
 import java.net.DatagramSocket;
 import java.util.ArrayList;
@@ -25,6 +26,14 @@ public class Vision extends Subsystem implements ISubsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  private static Vision instance = new Vision();
+
+  public static Vision getInstance() {
+    return instance;
+  }
+
+
+
   // Port used for receiving variables
   private final int PORT = 5800;
 
@@ -34,6 +43,7 @@ public class Vision extends Subsystem implements ISubsystem {
   private String[] data = new String[4];
 
   private VisionList targets = new VisionList();
+  private RobotState robot_state_ = RobotState.getInstance();
 
 
 
@@ -70,12 +80,11 @@ public class Vision extends Subsystem implements ISubsystem {
     }
 
     targets.setTimestamp(Timer.getFPGATimestamp() - Constants.cameraLatency); //Set timestamp of targets
+
+    robot_state_.addVisionUpdate(targets.getTimestamp(), targets); //Adds vision targets to robot state class to be used for targeting
+
   }
 
-  public VisionList getTargets()
-  {
-    return targets;
-  }
 
   
 

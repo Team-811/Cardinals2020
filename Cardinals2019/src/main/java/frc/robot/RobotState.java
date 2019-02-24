@@ -3,7 +3,8 @@ package frc.robot;
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.GoalTracker.TrackReport;
-import frc.robot.lib.AimingParameters;
+import frc.robot.lib.vision.AimingParameters;
+import frc.robot.lib.vision.VisionList;
 import frc.robot.lib.vision.VisionTarget;
 import frc.robot.lib.geometry.Pose2d;
 import frc.robot.lib.geometry.Rotation2d;
@@ -94,11 +95,11 @@ public class RobotState {
         vehicle_velocity_predicted_ = predicted_velocity;
     }
 
-    public void addVisionUpdate(double timestamp, List<VisionTarget> vision_update) {
+    public void addVisionUpdate(double timestamp, VisionList vision_update) {
         List<Translation2d> field_to_goals = new ArrayList<>();
         Pose2d field_to_camera = getFieldToCamera(timestamp);
-        if (!(vision_update == null || vision_update.isEmpty())) {
-            for (VisionTarget target : vision_update) {
+        if (!(vision_update == null || vision_update.getTargets().isEmpty())) {
+            for (VisionTarget target : vision_update.getTargets()) {
                     field_to_goals.add(field_to_camera
                             .transformBy(Pose2d
                                     .fromTranslation(new Translation2d(target.getDistance() * Math.cos(target.getAngleInRadians()), target.getDistance() * Math.sin(target.getAngleInRadians()))))

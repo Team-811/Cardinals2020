@@ -10,22 +10,21 @@ package frc.robot.commands.Drivetrain;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class DriveWithJoy extends Command {
-  public DriveWithJoy() {
+public class SlowMode extends Command {
+  public SlowMode() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.drivetrain);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.drivetrain.slowMode(true);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drivetrain.DriveWithJoy(Robot.controllers.driveController.leftStick.getY(), Robot.controllers.driveController.rightStick.getX(), Robot.controllers.driveController.leftStick.getX());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -37,11 +36,13 @@ public class DriveWithJoy extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.drivetrain.slowMode(false);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.drivetrain.slowMode(false);
   }
 }

@@ -16,7 +16,11 @@ public class Climber extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  private static Climber instance = new Climber();
 
+  public static Climber getInstance() {
+      return instance;
+  }
 
 
   @Override

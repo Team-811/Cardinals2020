@@ -45,6 +45,12 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
+    private static OI instance = new OI();
+
+    public static OI getInstance() {
+      return instance;
+    }
+
     public BobXboxController driveController;
     public BobXboxController operatorController;
 
@@ -52,6 +58,13 @@ public class OI {
     {
       driveController = new BobXboxController(0, 0.2, 0.2);
       operatorController = new BobXboxController(1, 0.2, 0.2);
+
+      driveController.rightBumper.whenPressed(new ToggleDriveMode());
+      driveController.leftBumper.whileHeld(new SlowMode());
+      //Drive left joy y axis is defined in the DriveWithJoy command for forward motion of drivetrain
+      //Drive left joy x axis is defined in the DriveWithJoy command for strafing motion of drivetrain
+      //Drive right joy x axis is defined in the DriveWithJoy command for rotation of drivetrain
+
 
       operatorController.aButton.whenPressed(new ReleaseHatch());
       operatorController.bButton.whenPressed(new GrabHatch());
@@ -61,6 +74,7 @@ public class OI {
       operatorController.leftBumper.whenPressed(new OuttakeBallComp());
       operatorController.startButton.whenPressed(new DropCargoIntake());
       operatorController.selectButton.whenPressed(new BringUpCargoIntake());
+      //Operator right joy Y axis is defined in default elevator command for manual elevator position
 
     }
 

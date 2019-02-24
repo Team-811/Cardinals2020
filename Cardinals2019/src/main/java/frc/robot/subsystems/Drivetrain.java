@@ -41,6 +41,12 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  private static Drivetrain instance = new Drivetrain();
+
+  public static Drivetrain getInstance() {
+    return instance;
+  }
+
   private TalonSRX topLeftMotor;
   private TalonSRX topRightMotor;
   private TalonSRX bottomLeftMotor;
@@ -58,8 +64,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private double strafeOffset;
   private double rotationOffset;
 
-
-  private Encoder strafeEncoder;
+  //private Encoder strafeEncoder;
   
   private double kPForward;
   private double kIForward;
@@ -90,7 +95,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       bottomLeftMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
-      strafeEncoder = new Encoder(RobotMap.DRIVE_STRAFE_ENCODER_ACHANNEL, RobotMap.DRIVE_STRAFE_ENCODER_BCHANNEL);
+      //strafeEncoder = new Encoder(RobotMap.DRIVE_STRAFE_ENCODER_ACHANNEL, RobotMap.DRIVE_STRAFE_ENCODER_BCHANNEL);
 
       configureTalons();
 
@@ -181,6 +186,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   }
 
+
+  //Motion Profiling
+
   public void loadTrajectory(Waypoint[] path, boolean reverse)
   {
       motionProfile.loadTrajectory(path, reverse);
@@ -197,6 +205,25 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     setVelocity(velocityLeft, velocityRight);
   }
 
+  public boolean isPathFinished()
+  {
+      return motionProfile.isFinished();
+  }
+
+  public double percentagePathFinished()
+  {
+      return motionProfile.percentageDone();
+  }
+
+  public boolean isPathPercentDone(double percentage)
+  {
+      return percentage <= percentagePathFinished();
+  }
+
+
+
+  //Velocity Control
+
   public void setVelocity(double velocityLeft, double velocityRight)
   {
     topLeftMotor.set(ControlMode.Velocity, velocityLeft);
@@ -205,6 +232,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     bottomLeftMotor.set(ControlMode.Follower, topRightMotor.getDeviceID());
 
   }
+
+
+  //PID Control
 
   public void PIDControl()
   {
@@ -227,12 +257,16 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   public void setPIDGoals(double goalDistance, double goalStrafe, double goalAngleInDegrees)
   {
-      distanceOffset = getLeftEncoder() + goalDistance;
+      distanceOffset = getForwardEncoder() + goalDistance;
       rotationOffset = getGyroAngle() + goalAngleInDegrees;
       strafeOffset = getStrafeEncoder() + goalStrafe;
 
   }
 
+
+
+
+  //Gyro Correction
 
   private double gyroCorrectRate = 0.02;
 
@@ -271,14 +305,28 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     return (getTopLeftEncoder() + getBottomLeftEncoder()) / 2;
   }
 
+  public double getLeftStrafe()
+  {
+    return (getTopLeftEncoder() - getBottomLeftEncoder()) * Constants.strafeTrackScrubFactor / 2;
+  }
+
   public double getRightEncoder()
   {
     return (getTopRightEncoder() + getBottomRightEncoder()) / 2;
   }
 
+  public double getRightStrafe()
+  {
+    return -(getTopRightEncoder() - getBottomRightEncoder()) * Constants.strafeTrackScrubFactor / 2;
+  }
+
+  public double getForwardEncoder()
+  {
+    return (getLeftEncoder() + getRightEncoder()) / 2;
+  }
   public double getStrafeEncoder()
   {
-    return UnitConverter.ticksToMeters(strafeEncoder.getDistance(), Constants.ticksPerRotation, Constants.smallWheelDiameter);
+    return (getLeftStrafe() + getRightStrafe()) / 2;
   }
 
   public void zeroEncoders()
@@ -319,15 +367,30 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     return (getTopLeftVelocity() + getBottomLeftVelocity()) / 2;
   }
 
+  public double getLeftStrafeVelocity()
+  {
+    return (getTopLeftVelocity() - getBottomLeftVelocity()) * Constants.strafeTrackScrubFactor / 2;
+  }
+
   public double getRightVelocity()
   {
     return (getTopRightVelocity() + getBottomRightVelocity()) / 2;
   }
 
+  public double getRightStrafeVelocity()
+  {
+    return -(getTopRightVelocity() - getBottomRightVelocity()) * Constants.strafeTrackScrubFactor / 2;
+  }
+
+  public double getForwardVelocity()
+  {
+    return (getLeftVelocity() + getRightVelocity()) / 2;
+  }
+
   public double getStrafeVelocity()
   {
     //Divided by 10 because getRate time measurement is in seconds and not 100ms
-    return UnitConverter.talonUnitsToMetersPerSecond(strafeEncoder.getRate(), Constants.ticksPerRotation, Constants.smallWheelDiameter) / 10;
+    return (getLeftStrafeVelocity() + getRightStrafeVelocity()) / 2;
   }
 
 
@@ -335,7 +398,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
 
 
-  //Gyro angles
+  //Gyro measurements
 
   private int gyroInversion = 1;
 

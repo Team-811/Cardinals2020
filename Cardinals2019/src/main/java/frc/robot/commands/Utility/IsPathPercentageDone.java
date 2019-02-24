@@ -5,16 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Drivetrain;
+package frc.robot.commands.Utility;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class DriveWithJoy extends Command {
-  public DriveWithJoy() {
+public class IsPathPercentageDone extends Command {
+
+  private double percentage;
+
+  public IsPathPercentageDone(double percentage) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.drivetrain);
+    this.percentage = percentage;
   }
 
   // Called just before this Command runs the first time
@@ -25,13 +29,12 @@ public class DriveWithJoy extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drivetrain.DriveWithJoy(Robot.controllers.driveController.leftStick.getY(), Robot.controllers.driveController.rightStick.getX(), Robot.controllers.driveController.leftStick.getX());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return Robot.drivetrain.isPathPercentDone(percentage);
   }
 
   // Called once after isFinished returns true

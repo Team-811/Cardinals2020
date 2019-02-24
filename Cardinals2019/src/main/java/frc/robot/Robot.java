@@ -45,13 +45,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    drivetrain = new Drivetrain();
-    intakes = new Intakes();
-    climber = new Climber();
-    elevator = new Elevator();
+    drivetrain = Drivetrain.getInstance();
+    intakes = Intakes.getInstance();
+    climber = Climber.getInstance();
+    elevator = Elevator.getInstance();
     led = new LED();
-    vision = new Vision();
-    controllers = new OI();
+    vision = Vision.getInstance();
+    controllers = OI.getInstance();
 
     updateSmartdashboard();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
@@ -63,8 +63,8 @@ public class Robot extends TimedRobot {
     camera.setVideoMode(PixelFormat.kMJPEG, 320, 240, 30);
 
     //Start threads
-    Thread networkThread = new Thread(new RunNetwork());
-    networkThread.start();
+    Thread updateThread = new Thread(new RunUpdater());
+    updateThread.start();
 
     // Thread robotPosition = new Thread(new UpdateRobotPostion());
     // robotPosition.start();
@@ -207,40 +207,42 @@ public class Robot extends TimedRobot {
 
 
 
-
-
-
-
-
-
-  public class RunNetwork implements Runnable
+  public class RunUpdater implements Runnable
   {
     public void run()
     {
       while (true) {
         try {
-            Thread.sleep(20L);
+          Thread.sleep(20L);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+          e.printStackTrace();
         }
 
-        if(led.instanceCounter == 0)
-        {
-          led = new LED();
-        }
+        ledOnLoop();
+        visionOnLoop();
+        updatePositionOnLoop();
 
       }
     }
   }
 
-  public class UpdateRobotPostion implements Runnable
+
+  public void ledOnLoop()
   {
-    public void run()
+    if(led.instanceCounter == 0)
     {
-      
+      led = new LED();
     }
   }
 
-  
+  public void visionOnLoop()
+  {
+
+  }
+
+  public void updatePositionOnLoop()
+  {
+
+  }
 
 }
