@@ -22,6 +22,8 @@ import frc.robot.lib.Output;
 import frc.robot.lib.PIDController;
 import frc.robot.lib.TalonChecker;
 import frc.robot.lib.UnitConverter;
+import frc.robot.lib.vision.AimingParameters;
+import frc.robot.RobotState;
 import jaci.pathfinder.Waypoint;
 import frc.robot.commands.Drivetrain.*;
 
@@ -56,6 +58,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   private MecanumDrive drivetrain;
   private MotionProfiling motionProfile;
+
+  private RobotState robot_state_;
 
   private PIDController pidDistance;
   private PIDController pidStrafe;
@@ -97,6 +101,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       //strafeEncoder = new Encoder(RobotMap.DRIVE_STRAFE_ENCODER_ACHANNEL, RobotMap.DRIVE_STRAFE_ENCODER_BCHANNEL);
 
+      robot_state_ = RobotState.getInstance();
+
       configureTalons();
 
       gyro = new AHRS(SerialPort.Port.kMXP);
@@ -105,9 +111,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       drivetrain = new MecanumDrive();
       motionProfile = new MotionProfiling(Constants.maxVelocity, Constants.maxAcceleration, Constants.maxJerk, Constants.wheelbase);
-      pidDistance = new PIDController(kPForward, kIForward, kDForward);
-      pidStrafe = new PIDController(kPStrafe, kIStrafe, kDStrafe);
-      pidRotation  = new PIDController(kPRotation, kIRotation, kDRotation);
+      configurePID();
+      
 
       drivetrain.invertForwardBackward(true);
       drivetrain.invertStrafing(true);
@@ -186,6 +191,14 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   }
 
+  public void stopDrivetrain()
+  {
+    topLeftMotor.set(ControlMode.PercentOutput, 0);
+    topRightMotor.set(ControlMode.PercentOutput, 0);
+    bottomLeftMotor.set(ControlMode.PercentOutput, 0);
+    bottomRightMotor.set(ControlMode.PercentOutput, 0);
+  }
+
 
   //Motion Profiling
 
@@ -260,6 +273,22 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       distanceOffset = getForwardEncoder() + goalDistance;
       rotationOffset = getGyroAngle() + goalAngleInDegrees;
       strafeOffset = getStrafeEncoder() + goalStrafe;
+
+  }
+
+  public boolean pidIsDone()
+  {
+    return pidDistance.isOnTarget() && pidStrafe.isOnTarget() && pidRotation.isOnTarget();
+  }
+
+  public void setUpVisionPID()
+  {
+      AimingParameters target = robot_state_.getAimingParameters();
+
+      if(target != null)
+        setPIDGoals(target.getY(), target.getX(), 0); //Assumes drivers rotation is good enough
+      else
+        System.out.println("No targets to track");
 
   }
 
@@ -463,7 +492,19 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     topRightMotor.config_kD(0, kDVelocity);
     topRightMotor.config_kF(0, kFVelocity);
 
+  }
 
+  private void configurePID()
+  {
+      pidDistance = new PIDController(kPForward, kIForward, kDForward);
+      pidDistance.setThreshold(0.05);
+      pidDistance.setOutputConstraints(0.8, -0.8);
+      pidStrafe = new PIDController(kPStrafe, kIStrafe, kDStrafe);
+      pidStrafe.setThreshold(0.05);
+      pidStrafe.setOutputConstraints(1, -1);
+      pidRotation  = new PIDController(kPRotation, kIRotation, kDRotation);
+      pidRotation.setThreshold(1);
+      pidRotation.setOutputConstraints(0.5, -0.5);
   }
 
   

@@ -32,7 +32,7 @@ public class Vision extends Subsystem implements ISubsystem {
     return instance;
   }
 
-
+  public static int instanceCounter = 0;
 
   // Port used for receiving variables
   private final int PORT = 5800;
@@ -51,8 +51,10 @@ public class Vision extends Subsystem implements ISubsystem {
     try {
       // port 5800-5810
       socket = new DatagramSocket(PORT);
+      instanceCounter = 1;
     } catch (Exception e) {
       System.out.println("Can't initialize vision socket");
+      instanceCounter = 0;
     }
   }
 

@@ -19,6 +19,11 @@ public class PIDController {
 
     private double error;
     private double lastError;
+
+    private double threshold;
+
+    private double maxOutput;
+    private double minOutput;
     
     private double integral;
     private double kP;
@@ -37,6 +42,10 @@ public class PIDController {
         this.lastError = 0.0;
         this.error = 0.0;
         this.integral = 0.0;
+
+        this.maxOutput = 1;
+        this.minOutput = -1;
+        this.threshold = 0;
     }
 
     public PIDController(double kP, double kI, double kD, double kF) {
@@ -48,6 +57,21 @@ public class PIDController {
         this.lastError = 0.0;
         this.error = 0.0;
         this.integral = 0.0;
+
+        this.maxOutput = 1;
+        this.minOutput = -1;
+        this.threshold = 0;
+    }
+
+    public void setThreshold(double threshold)
+    {
+        this.threshold = threshold;
+    }
+
+    public void setOutputConstraints(double maxOutput, double minOutput)
+    {
+        this.maxOutput = maxOutput;
+        this.minOutput = minOutput;
     }
     
     public double updatePID(double position, double goal) {
@@ -56,10 +80,10 @@ public class PIDController {
         double output = (kP * error) + (kI * integral) + (kD * (error - lastError) / DT) + kF;
 
         //Keeps output between -1 and 1 for motor control
-        if(output >= 1)
-            output = 1;
-        else if(output <= -1)
-            output = -1;
+        if(output >= maxOutput)
+            output = maxOutput;
+        else if(output <= minOutput)
+            output = minOutput;
         
         lastError = error;
         return output;
@@ -81,6 +105,13 @@ public class PIDController {
     public double getError() {
         return lastError;
     }
+
+    public boolean isOnTarget()
+    {
+        return Math.abs(error) <= threshold; 
+    }
+
+    
 }
 
 

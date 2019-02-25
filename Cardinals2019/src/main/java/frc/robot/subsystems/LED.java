@@ -17,6 +17,12 @@ public class LED extends Subsystem implements ISubsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  private static LED instance = new LED();
+
+  public static LED getInstance() {
+    return instance;
+  }
+
   private SerialPort LEDPort;
   
   public static int instanceCounter = 0;

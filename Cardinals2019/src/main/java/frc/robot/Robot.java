@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
   public static Elevator elevator;
   public static LED led;
   public static Vision vision;
+  public static RobotStateEstimator stateEstimator;
   public static OI controllers; 
 
   //Command m_autonomousCommand;
@@ -49,8 +50,9 @@ public class Robot extends TimedRobot {
     intakes = Intakes.getInstance();
     climber = Climber.getInstance();
     elevator = Elevator.getInstance();
-    led = new LED();
+    led = LED.getInstance();
     vision = Vision.getInstance();
+    stateEstimator = RobotStateEstimator.getInstance();
     controllers = OI.getInstance();
 
     updateSmartdashboard();
@@ -229,20 +231,27 @@ public class Robot extends TimedRobot {
 
   public void ledOnLoop()
   {
-    if(led.instanceCounter == 0)
+    if(LED.instanceCounter == 0)
     {
-      led = new LED();
+      led = LED.getInstance();
     }
   }
 
   public void visionOnLoop()
   {
-
+    if(Vision.instanceCounter == 0)
+    {
+      vision = vision.getInstance();
+    }
+    else
+    {
+      vision.onLoop();
+    }
   }
 
   public void updatePositionOnLoop()
   {
-
+      stateEstimator.runRobotStateEstimator(Timer.getFPGATimestamp());
   }
 
 }
