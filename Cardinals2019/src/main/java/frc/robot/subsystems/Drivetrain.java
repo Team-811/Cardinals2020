@@ -515,9 +515,10 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   {
       SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
       SmartDashboard.putNumber("Top Left Encoder", getTopLeftEncoder());
-      SmartDashboard.putNumber("Top Right Encoder", getGyroAngle());
-      SmartDashboard.putNumber("Bottom Left Encoder", getGyroAngle());
-      SmartDashboard.putNumber("Bottom Right Encoder", getGyroAngle());
+      SmartDashboard.putNumber("Top Right Encoder", getTopRightEncoder());
+      SmartDashboard.putNumber("Bottom Left Encoder", getBottomLeftEncoder());
+      SmartDashboard.putNumber("Bottom Right Encoder", getBottomRightEncoder());
+      SmartDashboard.putNumber("Strafe", getStrafeEncoder());
       SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
   }
 

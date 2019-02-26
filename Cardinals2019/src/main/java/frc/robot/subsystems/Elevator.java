@@ -337,9 +337,7 @@ public void updatePIDFFromDashboard() {
     // setDefaultCommand(new MySpecialCommand());
 
     setDefaultCommand(new DirectElevator());
-
     //setDefaultCommand(new MainElevator());
-    //setDefaultCommand(new ElevatorJoystick());
   }
 }
 
