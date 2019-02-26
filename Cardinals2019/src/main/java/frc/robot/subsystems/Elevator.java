@@ -77,7 +77,7 @@ private final int CRUISE_ACCELERATION = 1600;
 private final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); // 1024
 private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.7); // 1024
 
-private final int joyRate = 10;
+private final double joyRate = 10;
 
 public enum Positions {
     //TODO
@@ -110,7 +110,7 @@ public void setPosition(double newPos) {
 }
 
 public void setPositionWithJoy(double joy) {
-    setPosition(getDesiredPosition() + joy * 10);
+    setPosition(getDesiredPosition() + joyRate * 10);
 }
 
 private final int MOTION_MAGIC_TOLERANCE = 150;
@@ -189,13 +189,17 @@ public void checkMotionMagicTermination() {
 public void directJoyControl(double joystick)
 {
     
-    if(joystick <= -0.2)
+    if(joystick >= 0.1)
     {
         setState(LiftState.GoingUp);
     }
-    if(joystick >= 0.2)
+    else if(joystick <= -0.1)
     {
         setState(LiftState.GoingDown);
+    }
+    else
+    {
+        setState(LiftState.Stationary);
     }
     
     elevatorLeader.set(ControlMode.PercentOutput, joystick);
@@ -309,7 +313,7 @@ public void updatePIDFFromDashboard() {
     System.out.println("Testing Elevator Motors and Encoders");
     Timer.delay(0.5);
     TalonChecker checker = new TalonChecker("Elevator Talons", elevatorLeader, false);
-    sucess = checker.runTest(5, 0); //TODO
+    sucess = checker.runTest(2, 100); //TODO
     Timer.delay(0.2);
 
     if(!sucess)

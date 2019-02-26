@@ -8,15 +8,14 @@
 package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.Intakes.InstantCommands.*;
 import frc.robot.commands.Utility.*;
-import frc.robot.commands.LED.*;
+import frc.robot.commands.Intakes.InstantCommands.*;
 
-public class OverTheTopOuttakeComp extends CommandGroup {
+public class Unjam extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public OverTheTopOuttakeComp() {
+  public Unjam() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -33,25 +32,8 @@ public class OverTheTopOuttakeComp extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-    //Play outtake LED pattern
-    addSequential(new Rainbow());
-    //Just to ensure that the intake is down even though it should be down anyway
-    addSequential(new DropCargoIntake());
-    //Pulse the motors a few times and bring the ball over the top
-    addSequential(new Unjam());
-    addSequential(new TimerCommand(0.15));
-    addSequential(new Unjam());
-    addSequential(new TimerCommand(0.7));
-    //Punch the ball
-    addSequential(new ExtendHatchIntake());
-    addSequential(new TimerCommand(0.15));
-    addSequential(new RetractHatchIntake());
-    addSequential(new TimerCommand(0.15));
-    //Return to default state
-    addSequential(new StopCargo());
-    addSequential(new ReleaseHatch());
-    addSequential(new BringUpCargoIntake());
-    addSequential(new RedFlame());
+    addSequential(new ReleaseCargo());
+    addSequential(new TimerCommand(0.05));
+    addSequential(new GrabCargo());
   }
 }

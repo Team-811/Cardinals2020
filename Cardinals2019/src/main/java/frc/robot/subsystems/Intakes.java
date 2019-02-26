@@ -109,7 +109,7 @@ public class Intakes extends Subsystem implements ISubsystem{
 
    public void intakeCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, -1);
+      cargoMotor.set(ControlMode.PercentOutput, -0.6);
       
   }
 
@@ -120,7 +120,7 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   public void stopCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, 0);
+      cargoMotor.set(ControlMode.PercentOutput, 0.6);
   }
 
   public boolean hasCargo()
@@ -207,7 +207,7 @@ public class Intakes extends Subsystem implements ISubsystem{
         System.out.println("Checking Cargo Motor");
         Timer.delay(0.5);
         TalonChecker checker = new TalonChecker("Cargo Talon", cargoMotor, false);
-        sucess = checker.runTest(5);
+        sucess = checker.runTest(2);
         Timer.delay(0.2);
 
         if(!sucess)

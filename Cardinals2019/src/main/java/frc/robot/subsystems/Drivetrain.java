@@ -531,11 +531,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   @Override
   public void resetSubsystem() 
   {
-    topLeftMotor.set(ControlMode.PercentOutput, 0);
-    topRightMotor.set(ControlMode.PercentOutput, 0);
-    bottomLeftMotor.set(ControlMode.PercentOutput, 0);
-    bottomRightMotor.set(ControlMode.PercentOutput, 0);
-
+    stopDrivetrain();
     zeroSensors();
     configureTalons();
   }
@@ -554,7 +550,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     System.out.println("Testing Top Left Motor and Encoder");
     Timer.delay(0.5);
     TalonChecker checker = new TalonChecker("Top Left Wheel Talon", topLeftMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    sucess = checker.runTest(5, 75); //TODO
     Timer.delay(0.2);
 
     if(!sucess)
@@ -567,7 +563,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     System.out.println("Testing Top Right Motor and Encoder");
     Timer.delay(0.5);
     checker = new TalonChecker("Top Right Wheel Talon", topLeftMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    sucess = checker.runTest(2, 75); //TODO
     Timer.delay(0.2);
 
     if(!sucess)
@@ -580,7 +576,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     System.out.println("Testing Bottom Left Motor and Encoder");
     Timer.delay(0.5);
     checker = new TalonChecker("Bottom Left Wheel Talon", topLeftMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    sucess = checker.runTest(2, 75); //TODO
     Timer.delay(0.2);
 
     if(!sucess)
@@ -593,7 +589,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     System.out.println("Testing Bottom Right Motor and Encoder");
     Timer.delay(0.5);
     checker = new TalonChecker("Bottom Right Wheel Talon", topLeftMotor, false);
-    sucess = checker.runTest(5, 0); //TODO
+    sucess = checker.runTest(2, 75); //TODO
     Timer.delay(0.2);
 
     if(!sucess)
