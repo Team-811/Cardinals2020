@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.lib.vision.VisionList;
@@ -32,7 +35,6 @@ public class Vision extends Subsystem implements ISubsystem {
     return instance;
   }
 
-  public static int instanceCounter = 0;
 
   // Port used for receiving variables
   private final int PORT = 5800;
@@ -45,20 +47,32 @@ public class Vision extends Subsystem implements ISubsystem {
   private VisionList targets = new VisionList();
   private RobotState robot_state_ = RobotState.getInstance();
 
+  private NetworkTable table;
+  private NetworkTableEntry xEntry;
+  private NetworkTableEntry distEntry;
+  private NetworkTableEntry angleEntry;
 
 
-  public Vision() {
+
+
+  public Vision() 
+  {
+    networkTableInit();
+  }
+
+  public void onLoop() 
+  {
+    networkTableUpdate();
+  }
+
+  private void udpUpdate()
+  {
     try {
       // port 5800-5810
       socket = new DatagramSocket(PORT);
-      instanceCounter = 1;
     } catch (Exception e) {
       System.out.println("Can't initialize vision socket");
-      instanceCounter = 0;
     }
-  }
-
-  public void onLoop() {
     // receive information
     DatagramPacket packet = new DatagramPacket(buf, buf.length);
     try {
@@ -84,10 +98,39 @@ public class Vision extends Subsystem implements ISubsystem {
     targets.setTimestamp(Timer.getFPGATimestamp() - Constants.cameraLatency); //Set timestamp of targets
 
     robot_state_.addVisionUpdate(targets.getTimestamp(), targets); //Adds vision targets to robot state class to be used for targeting
+  }
+
+  private void networkTableUpdate()
+  {
+      double[] xOffset;
+      double[] distance;
+      double[] angle;
+
+      xOffset = xEntry.getDoubleArray(new double[0]);
+      distance = distEntry.getDoubleArray(new double[0]);
+      angle = angleEntry.getDoubleArray(new double[0]);
+
+      targets.clearList(); //Clear previous targets before adding more
+
+      for(int i = 0; i < xOffset.length; i++)
+      {
+        targets.addTarget(new VisionTarget(xOffset[i], distance[i], angle[i]));
+      }
+
+      targets.setTimestamp(Timer.getFPGATimestamp() - Constants.cameraLatency); //Set timestamp of targets
+
+      robot_state_.addVisionUpdate(targets.getTimestamp(), targets); //Adds vision targets to robot state class to be used for targeting
 
   }
 
-
+  private void networkTableInit()
+  {
+      NetworkTableInstance inst = NetworkTableInstance.getDefault();
+      table = inst.getTable("VisionTarget");
+      xEntry = table.getEntry("xOffset");
+      distEntry = table.getEntry("distance");
+      angleEntry = table.getEntry("angle");
+  }
   
 
   @Override
