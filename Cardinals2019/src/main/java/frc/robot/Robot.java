@@ -235,21 +235,15 @@ public class Robot extends TimedRobot {
 
   public void ledOnLoop()
   {
-  
       led = LED.getInstance();
-    
   }
 
   public void visionOnLoop()
   {
-    if(Vision.instanceCounter == 0)
-    {
       vision = vision.getInstance();
-    }
-    else
-    {
-      vision.onLoop();
-    }
+      if(vision != null)
+        vision.onLoop();
+    
   }
 
   public void updatePositionOnLoop()
