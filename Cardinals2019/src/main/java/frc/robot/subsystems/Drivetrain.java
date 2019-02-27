@@ -70,14 +70,14 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   //private Encoder strafeEncoder;
   
-  private double kPForward;
-  private double kIForward;
-  private double kDForward;
-  private double kFForward;
+  private double kPForward = 1.2;
+  private double kIForward = 0;
+  private double kDForward = 0.05;
+  private double kFForward = 0;
 
-  private double kPRotation;
-  private double kIRotation;
-  private double kDRotation;
+  private double kPRotation = 0.021;
+  private double kIRotation = 0;
+  private double kDRotation = 0.000006;
   private double kFRotation;
 
   private double kPStrafe;
@@ -116,8 +116,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       configurePID();
       
 
-      drivetrain.invertForwardBackward(true);
+      drivetrain.invertForwardBackward(false);
       drivetrain.invertStrafing(true);
+      drivetrain.invertRotation(false);
   }
 
 
@@ -152,32 +153,32 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       Output driveOutput;
       double correction;
 
-      //if(rotation < 0.2 && rotation > -0.2)
+      if(rotation < 0.2 && rotation > -0.2)
           //when not rotating, compare your current gyro pos to the last time you were rotating to get error
-          //correction = gyroCorrection();
-        //else
+          correction = gyroCorrection();
+        else
           correction = 0;
 
 
       if(mode == DriveMode.Arcade)
       {
         if(gyro.isConnected())
-          driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, (rotation + correction) * SpeedScale, strafe * SpeedScale);
+          driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, (rotation - correction) * SpeedScale, strafe * SpeedScale);
         else
           driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
       }
       else
       {
         if(gyro.isConnected())
-          driveOutput = drivetrain.fieldOrientedDrive(forward * SpeedScale, (rotation + correction) * SpeedScale, strafe * SpeedScale, getGyroAngle());
+          driveOutput = drivetrain.fieldOrientedDrive(forward * SpeedScale, (rotation - correction) * SpeedScale, strafe * SpeedScale, getGyroAngle());
         else
           driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale, strafe * SpeedScale);
       }
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
-      bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
-      bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
+      bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue() * 0.8);
+      bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue() * 0.8);
 
       
       prevAngle = getGyroAngle(); //Stores previous angle
@@ -261,14 +262,13 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       //Gyro to track rotation
       double rotation = pidRotation.updatePID(getGyroAngle(), rotationOffset);
 
-      Output driveOutput = drivetrain.arcadeMecanumDrive(distance, rotation, strafe);
+      Output driveOutput = drivetrain.arcadeMecanumDrive(0, 0, -rotation);
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
-
-  }
+  } 
 
   public void setPIDGoals(double goalDistance, double goalStrafe, double goalAngleInDegrees)
   {
@@ -299,7 +299,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   //Gyro Correction
 
-  private double gyroCorrectRate = 0.02;
+  private double gyroCorrectRate = 0.1;
 
   private double prevAngle;
 
@@ -313,22 +313,22 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   public double getTopLeftEncoder()
   {
-    return UnitConverter.ticksToMeters(topLeftMotor.getSelectedSensorPosition(), Constants.ticksPerRotation, Constants.wheelDiameter);
+    return UnitConverter.ticksToMeters(topLeftMotor.getSelectedSensorPosition(), 1378, Constants.wheelDiameter);
   }
 
   public double getTopRightEncoder()
   {
-    return UnitConverter.ticksToMeters(topRightMotor.getSelectedSensorPosition(), Constants.ticksPerRotation, Constants.wheelDiameter);
+    return UnitConverter.ticksToMeters(topRightMotor.getSelectedSensorPosition(), 1373, Constants.wheelDiameter);
   }
 
   public double getBottomLeftEncoder()
   {
-    return UnitConverter.ticksToMeters(bottomLeftMotor.getSelectedSensorPosition(), Constants.ticksPerRotation, Constants.wheelDiameter);
+    return UnitConverter.ticksToMeters(bottomLeftMotor.getSelectedSensorPosition(), 1024, Constants.wheelDiameter);
   }
 
   public double getBottomRightEncoder()
   {
-    return UnitConverter.ticksToMeters(bottomRightMotor.getSelectedSensorPosition(), Constants.ticksPerRotation, Constants.wheelDiameter);
+    return UnitConverter.ticksToMeters(bottomRightMotor.getSelectedSensorPosition(), 1024, Constants.wheelDiameter);
   }
 
   public double getLeftEncoder()
@@ -499,14 +499,14 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private void configurePID()
   {
       pidDistance = new PIDController(kPForward, kIForward, kDForward);
-      pidDistance.setThreshold(0.05);
+      pidDistance.setThreshold(0.02);
       pidDistance.setOutputConstraints(0.8, -0.8);
       pidStrafe = new PIDController(kPStrafe, kIStrafe, kDStrafe);
-      pidStrafe.setThreshold(0.05);
+      pidStrafe.setThreshold(0.03);
       pidStrafe.setOutputConstraints(1, -1);
       pidRotation  = new PIDController(kPRotation, kIRotation, kDRotation);
-      pidRotation.setThreshold(1);
-      pidRotation.setOutputConstraints(0.5, -0.5);
+      pidRotation.setThreshold(5);
+      pidRotation.setOutputConstraints(0.8, -0.8);
   }
 
   
