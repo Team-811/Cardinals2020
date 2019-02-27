@@ -66,8 +66,8 @@ public class OI {
       //Drive right joy x axis is defined in the DriveWithJoy command for rotation of drivetrain
 
 
-      operatorController.aButton.whenPressed(new ReleaseHatch());
-      operatorController.bButton.whenPressed(new GrabHatch());
+      operatorController.aButton.whenPressed(new IntakeCargoComp());
+      operatorController.bButton.whenPressed(new OverTheTopOuttakeComp());
       operatorController.xButton.whenPressed(new PlaceHatchComp());
       operatorController.yButton.whenPressed(new AquireHatchComp());  
       operatorController.rightBumper.whenPressed(new IntakeCargoComp());

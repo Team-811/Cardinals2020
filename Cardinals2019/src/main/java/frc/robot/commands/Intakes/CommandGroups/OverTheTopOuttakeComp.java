@@ -42,12 +42,12 @@ public class OverTheTopOuttakeComp extends CommandGroup {
     addSequential(new Unjam());
     addSequential(new TimerCommand(0.15));
     addSequential(new Unjam());
-    addSequential(new TimerCommand(0.7));
+    addSequential(new TimerCommand(1.4));
     //Punch the ball
     addSequential(new ExtendHatchIntake());
     addSequential(new TimerCommand(0.15));
     addSequential(new RetractHatchIntake());
-    addSequential(new TimerCommand(0.15));
+    addSequential(new TimerCommand(0.6));
     //Return to default state
     addSequential(new StopCargo());
     addSequential(new ReleaseHatch());

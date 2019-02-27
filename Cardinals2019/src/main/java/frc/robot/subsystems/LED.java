@@ -24,26 +24,22 @@ public class LED extends Subsystem implements ISubsystem{
   }
 
   private SerialPort LEDPort;
-  
-  public static int instanceCounter = 0;
+
 
   public LED()
   {
     try{
     LEDPort = new SerialPort(9600, SerialPort.Port.kUSB);
-    instanceCounter = 1;
     }
     catch(Exception e)
     {
-      instanceCounter = 0;
+      //ignore
     }
 
   }
 
   public void setLEDs(int preset)
   {
-    if(instanceCounter == 1)
-    {
       try{
         switch(preset)
         {
@@ -114,7 +110,7 @@ public class LED extends Subsystem implements ISubsystem{
         //ignore
       }
     }
-  }
+  
 
 
   @Override

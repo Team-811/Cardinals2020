@@ -107,7 +107,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       gyro = new AHRS(SerialPort.Port.kMXP);
       gyro.reset();
-      invertGyro(true);
+      invertGyro(false);
+
+      zeroEncoders();
 
       drivetrain = new MecanumDrive();
       motionProfile = new MotionProfiling(Constants.maxVelocity, Constants.maxAcceleration, Constants.maxJerk, Constants.wheelbase);
@@ -150,10 +152,10 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       Output driveOutput;
       double correction;
 
-      if(rotation < 0.2 && rotation > -0.2)
+      //if(rotation < 0.2 && rotation > -0.2)
           //when not rotating, compare your current gyro pos to the last time you were rotating to get error
-          correction = gyroCorrection();
-        else
+          //correction = gyroCorrection();
+        //else
           correction = 0;
 
 
@@ -469,7 +471,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     bottomLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     bottomRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    topLeftMotor.setSensorPhase(true);
+    topLeftMotor.setSensorPhase(false);
     topRightMotor.setSensorPhase(true);
     bottomLeftMotor.setSensorPhase(true);
     bottomRightMotor.setSensorPhase(true);

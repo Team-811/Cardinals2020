@@ -33,13 +33,13 @@ public class RobotMap {
 
   //Intake
     //Hatch
-  public static final int INTAKE_RETRACT_PISTON = 4;
-  public static final int INTAKE_HATCH_PISTON_FORWARD = 0;
-  public static final int INTAKE_HATCH_PISTON_REVERSE = 3;
+  public static final int INTAKE_RETRACT_PISTON = 1;
+  public static final int INTAKE_HATCH_PISTON_FORWARD = 4;
+  public static final int INTAKE_HATCH_PISTON_REVERSE = 5;
   public static final int INTAKE_LIMIT_SWITCH = 3;
     //Cargo
-  public static final int INTAKE_CARGO_PISTON_FORWARD = 1;
-  public static final int INTAKE_CARGO_PISTON_REVERSE = 2;
+  public static final int INTAKE_CARGO_PISTON_FORWARD = 2;
+  public static final int INTAKE_CARGO_PISTON_REVERSE = 3;
   public static final int INTAKE_CARGO_MOTOR = 4;
   public static final int INTAKE_DISTANCE_SENSOR = 0;
 

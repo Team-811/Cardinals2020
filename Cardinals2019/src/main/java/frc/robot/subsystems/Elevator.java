@@ -72,12 +72,12 @@ private double kF = 0.1165 * 2; // 0.1165 * 2
 //max motor RPM: 4500
 //16:1 geared down
 //
-private final int CRUISE_VELOCITY = 1920;
-private final int CRUISE_ACCELERATION = 1600;
-private final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.7); // 1024
-private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.7); // 1024
+private final int CRUISE_VELOCITY = 40;
+private final int CRUISE_ACCELERATION = 30;
+private final int CRUISE_VELOCITY_DOWN = (int) (CRUISE_VELOCITY * 0.6); // 1024
+private final int CRUISE_ACCELERATION_DOWN = (int) (CRUISE_ACCELERATION * 0.6); // 1024
 
-private final double joyRate = 10;
+private final double joyRate = 3;
 
 public enum Positions {
     //TODO
@@ -87,7 +87,7 @@ public enum Positions {
     Level1Cargo(70000),
     Level2Cargo(75001),
     Level3Cargo(0),
-    Top(75000);
+    Top(720);
     private double position;
 
     Positions(double encPos) {
@@ -133,7 +133,7 @@ public Elevator() {
     //Neutral mode
     elevatorLeader.setNeutralMode(NeutralMode.Brake);
 
-    elevatorLeader.setInverted(true);
+    elevatorLeader.setInverted(false);
 
     configPIDF(kP, kI, kD, kF);
     configMotionMagic(CRUISE_VELOCITY, CRUISE_ACCELERATION);
@@ -282,7 +282,7 @@ public void updatePIDFFromDashboard() {
     SmartDashboard.putNumber("Actual elevator position", getEncoderPosition());
     SmartDashboard.putNumber("Elevator Velocity", getEncoderVeloctiy());
     SmartDashboard.putNumber("Closed loop error", Math.abs(getDesiredPosition() - getEncoderPosition()));
-    SmartDashboard.putBoolean("Elevator Bottomed out", bottomLimitSwitch.get());
+    SmartDashboard.putBoolean("Elevator Bottomed out", getBottomLimit());
   }
 
   @Override

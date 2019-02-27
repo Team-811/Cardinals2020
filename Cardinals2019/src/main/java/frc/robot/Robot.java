@@ -73,10 +73,13 @@ public class Robot extends TimedRobot {
 
 
 
+
     //Robot.intakes.releaseHatch();
     Robot.intakes.bringUpCargoIntake();
 
     led.setLEDs(9); //Red Flame
+
+    
   }
 
   /**
@@ -90,6 +93,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
       updateSmartdashboard();
+      
   }
 
   /**
@@ -221,7 +225,7 @@ public class Robot extends TimedRobot {
         }
 
         ledOnLoop();
-        visionOnLoop();
+        //visionOnLoop();
         updatePositionOnLoop();
 
       }
@@ -231,10 +235,9 @@ public class Robot extends TimedRobot {
 
   public void ledOnLoop()
   {
-    if(LED.instanceCounter == 0)
-    {
+  
       led = LED.getInstance();
-    }
+    
   }
 
   public void visionOnLoop()
