@@ -127,7 +127,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     FieldOriented();
   }
 
-  private DriveMode mode = DriveMode.FieldOriented;
+  private DriveMode mode = DriveMode.Arcade;
 
   public DriveMode getMode() {
     return mode;
