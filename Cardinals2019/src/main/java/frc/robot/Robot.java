@@ -68,11 +68,6 @@ public class Robot extends TimedRobot {
     Thread updateThread = new Thread(new RunUpdater());
     updateThread.start();
 
-    // Thread robotPosition = new Thread(new UpdateRobotPostion());
-    // robotPosition.start();
-
-
-
 
     //Robot.intakes.releaseHatch();
     Robot.intakes.bringUpCargoIntake();

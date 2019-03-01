@@ -8,6 +8,7 @@
 package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
 import frc.robot.commands.Intakes.InstantCommands.*;
 import frc.robot.commands.Utility.*;
 import frc.robot.commands.LED.*;
@@ -40,18 +41,28 @@ public class OverTheTopOuttakeComp extends CommandGroup {
     addSequential(new DropCargoIntake());
     //Pulse the motors a few times and bring the ball over the top
     addSequential(new Unjam());
-    addSequential(new TimerCommand(0.15));
+    addSequential(new TimerCommand(0.2));
     addSequential(new Unjam());
-    addSequential(new TimerCommand(1.4));
-    //Punch the ball
-    addSequential(new ExtendHatchIntake());
-    addSequential(new TimerCommand(0.15));
-    addSequential(new RetractHatchIntake());
-    addSequential(new TimerCommand(0.6));
-    //Return to default state
-    addSequential(new StopCargo());
-    addSequential(new ReleaseHatch());
-    addSequential(new BringUpCargoIntake());
-    addSequential(new RedFlame());
+    addSequential(new TimerCommand(1.6));
+    //If the robot does not have the ball anymmore then the ball sucessfully went over the top and can be punched
+    if(Robot.intakes.hasCargo() == false)
+    {
+        //Punch the ball
+        addSequential(new ExtendHatchIntake());
+        addSequential(new TimerCommand(0.15));
+        addSequential(new RetractHatchIntake());
+        addSequential(new TimerCommand(0.6));
+        //Return to default state
+        addSequential(new StopCargo());
+        addSequential(new ReleaseHatch());
+        addSequential(new BringUpCargoIntake());
+        addSequential(new RedFlame());
+    }
+    else //If it did not go over then simply just keep holding onto the ball
+    {
+        addSequential(new StopCargo());
+        addSequential(new RedFlame());
+    }
+    
   }
 }
