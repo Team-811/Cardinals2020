@@ -36,7 +36,7 @@ public class IntakeCargoComp extends CommandGroup {
     // arm.
 
     // Set LEDs
-    addSequential(new Red());
+    addSequential(new RainbowSnake());
 
     //Make sure that hatch intake is out of the way
     addSequential(new RetractHatchIntake());
@@ -52,12 +52,6 @@ public class IntakeCargoComp extends CommandGroup {
 
     //Intake ball with sensor
     addSequential(new GrabCargoWithSensor());
-
-    if(Robot.intakes.hasCargo())
-    {
-      addSequential(new Green());
-      addSequential(new TimerCommand(2));
-    }
 
     // Set LEDs
     addSequential(new RedFlame());
