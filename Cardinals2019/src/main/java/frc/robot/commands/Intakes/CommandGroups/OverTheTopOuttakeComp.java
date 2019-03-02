@@ -8,6 +8,7 @@
 package frc.robot.commands.Intakes.CommandGroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
 import frc.robot.commands.Intakes.InstantCommands.*;
 import frc.robot.commands.Utility.*;
 import frc.robot.commands.LED.*;
@@ -42,7 +43,7 @@ public class OverTheTopOuttakeComp extends CommandGroup {
     addSequential(new Unjam());
     addSequential(new TimerCommand(0.15));
     addSequential(new Unjam());
-    addSequential(new TimerCommand(1.4));
+    addSequential(new TimerCommand(1.6));
     //Punch the ball
     addSequential(new ExtendHatchIntake());
     addSequential(new TimerCommand(0.15));

@@ -178,8 +178,8 @@ public void checkMotionMagicTermination() {
         state = LiftState.Stationary;
     }
     //If elevator is at limits, then stop the elevator
-    checkIfToppedOut();
-    checkIfZeroedOut();
+    //checkIfToppedOut();
+    //checkIfZeroedOut();
 }
 
 
@@ -202,8 +202,11 @@ public void directJoyControl(double joystick)
         setState(LiftState.Stationary);
     }
     
-    elevatorLeader.set(ControlMode.PercentOutput, joystick);
-    checkIfZeroedOut();
+    if(!isZeroedOut())
+        elevatorLeader.set(ControlMode.PercentOutput, joystick);
+    else
+        stopElevator();
+
 }
 
 
@@ -211,21 +214,25 @@ public void stopElevator() {
     elevatorLeader.set(ControlMode.PercentOutput, 0.0);
 }
 
-private void checkIfToppedOut(){
+private boolean isToppedOut(){
     if (getEncoderPosition() >= Positions.Top.getPosition() && getState() != LiftState.GoingDown) {
         setState(LiftState.ToppedOut);
         setPosition(Positions.Top.position);
-        stopElevator();
+        return true;
     }
+    else
+        return false;
 }
 
-private void checkIfZeroedOut() {
+private boolean isZeroedOut() {
     if (getBottomLimit() && getState() != LiftState.GoingUp) {
         setState(LiftState.BottomedOut);
         setPosition(Positions.Intake.position);
         elevatorLeader.setSelectedSensorPosition(0);
-        stopElevator();
+        return true;
     }
+    else
+        return false;
 }
 
 public void configPIDF(double kP, double kI, double kD, double kF) {

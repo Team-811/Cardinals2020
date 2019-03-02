@@ -226,7 +226,7 @@ public class Robot extends TimedRobot {
 
         ledOnLoop();
         //visionOnLoop();
-        updatePositionOnLoop();
+        //updatePositionOnLoop();
 
       }
     }
