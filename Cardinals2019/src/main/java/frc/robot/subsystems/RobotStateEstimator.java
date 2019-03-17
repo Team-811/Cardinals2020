@@ -6,6 +6,7 @@ import frc.robot.Robot;
 import frc.robot.RobotState;
 import frc.robot.lib.geometry.Rotation2d;
 import frc.robot.lib.geometry.Twist2d;
+import frc.robot.commands.RobotStateEstimator.*;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -56,6 +57,7 @@ public class RobotStateEstimator extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
+        setDefaultCommand(new EstimatePosition());
     }
 
 }

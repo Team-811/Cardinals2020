@@ -7,7 +7,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.RobotMap;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
@@ -37,21 +41,25 @@ public class Climber extends Subsystem implements ISubsystem{
 
   public void armMotor(double rotation)
   {
-    armMotor.set(ControlMode.PercentOutput,rotation);
+    armMotor.set(ControlMode.PercentOutput, rotation);
       
   }
 
-  public void stiltMotor(double rotation)
+  public void stiltMotor(double value)
   {
-    stiltMotor.set(ControlMode.PercentOutput,rotation);
+    stiltMotor.set(ControlMode.PercentOutput, value);
       
   }
 
   public void wheelMotor(double rotation)
   {
-    wheelMotor.set(ControlMode.PercentOutput,rotation);
+    wheelMotor.set(ControlMode.PercentOutput, rotation);
       
   }
+
+
+
+
 
   @Override
   public void outputSmartdashboard() 
