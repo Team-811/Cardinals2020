@@ -17,11 +17,41 @@ public class Climber extends Subsystem implements ISubsystem{
   // here. Call these from Commands.
 
   private static Climber instance = new Climber();
-
+                                                                                                                                      
   public static Climber getInstance() {
       return instance;
   }
 
+  private TalonSRX armMotor;
+  private TalonSRX stiltMotor;
+  private TalonSRX wheelMotor;
+
+  public Climber()
+  {
+    armMotor = new TalonSRX(RobotMap.CLIMBER_ARM_MOTOR);
+    stiltMotor = new TalonSRX(RobotMap.CLIMBER_STILT_MOTOR);
+    wheelMotor = new TalonSRX(RobotMap.CLIMBER_WHEEL_MOTOR); 
+  }
+
+  //ClimberMethods
+
+  public void armMotor(double rotation)
+  {
+    armMotor.set(ControlMode.PercentOutput,rotation);
+      
+  }
+
+  public void stiltMotor(double rotation)
+  {
+    stiltMotor.set(ControlMode.PercentOutput,rotation);
+      
+  }
+
+  public void wheelMotor(double rotation)
+  {
+    wheelMotor.set(ControlMode.PercentOutput,rotation);
+      
+  }
 
   @Override
   public void outputSmartdashboard() 
