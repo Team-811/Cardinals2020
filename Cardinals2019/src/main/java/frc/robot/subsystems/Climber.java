@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -30,6 +31,12 @@ public class Climber extends Subsystem implements ISubsystem{
   private TalonSRX stiltMotor;
   private TalonSRX wheelMotor;
 
+  private DigitalInput upperArmLimitSwitch;
+  private DigitalInput lowerArmLimitSwitch;
+  private DigitalInput upperStiltLimitSwitch;
+  private DigitalInput lowerStiltLimitSwitch;
+  private DigitalInput habLimitSwitch;
+
   public Climber()
   {
     armMotor = new TalonSRX(RobotMap.CLIMBER_ARM_MOTOR);
@@ -39,27 +46,43 @@ public class Climber extends Subsystem implements ISubsystem{
 
   //ClimberMethods
 
-  public void armMotor(double rotation)
+  public void setArmMotor(double rotation)
   {
     armMotor.set(ControlMode.PercentOutput, rotation);
       
   }
 
-  public void stiltMotor(double value)
+  public void setStiltMotor(double value)
   {
     stiltMotor.set(ControlMode.PercentOutput, value);
       
   }
 
-  public void wheelMotor(double rotation)
+  public void setWheelMotor(double rotation)
   {
     wheelMotor.set(ControlMode.PercentOutput, rotation);
       
   }
 
+  public boolean getUpperArmSwitch() {
+    return upperArmLimitSwitch.get();
+  }
 
+  public boolean getLowerArmSwitch() {
+    return lowerArmLimitSwitch.get();
+  }
 
+  public boolean getUpperStiltSwitch() {
+    return upperStiltLimitSwitch.get();
+  }
 
+  public boolean getLowerStiltSwitch() {
+    return lowerStiltLimitSwitch.get();
+  }
+
+  public boolean getHabSwitch() {
+    return habLimitSwitch.get();
+  }
 
   @Override
   public void outputSmartdashboard() 
