@@ -88,7 +88,7 @@ public class MotionProfiling
             System.out.println(pathHash + ".csv not found, wrote to file");
         } else {
             System.out.println(pathHash + ".csv read from file");
-            trajectory = Pathfinder.readFromCSV(trajectoryFile);
+            //trajectory = Pathfinder.readFromCSV(trajectoryFile);
         }        
 
         if(reverse)
