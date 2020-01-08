@@ -5,13 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-<<<<<<< HEAD
 //hi 2
 
-=======
-//hi
-//test2
->>>>>>> b2cf02ea5001ad58e9bd73431882d11434b0de6c
 
 package frc.robot.commands.Drivetrain;
 
