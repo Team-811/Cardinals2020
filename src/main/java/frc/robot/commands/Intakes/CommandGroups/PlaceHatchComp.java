@@ -14,8 +14,9 @@ import frc.robot.commands.LED.*;
 
 public class PlaceHatchComp extends CommandGroup {
   /**
-   * Add your docs here.
-   */
+ * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.  This one is a combination of commands
+ * that allows the robot to place a hatch
+ */
   public PlaceHatchComp() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
@@ -36,9 +37,9 @@ public class PlaceHatchComp extends CommandGroup {
 
     addSequential(new RedYellowSnake());
     addSequential(new ExtendHatchIntake());
-    addSequential(new TimerCommand(0.2));
+    addSequential(new TimerCommand(0.25));
     addSequential(new ReleaseHatch());
-    addSequential(new TimerCommand(0.2));
+    addSequential(new TimerCommand(0.25));
     addSequential(new RetractHatchIntake());
     addSequential(new RedFlame());
 

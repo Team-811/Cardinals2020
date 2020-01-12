@@ -9,6 +9,10 @@ package frc.robot.lib;
 
 import jaci.pathfinder.*;
 import jaci.pathfinder.Trajectory.Segment;
+import jaci.pathfinder.followers.EncoderFollower;
+import jaci.pathfinder.modifiers.TankModifier;
+
+import frc.robot.Constants;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,16 +25,26 @@ import java.util.Collections;
  * follow the path.
  */
 
+ /*
+ notes about this class
+ -the trajectory loading from file was not working
+ -ramsete is not working and more difficult to work with
+ */
 public class MotionProfiling 
 {
     private double maxVelocity;
+    private double absoluteMaxVelocity;
     private double maxAcceleration;
     private double maxJerk;
     private double wheelbase;
 
+    //the loop rate this code is running at.  Robot program runs every 20ms
     private final double dt = 0.05;
 
     private Trajectory trajectory;
+
+    private EncoderFollower leftFollower;
+    private EncoderFollower rightFollower;
 
      //Should be greater than zero and this increases correction
      private static final double b = 1.5;
@@ -44,6 +58,10 @@ public class MotionProfiling
  
      //The robot's x and y position and angle
      private Odometry odometry;
+
+     private int leftEncoderStartingPosition;
+     private int rightEncoderStartingPosition;
+     private double initGyro;
  
  
      //Variable used to calculate linear and angular velocity
@@ -55,6 +73,10 @@ public class MotionProfiling
      //Constants
      private static final double EPSILON = 0.00001;
      private static final double TWO_PI = 2 * Math.PI;
+
+    //PID for pathfinder
+     private double kD = 0.2;
+	 private double kP = 1;
  
      //Variable for holding velocity for robot to drive on
      private double left, right;
@@ -63,11 +85,14 @@ public class MotionProfiling
     public MotionProfiling(double maxVelocity, double maxAcceleration, double maxJerk, double wheelbase)
     {
         this.maxVelocity = maxVelocity;
+        this.absoluteMaxVelocity = Constants.maxVelocity;
         this.maxAcceleration = maxAcceleration;
         this.maxJerk = maxJerk;
         this.wheelbase = wheelbase;
 
+        //class used to store the robots x and y position and angle
         odometry = new Odometry();
+
         driveOutput = new Output();
         
     }
@@ -88,7 +113,7 @@ public class MotionProfiling
             System.out.println(pathHash + ".csv not found, wrote to file");
         } else {
             System.out.println(pathHash + ".csv read from file");
-            //trajectory = Pathfinder.readFromCSV(trajectoryFile);
+            trajectory = Pathfinder.readFromCSV(trajectoryFile);
         }        
 
         if(reverse)
@@ -98,7 +123,47 @@ public class MotionProfiling
         setInitialOdometry();
     }
 
-    public Trajectory reversePath(Trajectory original){
+    public void loadTrajectoryPathfinder(Waypoint[] path, boolean reverse, int leftEncoderRaw, int rightEncoderRaw, double gyroAngle) {
+        Trajectory.Config cfg = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH,
+                dt, maxVelocity, maxAcceleration, maxJerk);
+
+        //Load trajectory from file if it exists, else generate the trajectory and save it 
+        String pathHash = String.valueOf(path.hashCode());
+        File trajectoryFile = new File("/home/lvuser/paths/" + pathHash + ".csv");
+        if (!trajectoryFile.exists()) {
+            trajectory = Pathfinder.generate(path, cfg);
+            Pathfinder.writeToCSV(trajectoryFile, trajectory);
+            System.out.println(pathHash + ".csv not found, wrote to file");
+        } else {
+            System.out.println(pathHash + ".csv read from file");
+            trajectory = Pathfinder.readFromCSV(trajectoryFile);
+        }        
+
+        TankModifier modifier = new TankModifier(trajectory);
+        
+        //this is reversal code from 2018 which is to flip flop the left right trajectories and the encoders always read positive
+        if(!reverse) {
+            leftFollower = new EncoderFollower(modifier.getLeftTrajectory());
+            rightFollower = new EncoderFollower(modifier.getRightTrajectory());
+        }
+        else 
+        {
+            leftFollower = new EncoderFollower(modifier.getRightTrajectory());
+            rightFollower = new EncoderFollower(modifier.getLeftTrajectory());	
+        }
+            leftEncoderStartingPosition = leftEncoderRaw;
+            rightEncoderStartingPosition = rightEncoderRaw;
+            initGyro = gyroAngle;
+
+            leftFollower.configureEncoder(leftEncoderStartingPosition, Constants.ticksPerRotation, Constants.wheelDiameter);
+            rightFollower.configureEncoder(rightEncoderStartingPosition, Constants.ticksPerRotation, Constants.wheelDiameter);
+            leftFollower.configurePIDVA(kP, 0.0, kD, 1 / absoluteMaxVelocity, 0);
+            rightFollower.configurePIDVA(kP, 0.0, kD, 1 / absoluteMaxVelocity, 0);
+    }
+
+
+    //This function is used to invert a trajectory
+    private Trajectory reversePath(Trajectory original){
         ArrayList<Segment> segments = new ArrayList<>(Arrays.asList(original.segments));
         Collections.reverse(segments);
 
@@ -217,5 +282,46 @@ public class MotionProfiling
      {
         return (segmentIndex / trajectory.length()) * 100;
      }
+
+
+
+
+     //Pathfinder Methods
+    
+    public Output followTrajectoryPathfinder(boolean reverse, int leftEncoderRaw, int rightEncoderRaw, double gyroAngle)
+    {
+        int inverted = 1;
+
+        if(reverse)
+            inverted = -1;
+        
+        //
+		int leftEncoderPosition = leftEncoderStartingPosition
+				+ Math.abs(leftEncoderStartingPosition - leftEncoderRaw);
+		int rightEncoderPosition = rightEncoderStartingPosition
+                + Math.abs(rightEncoderStartingPosition - rightEncoderRaw);
+                
+        gyroAngle = gyroAngle - initGyro;
+
+
+		double l = leftFollower.calculate(leftEncoderPosition);
+		double r = rightFollower.calculate(rightEncoderPosition);
+
+		double gyro_heading = gyroAngle * -1; // counter clockwise rotation should be positive
+		double desired_heading = Pathfinder.r2d(leftFollower.getHeading()); // Should also be in degrees
+
+		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+		double turn = 0.8 * (-1.0 / 80.0) * angleDifference;
+
+        driveOutput.updateOutput(l * inverted + turn , l * inverted + turn);
+
+		return driveOutput;
+    }
+
+    public boolean isPathfinderPathDone()
+    {
+        return leftFollower.isFinished() && rightFollower.isFinished();
+    }
+    
  }
 

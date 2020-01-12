@@ -10,6 +10,11 @@ package frc.robot.commands.Elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
+/**
+ * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.  This one loops to use the 
+ * motion magic control of the elevator
+ */
+
 public class MainElevator extends Command {
   public MainElevator() {
     // Use requires() here to declare subsystem dependencies
@@ -25,7 +30,7 @@ public class MainElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.elevator.setPositionWithJoy(-Robot.controllers.operatorController.rightStick.getY());
+    Robot.elevator.setPositionWithJoy(Robot.controllers.operatorController.triggers.getTwist());
     Robot.elevator.runMotionMagic();
     Robot.elevator.checkMotionMagicTermination();
   }

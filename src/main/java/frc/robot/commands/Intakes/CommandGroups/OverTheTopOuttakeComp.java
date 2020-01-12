@@ -15,8 +15,9 @@ import frc.robot.commands.LED.*;
 
 public class OverTheTopOuttakeComp extends CommandGroup {
   /**
-   * Add your docs here.
-   */
+ * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.  This one is a combination of commands
+ * that allows the robot to release a ball over the top
+ */
   public OverTheTopOuttakeComp() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
@@ -41,9 +42,7 @@ public class OverTheTopOuttakeComp extends CommandGroup {
     addSequential(new DropCargoIntake());
     //Pulse the motors a few times and bring the ball over the top
     addSequential(new Unjam());
-    addSequential(new TimerCommand(0.2));
-    addSequential(new Unjam());
-    addSequential(new TimerCommand(1.6));
+    addSequential(new TimerCommand(1.2));
     //Punch the ball
     addSequential(new ExtendHatchIntake());
     addSequential(new TimerCommand(0.15));

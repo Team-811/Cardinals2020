@@ -23,7 +23,8 @@ import java.util.List;
 import java.net.DatagramPacket;
 
 /**
- * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.
+ * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  The vision subsystem takes in data from the rasp pi which does the vision 
+ * processing and adds targets to the VisionList which keeps a list of vision targets and information about the targets.
  */
 public class Vision extends Subsystem implements ISubsystem {
   // Put methods for controlling this subsystem
@@ -86,13 +87,13 @@ public class Vision extends Subsystem implements ISubsystem {
     targets.clearList(); //Clear previous targets before adding more
     
     // parse all data from String[] into variables
-    for(int i = 0; i < data.length; i+= 3)
+    for(int i = 0; i < data.length; i+= 2)
     {
       double xOffset = Double.parseDouble(data[i]);
       double distance = Double.parseDouble(data[i + 1]);
-      double angle = Double.parseDouble(data[i + 2]);
+      //double angle = Double.parseDouble(data[i + 2]);
 
-      targets.addTarget(new VisionTarget(xOffset, distance, angle));
+      targets.addTarget(new VisionTarget(xOffset, distance));
     }
 
     targets.setTimestamp(Timer.getFPGATimestamp() - Constants.cameraLatency); //Set timestamp of targets
@@ -114,7 +115,7 @@ public class Vision extends Subsystem implements ISubsystem {
 
       for(int i = 0; i < xOffset.length; i++)
       {
-        targets.addTarget(new VisionTarget(xOffset[i], distance[i], angle[i]));
+        targets.addTarget(new VisionTarget(xOffset[i], distance[i]));
       }
 
       targets.setTimestamp(Timer.getFPGATimestamp() - Constants.cameraLatency); //Set timestamp of targets
@@ -146,6 +147,41 @@ public class Vision extends Subsystem implements ISubsystem {
   @Override
   public void resetSubsystem() {
     
+  }
+  
+  public int[][][] RyanVision()
+  {
+    int rows=640;
+    int col= 480;
+    int pixel= 3;
+    try {
+      // port 5800-5810
+      socket = new DatagramSocket(PORT);
+    } catch (Exception e) {
+      System.out.println("Can't initialize vision socket");
+    }
+    // receive information
+    DatagramPacket packet = new DatagramPacket(buf, buf.length);
+    try {
+      socket.receive(packet);
+    } catch (Exception e) {
+      //Ignore
+    }
+    // put information into String[]
+    data = new String(packet.getData(), 0, packet.getLength()).split(",");
+    int [][][] picture = new int [rows][col][pixel];
+    // parse all data from String[] into variables
+    for(int i = 0; i < data.length; i+= 2)
+    {
+      for (int row=0; row<rows; row++)
+        for (int cols=0; cols<col; cols++)
+          for(int pix=0; pix<pixel; pix++)
+            picture[row][cols][pix]= Integer.parseInt(data[((row)*cols+cols)*pix+pix]);
+      double xOffset = Double.parseDouble(data[i]);
+      double distance = Double.parseDouble(data[i + 1]);
+      //double angle = Double.parseDouble(data[i + 2]);
+    }
+    return picture;
   }
 
 

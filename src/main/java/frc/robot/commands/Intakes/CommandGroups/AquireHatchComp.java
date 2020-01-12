@@ -13,9 +13,10 @@ import frc.robot.commands.Intakes.InstantCommands.*;
 import frc.robot.commands.LED.*;
 
 public class AquireHatchComp extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
+/**
+ * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.  This one is a combination of commands
+ * that allows the robot to pick up a hatch
+ */
   public AquireHatchComp() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
@@ -42,9 +43,9 @@ public class AquireHatchComp extends CommandGroup {
     //Sequence to grab hatch
     addSequential(new ExtendHatchIntake());
     addSequential(new ReleaseHatch());
-    addSequential(new TimerCommand(0.2));
+    addSequential(new TimerCommand(0.25));
     addSequential(new GrabHatch());
-    addSequential(new TimerCommand(0.2));
+    addSequential(new TimerCommand(0.25));
     addSequential(new RetractHatchIntake());
     //set default led
     addSequential(new RedFlame());

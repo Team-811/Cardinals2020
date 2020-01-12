@@ -49,6 +49,7 @@ public class Intakes extends Subsystem implements ISubsystem{
   private DigitalInput limitSwitch;
 
   private DoubleSolenoid cargoPiston;
+  private boolean cargoIsDown;
   private TalonSRX cargoMotor;
   private AnalogInput distanceSensor;
 
@@ -59,6 +60,7 @@ public class Intakes extends Subsystem implements ISubsystem{
       limitSwitch = new DigitalInput(RobotMap.INTAKE_LIMIT_SWITCH);
 
       cargoPiston = new DoubleSolenoid(RobotMap.INTAKE_CARGO_PISTON_FORWARD, RobotMap.INTAKE_CARGO_PISTON_REVERSE);
+      cargoIsDown = false;
       cargoMotor = new TalonSRX(RobotMap.INTAKE_CARGO_MOTOR);
       cargoMotor.setInverted(true);
       distanceSensor = new AnalogInput(RobotMap.INTAKE_DISTANCE_SENSOR);
@@ -77,12 +79,12 @@ public class Intakes extends Subsystem implements ISubsystem{
 
    public void grabHatch()
   {
-      hatchPiston.set(DoubleSolenoid.Value.kForward);
+      hatchPiston.set(DoubleSolenoid.Value.kReverse);
   }
 
    public void releaseHatch()
   {
-      hatchPiston.set(DoubleSolenoid.Value.kReverse);
+      hatchPiston.set(DoubleSolenoid.Value.kForward);
   }
 
   public boolean hasHatch()
@@ -100,22 +102,28 @@ public class Intakes extends Subsystem implements ISubsystem{
    public void bringUpCargoIntake()
   {
       cargoPiston.set(DoubleSolenoid.Value.kReverse);
+      cargoIsDown = false;
   }
 
    public void dropCargoIntake()
   {
       cargoPiston.set(DoubleSolenoid.Value.kForward);
+      cargoIsDown = true;
   }
 
+  public boolean isCargoIntakeDown()
+ {
+    return cargoIsDown;
+ }
    public void intakeCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, 0.6);
+      cargoMotor.set(ControlMode.PercentOutput, 1);
       
   }
 
    public void releaseCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, -0.6);
+      cargoMotor.set(ControlMode.PercentOutput, -1);
   }
 
   public void stopCargo()
@@ -125,12 +133,12 @@ public class Intakes extends Subsystem implements ISubsystem{
 
   public boolean hasCargo()
   {
-      if(distanceSensor.getVoltage() > 0.829)  //Any object that is 7cm or closer will produce 0.8V or more
+      if(distanceSensor.getVoltage() > 0.520)  //Any object that is 7cm or closer will produce 0.8V or more
         return true;
       else
         return false;
   }
-
+/*
   public boolean hasCargoOverTop()
   {
       if(distanceSensor.getVoltage() > 0.7)  //Any object that is 7cm or closer will produce 0.8V or more
@@ -138,7 +146,7 @@ public class Intakes extends Subsystem implements ISubsystem{
       else
         return false;
   }
-
+*/
 
 
 

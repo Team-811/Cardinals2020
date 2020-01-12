@@ -10,6 +10,11 @@ package frc.robot.commands.Drivetrain;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
+/**
+ * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.
+ */
+
+
 public class TrackVisionTarget extends Command {
   public TrackVisionTarget() {
     // Use requires() here to declare subsystem dependencies
@@ -20,7 +25,7 @@ public class TrackVisionTarget extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.drivetrain.setPIDGoals(0, 0, 90);
+    Robot.drivetrain.setPIDGoals(0, 1, 0);
   }
 
   // Called repeatedly when this Command is scheduled to run

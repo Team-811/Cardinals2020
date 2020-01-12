@@ -12,23 +12,27 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Elevator.Positions;
 
 /**
- * Add your docs here.
+ * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.
  */
-public class GoToLevel2Cargo extends InstantCommand {
+public class GoToLevel1 extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public GoToLevel2Cargo() {
+  public GoToLevel1() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.elevator);
+    requires(Robot.intakes);
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.elevator.setPosition(Positions.Level2Cargo.getPosition());
+    if(Robot.intakes.isCargoIntakeDown())
+      Robot.elevator.setPosition(Positions.Level1Cargo.getPosition());
+    else
+      Robot.elevator.setPosition(Positions.Intake.getPosition());
   }
 
 }

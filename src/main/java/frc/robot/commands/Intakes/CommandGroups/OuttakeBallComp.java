@@ -14,8 +14,9 @@ import frc.robot.commands.Utility.*;
 
 public class OuttakeBallComp extends CommandGroup {
   /**
-   * Add your docs here.
-   */
+ * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.  This one is a combination of commands
+ * that allows the robot release a ball 
+ */
   public OuttakeBallComp() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
@@ -40,10 +41,11 @@ public class OuttakeBallComp extends CommandGroup {
     addSequential(new DropCargoIntake());
     
     addSequential(new ReleaseCargo());
-    addSequential(new TimerCommand(2));
+    addSequential(new TimerCommand(1.2));
     addSequential(new StopCargo());
     addSequential(new ReleaseHatch());
     addSequential(new BringUpCargoIntake());
+
     addSequential(new RedFlame());
   }
 }
