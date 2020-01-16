@@ -1,6 +1,6 @@
-package frc.robot.controllers.Utility;
+package frc.robot.controllers;
 
-import frc.robot.controllers.Utility.BobAxisButton.ThresholdType;
+import frc.robot.controllers.BobAxisButton.ThresholdType;
 
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -27,9 +27,9 @@ public class BobXboxController extends Joystick {
 	public BobButton leftStickButton = new BobButton(this, XboxButton.LEFT_STICK);
 	public BobButton rightStickButton = new BobButton(this, XboxButton.RIGHT_STICK);
 
-	public BobAxisButton leftTriggerButton = new BobAxisButton(this, XboxAxis.LEFT_TRIGGER, .5,
+	public BobAxisButton leftTriggerButton = new BobAxisButton(this, XboxAxis.LEFT_TRIGGER, .25,
 			ThresholdType.GREATER_THAN);
-	public BobAxisButton rightTriggerButton = new BobAxisButton(this, XboxAxis.RIGHT_TRIGGER, .5,
+	public BobAxisButton rightTriggerButton = new BobAxisButton(this, XboxAxis.RIGHT_TRIGGER, .25,
 			ThresholdType.GREATER_THAN);
 	public BobDpad Dpad = new BobDpad(this);
 

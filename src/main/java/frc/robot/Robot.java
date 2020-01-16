@@ -7,18 +7,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controllers.OI;
-import frc.robot.subsystems.*;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode.PixelFormat;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Neo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,15 +23,12 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  public static Drivetrain drivetrain;
-  public static Intakes intakes;
-  public static Climber climber;
-  public static Elevator elevator;
-  public static LED led;
-  public static Vision vision;
-  public static RobotStateEstimator stateEstimator;
+  public static Drivetrain drivetrain = Drivetrain.getInstance();
+  public static Neo neo = Neo.getInstance();
+  public static RobotMap robotMap = new RobotMap();  
   public static OI controllers; 
+
+
 
   //Command m_autonomousCommand;
   //SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -47,41 +39,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    //initialize all the subsystems
-    //Retrieves the instance from the class to make sure there arent 2 drivetrains etc
-    drivetrain = Drivetrain.getInstance();
-    intakes = Intakes.getInstance();
-    climber = Climber.getInstance();
-    elevator = Elevator.getInstance();
-    led = LED.getInstance();
-    vision = Vision.getInstance();
-    stateEstimator = RobotStateEstimator.getInstance();
-    controllers = OI.getInstance();
+    controllers = new OI();
+
+    CameraServer.getInstance().startAutomaticCapture();
 
     updateSmartdashboard();
+
+    //SmartDashboard CameraServer
+
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);
-
-    //CameraServer for SmartDashboard
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    camera.setVideoMode(PixelFormat.kMJPEG, 320, 240, 30);
-
-    //Start threads
-    //Threads are used for leds, vision, and position tracker so they dont overload the main robot program
-    Thread updateThread = new Thread(new RunUpdater());
-    updateThread.start();
-
-
-    //Presets the cargo intake to the up position
-    Robot.intakes.bringUpCargoIntake();
-
-    //Presets the LEDs to play the flame patten
-    led.setLEDs(9); //Red Flame
-
-    
   }
-
+  
+  
   /**
    * This function is called every robot packet, no matter the mode. Use
    * this for items like diagnostics that you want ran during disabled,
@@ -92,8 +63,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-      updateSmartdashboard();
-      
   }
 
   /**
@@ -136,8 +105,6 @@ public class Robot extends TimedRobot {
     //if (m_autonomousCommand != null) {
     //m_autonomousCommand.start();
     //}
-
-    updateSmartdashboard();
   }
 
   /**
@@ -146,8 +113,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-
-    updateSmartdashboard();
   }
 
   @Override
@@ -159,8 +124,6 @@ public class Robot extends TimedRobot {
    // if (m_autonomousCommand != null) {
    //   m_autonomousCommand.cancel();
     //}
-
-      updateSmartdashboard();
   }
 
   /**
@@ -169,7 +132,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-
     updateSmartdashboard();
   }
 
@@ -180,77 +142,10 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-  /**
-   * This function is called once when the robot is enabled in test mode
-   */
-  @Override
-  public void testInit() {
-    //Initial Print
-    System.out.println("/////////////////////////////////////////////////////");
-    System.out.println("***********Robot has now entered test mode***********");
-    System.out.println("*****Warning: Robot will move during this period*****");
-    System.out.println("*******Please move out of the way of the Robot*******");
-    System.out.println("/////////////////////////////////////////////////////");
-    Timer.delay(5);
-
-    //Run tests
-    drivetrain.testSubsystem();
-    elevator.testSubsystem();
-    intakes.testSubsystem();
-
-
-    
-  }
-
-
   private void updateSmartdashboard()
   {
       drivetrain.outputSmartdashboard();
-      elevator.outputSmartdashboard();
-      intakes.outputSmartdashboard();
-      //led.outputSmartdashboard();
-      vision.outputSmartdashboard();
-  }
-
-
-
-
-
-  public class RunUpdater implements Runnable
-  {
-    public void run()
-    {
-      while (true) {
-        try {
-          Thread.sleep(20L);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-
-        ledOnLoop();
-        //visionOnLoop();
-
-      }
-    }
-  }
-
-
-  public void ledOnLoop()
-  {
-      led = LED.getInstance();
-  }
-
-  public void visionOnLoop()
-  {
-      vision = vision.getInstance();
-      if(vision != null)
-        vision.onLoop();
-    
-  }
-
-  public void updatePositionOnLoop()
-  {
-      stateEstimator.runRobotStateEstimator(Timer.getFPGATimestamp());
+      neo.outputSmartdashboard();
   }
 
 }

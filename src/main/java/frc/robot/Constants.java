@@ -13,7 +13,7 @@ package frc.robot;
 public class Constants 
 {
     //TODO
-    public static final double wheelbase = 0;
+    public static final double wheelbase = 0.84;
     public static final double wheelDiameter = 0.1;
     public static final double smallWheelDiameter = 0.1;
     public static final double maxVelocity = 1;
@@ -23,6 +23,10 @@ public class Constants
     public static final double strafeTrackScrubFactor = 0.8;
     public static final int ticksPerRotation = 1024;
 
+    // DRIVE WHEEL COEFFICIENTS
+    public static final double LEFT_COEFFICIENT = 1;
+    public static final double RIGHT_COEFFICENT = 1;
+   
     public static final double robotLength = 0.8763; //With bumpers
     public static final double robotWidth = 0.8636; //With bumpers
 
@@ -39,6 +43,5 @@ public class Constants
     public static double kTrackReportComparatorStablityWeight = 1.0;
     public static double kTrackReportComparatorAgeWeight = 1.0;
 
-    public static final double cameraLatency = 0.2; //TODO
-
+    public static final double cameraLatency = 0.2;
 }

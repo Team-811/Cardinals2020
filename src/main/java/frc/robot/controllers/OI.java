@@ -7,15 +7,9 @@
 
 package frc.robot.controllers;
 
-import frc.robot.controllers.Utility.*;
-import frc.robot.commands.Climber.single.MoveRobot;
 import frc.robot.commands.Drivetrain.*;
-import frc.robot.commands.Elevator.GoToBottom;
-import frc.robot.commands.Elevator.GoToLevel1;
-import frc.robot.commands.Elevator.GoToLevel2;
-import frc.robot.commands.Elevator.GoToLevel3;
-import frc.robot.commands.Intakes.CommandGroups.*;
-import frc.robot.commands.Intakes.InstantCommands.*;
+import frc.robot.commands.Test.*;
+import frc.robot.subsystems.Neo;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -50,49 +44,16 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
-    private static OI instance = new OI();
+  public BobXboxController driveController;
+  public BobXboxController operatorController;
 
-    public static OI getInstance() {
-      return instance;
-    }
+  public OI()
+  {
+    driveController = new BobXboxController(0, 0.2, 0.2);    
+    driveController.leftBumper.whileHeld(new SlowMode()); 
 
-    public BobXboxController driveController;
-    public BobXboxController operatorController;
-
-    public OI()
-    {
-      driveController = new BobXboxController(0, 0.2, 0.2);
-      operatorController = new BobXboxController(1, 0.2, 0.2);
-
-      //Driver
-
-      driveController.rightBumper.whenPressed(new ToggleDriveMode());
-      driveController.leftBumper.whileHeld(new SlowMode());
-      driveController.startButton.whileHeld(new MoveRobot());
-      driveController.leftTriggerButton.whenPressed(new AquireHatchComp());
-      driveController.rightTriggerButton.whenPressed(new PlaceHatchComp());
-      //Drive left joy y axis is defined in the DriveWithJoy command for forward motion of drivetrain
-      //Drive left joy x axis is defined in the DriveWithJoy command for strafing motion of drivetrain
-      //Drive right joy x axis is defined in the DriveWithJoy command for rotation of drivetrain
-
-
-
-      //Operator
-
-      operatorController.aButton.whenPressed(new GoToBottom());
-      operatorController.bButton.whenPressed(new GoToLevel1());
-      operatorController.xButton.whenPressed(new GoToLevel2());
-      operatorController.yButton.whenPressed(new GoToLevel3());  
-      operatorController.rightBumper.whenPressed(new OverTheTopOuttakeComp());
-      operatorController.leftBumper.whenPressed(new OuttakeBallComp());
-      operatorController.startButton.whenPressed(new IntakeCargoComp());
-      operatorController.selectButton.whenPressed(new ResetIntake());
-      //Operator trigger twist is defined in default elevator command for manual elevator position
-      //Operator left joy y axis is defined in the ClimbWithJoy command for arm motor
-      //Operator right joy y axis is defined in the ClimbWithJoy command for stilt motor
-
-    }
-
-  
+    operatorController = new BobXboxController(1,0.2,0.2);  
+    
+  }    
 
 }

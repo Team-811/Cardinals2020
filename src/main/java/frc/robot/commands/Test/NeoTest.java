@@ -5,25 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Utility;
+package frc.robot.commands.Test;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-/**
- * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.  This command is used to pair with 
- * other commands that need to start after the robot has driven a motion profile path a certain percentage.
- */
-
-public class IsPathPercentageDone extends Command {
-
-  private double percentage;
-
-  public IsPathPercentageDone(double percentage) {
+public class NeoTest extends Command {
+  public NeoTest() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.drivetrain);
-    this.percentage = percentage;
+    requires(Robot.neo);
   }
 
   // Called just before this Command runs the first time
@@ -34,12 +25,13 @@ public class IsPathPercentageDone extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.neo.NeoTest(Robot.controllers.operatorController.leftStick.getY());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.drivetrain.isPathPercentDone(percentage);
+    return false;
   }
 
   // Called once after isFinished returns true
