@@ -13,7 +13,9 @@ package frc.robot;
  * the wiring easier and significantly reduces the number of magic numbers
  * floating around.
  */
+
 public class RobotMap {
+
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -24,10 +26,30 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
 
-  //For CAN bus items, these numbers are the IDs from Phoenix Tuner
-  public static final int DRIVE_LEFT_MOTOR = 1;
-  public static final int DRIVE_RIGHT_MOTOR = 2; 
+  //CAN IDs
+
+  //Drivetrain
+  public static final int DRIVE_TOP_LEFT_MOTOR = 1;
+  public static final int DRIVE_BOTTOM_LEFT_MOTOR = 2;
+  public static final int DRIVE_TOP_RIGHT_MOTOR = 3; 
+  public static final int DRIVE_BOTTOM_RIGHT_MOTOR2 = 4; 
   
-  public static final int NEO_TEST = 3;
+  //Shooter
+  public static final int SHOOTER = 5;
+  public static final int SHOOTER_INTAKE = 6;
+
+  //Intake
+  public static final int INTAKE = 7;
+  
+  //Storage
+  public static final int STORAGE = 8;
+  public static final int STORAGE_INTAKE = 9;
+
+  //Climber
+  public static final int WINCH = 10;
+  public static final int HOOK = 11;
+
+  //Sensors
+
 
 }
