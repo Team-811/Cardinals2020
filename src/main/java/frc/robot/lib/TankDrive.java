@@ -30,7 +30,7 @@ public class TankDrive
         rotationInvert = 1;
     }
 
-    public Output tankMecanumDrive(double leftValue, double rightValue)
+    public Output tankDrive(double leftValue, double rightValue)
     {
         //First invert all the values if needed before doing the motor output calculations
         leftValue = leftValue * forwardBackwardInvert;
@@ -42,7 +42,7 @@ public class TankDrive
     }
 
 
-    public Output arcadeMecanumDrive(double forwardValue, double rotationValue)
+    public Output arcadeDrive(double forwardValue, double rotationValue)
     {
         //First invert all the values if needed before doing the motor output calculations
         forwardValue = forwardValue * forwardBackwardInvert;

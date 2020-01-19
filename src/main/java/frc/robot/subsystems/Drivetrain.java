@@ -7,22 +7,19 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.commands.Drivetrain.DriveWithJoy;
 import frc.robot.lib.Output;
-import frc.robot.lib.TalonChecker;
 import frc.robot.lib.TankDrive;
-import frc.robot.lib.UnitConverter;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  This subsystem deals with the 
@@ -41,8 +38,16 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     return instance;
   }
 
-  private TalonSRX leftMotor;
-  private TalonSRX rightMotor;
+  //Motors
+  private CANSparkMax topLeftMotor;
+  private CANSparkMax topRightMotor;
+  private CANSparkMax bottomLeftMotor;
+  private CANSparkMax bottomRightMotor;
+
+  private CANEncoder topLeftEncoder;
+  private CANEncoder topRightEncoder;
+  private CANEncoder bottomLeftEncoder;
+  private CANEncoder bottomRightEncoder;
 
   private AHRS gyro;
 
@@ -50,46 +55,81 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   public Drivetrain()
   {
-      leftMotor = new TalonSRX(RobotMap.DRIVE_LEFT_MOTOR);
-      rightMotor = new TalonSRX(RobotMap.DRIVE_RIGHT_MOTOR);      
-      configureTalons();
+      topLeftMotor = new CANSparkMax(RobotMap.DRIVE_TOP_LEFT_MOTOR, MotorType.kBrushless);
+      topRightMotor = new CANSparkMax(RobotMap.DRIVE_TOP_RIGHT_MOTOR, MotorType.kBrushless);
+      bottomLeftMotor = new CANSparkMax(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR, MotorType.kBrushless);
+      bottomRightMotor = new CANSparkMax(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR, MotorType.kBrushless); 
+      
+      topLeftEncoder = topLeftMotor.getEncoder();
+      topRightEncoder = topRightMotor.getEncoder();
+      bottomLeftEncoder = bottomLeftMotor.getEncoder();
+      bottomRightEncoder = bottomRightMotor.getEncoder();      
+
+      configureSparkMAX();
+      zeroEncoders();
 
       gyro = new AHRS(SerialPort.Port.kMXP);
       gyro.reset();
       invertGyro(false);     
 
-      drivetrain = new TankDrive();
-                 
+      drivetrain = new TankDrive();                 
   }
 
+  //how fast motors will go; value between 0-1
   private double SpeedScale = 1;
 
-  public void DriveWithJoy(double forward, double rotation)
+  //drive mode; true = arcade; false = tank
+  private boolean DriveMode = false;
+
+  public void DriveWithJoy(double leftStick, double rightStick)
   {
-      Output driveOutput;
-      double correction;
-
-      if(rotation < 0.2 && rotation > -0.2) {
-          //when not rotating, compare your current gyro pos to the last time you were rotating to get error
-          correction = gyroCorrection();
-        } 
-      else 
+      //Tank Drive
+      if(DriveMode == false)
       {
-          correction = 0;
+        Output driveOutput;     
+      
+        driveOutput = drivetrain.tankDrive(leftStick * SpeedScale, rightStick * SpeedScale);     
+  
+        topLeftMotor.set(driveOutput.getLeftValue());
+        bottomLeftMotor.set(driveOutput.getLeftValue());
+  
+        topRightMotor.set(driveOutput.getRightValue());
+        bottomRightMotor.set(driveOutput.getRightValue());
       }
-      
-      if(gyro.isConnected())
-        driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, (rotation - correction) * SpeedScale);
-      else
-        driveOutput = drivetrain.arcadeMecanumDrive(forward * SpeedScale, rotation * SpeedScale);     
 
-      leftMotor.set(ControlMode.PercentOutput, driveOutput.getLeftValue() * Constants.LEFT_COEFFICIENT);
-      rightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue() * Constants.RIGHT_COEFFICENT);     
-      
-      prevAngle = getGyroAngle(); //Stores previous angle
+      //Arcade Drive
+      else
+      {
+        Output driveOutput;
+        double correction;
+    
+        if(rightStick < 0.2 && rightStick > -0.2) {
+            //when not rotating, compare your current gyro pos to the last time you were rotating to get error
+            correction = gyroCorrection();
+          } 
+        else 
+        {
+            correction = 0;
+        }
+        
+        if(gyro.isConnected())
+          driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rightStick - correction) * SpeedScale);
+        else
+          driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rightStick * SpeedScale);     
+    
+          topLeftMotor.set(driveOutput.getLeftValue());
+          bottomLeftMotor.set(driveOutput.getLeftValue());
+    
+          topRightMotor.set(driveOutput.getRightValue());
+          bottomRightMotor.set(driveOutput.getRightValue());
+        
+        prevAngle = getGyroAngle(); //Stores previous angle
+        
+      }     
 
   }
 
+  //toggle slow mode
   public void slowMode(boolean isSlow)
   {
     if(isSlow)
@@ -98,10 +138,19 @@ public class Drivetrain extends Subsystem implements ISubsystem{
         SpeedScale = 1;
   }
 
+  //toggle drive mode
+  public void driveMode(boolean mode)
+  {
+    DriveMode = mode;
+  }
+
   public void stopDrivetrain()
   {
-    leftMotor.set(ControlMode.PercentOutput, 0);
-    rightMotor.set(ControlMode.PercentOutput, 0);
+     topLeftMotor.set(0);
+     bottomLeftMotor.set(0);
+
+     topRightMotor.set(0);
+     bottomRightMotor.set(0);
   }
 
   //Gyro Correction
@@ -120,30 +169,24 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   public double getLeftEncoder()
   {
-    return UnitConverter.ticksToMeters(leftMotor.getSelectedSensorPosition(), 1378, Constants.wheelDiameter);
+    return ((topLeftEncoder.getPosition()+bottomLeftEncoder.getPosition())/2);
   }
 
   public double getRightEncoder()
   {
-    return UnitConverter.ticksToMeters(rightMotor.getSelectedSensorPosition(), 1373, Constants.wheelDiameter);
+    return ((topRightEncoder.getPosition()+bottomRightEncoder.getPosition())/2);
   }
-
-  public void zeroEncoders()
-  {
-    leftMotor.setSelectedSensorPosition(0);
-    rightMotor.setSelectedSensorPosition(0);
-  }
+  
 
   //Encoder Velocities
-
   public double getLeftVelocity()
   {
-    return UnitConverter.talonUnitsToMetersPerSecond(leftMotor.getSelectedSensorVelocity(), Constants.ticksPerRotation, Constants.wheelDiameter);
+    return (topLeftEncoder.getVelocity()+bottomLeftEncoder.getVelocity()) / 2;
   }
 
   public double getRightVelocity()
   {
-    return UnitConverter.talonUnitsToMetersPerSecond(rightMotor.getSelectedSensorVelocity(), Constants.ticksPerRotation, Constants.wheelDiameter);
+    return (topRightEncoder.getVelocity()+bottomRightEncoder.getVelocity()) / 2;
   } 
 
   public double getForwardVelocity()
@@ -157,7 +200,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   public double getGyroAngle()
   {
-      return gyroInversion *gyro.getAngle();
+      return gyroInversion * gyro.getAngle();
   }
 
   public double getAngularVelocity()
@@ -178,23 +221,26 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       gyro.zeroYaw();
   }
 
-  private void configureTalons()
+  public void zeroEncoders()
   {
-    leftMotor.setInverted(true);
-    rightMotor.setInverted(false);
+    topLeftEncoder.setPosition(0);
+    topRightEncoder.setPosition(0);
+    bottomLeftEncoder.setPosition(0);
+    bottomRightEncoder.setPosition(0);
+  }
+  
+  private void configureSparkMAX()
+  {    
+    zeroEncoders();
+    topLeftMotor.setInverted(false);
+    topRightMotor.setInverted(false);
+    bottomLeftMotor.setInverted(false);
+    bottomRightMotor.setInverted(false);
 
-    leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    rightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-
-    leftMotor.setSensorPhase(false);
-    rightMotor.setSensorPhase(false);    
-
-    leftMotor.setSelectedSensorPosition(0);
-    rightMotor.setSelectedSensorPosition(0);
-
-    leftMotor.configNominalOutputForward(0);
-    rightMotor.configNominalOutputReverse(0);
-    
+    topLeftMotor.setIdleMode(IdleMode.kBrake);
+    topRightMotor.setIdleMode(IdleMode.kBrake);
+    bottomLeftMotor.setIdleMode(IdleMode.kBrake);
+    bottomRightMotor.setIdleMode(IdleMode.kBrake);
   } 
 
   @Override
@@ -203,7 +249,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
       SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
       SmartDashboard.putNumber("Right Encoder", getRightEncoder()); 
-      SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
+      SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+      SmartDashboard.putNumber("Left Velocity", getLeftVelocity());     
   }
 
   @Override
@@ -218,53 +265,13 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   {
     stopDrivetrain();
     zeroSensors();
-    configureTalons();
+    configureSparkMAX();
   }
 
   @Override
-  public void testSubsystem() {
-    boolean success = true;
-    
-    System.out.println("///////////////////////////////////////////////////");
-    System.out.println("***************Beginning Drivetrain Test***************");
-    Timer.delay(0.2);
+  public void testSubsystem() 
+  {
 
-    //Test left motor
-    System.out.println("Testing Left Motor and Encoder");
-    Timer.delay(0.5);
-    TalonChecker checker = new TalonChecker("Left Wheel Talon", leftMotor, false);
-    success = checker.runTest(5, 75);
-    Timer.delay(0.2);
-
-    if(!success)
-    {
-        System.out.println("***************Error in Left Motor or Encoder***************");
-        return;
-    }
-
-    //Test right motor
-    System.out.println("Testing Right Motor and Encoder");
-    Timer.delay(0.5);
-    checker = new TalonChecker("Right Wheel Talon", rightMotor, false);
-    success = checker.runTest(2, 75);
-    Timer.delay(0.2);
-
-    if(!success)
-    {
-        System.out.println("***************Error in Right Motor or Encoder***************");
-        return;
-    }
-  
-    System.out.println("Testing Gyro");
-    Timer.delay(0.5);
-    success = gyro.isConnected();
-    Timer.delay(0.2);
-
-    if(!success)
-    {
-        System.out.println("***************Gyro Not Connected***************");
-        return;
-    }
 
   }
 
