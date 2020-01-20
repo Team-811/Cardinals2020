@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.commands.Test.NeoTest;
 
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  
@@ -52,6 +51,6 @@ public class Neo extends Subsystem implements ISubsystem{
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.    
-      setDefaultCommand(new NeoTest());
+      //setDefaultCommand();
   }
 }

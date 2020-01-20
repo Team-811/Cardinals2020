@@ -139,9 +139,9 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   }
 
   //toggle drive mode
-  public void driveMode(boolean mode)
+  public void toggleDriveMode()
   {
-    DriveMode = mode;
+    DriveMode = !DriveMode;
   }
 
   public void stopDrivetrain()
@@ -250,7 +250,15 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
       SmartDashboard.putNumber("Right Encoder", getRightEncoder()); 
       SmartDashboard.putNumber("Right Velocity", getRightVelocity());
-      SmartDashboard.putNumber("Left Velocity", getLeftVelocity());     
+      SmartDashboard.putNumber("Left Velocity", getLeftVelocity()); 
+      
+      String mode;
+      if(DriveMode)
+        mode = "Arcade";
+      else
+        mode = "Tank";
+      SmartDashboard.putString("Drive Mode ", mode);
+
   }
 
   @Override

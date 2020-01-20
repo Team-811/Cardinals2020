@@ -28,29 +28,31 @@ public class RobotMap {
 
   //CAN IDs
 
-  //Drivetrain - Neos
+  //Neos
+
+  //Drivetrain
   public static final int DRIVE_TOP_LEFT_MOTOR = 1;
   public static final int DRIVE_BOTTOM_LEFT_MOTOR = 2;
   public static final int DRIVE_TOP_RIGHT_MOTOR = 3; 
   public static final int DRIVE_BOTTOM_RIGHT_MOTOR = 4;
   
-  //Shooter
-  public static final int SHOOTER = 5; //Neo
-  public static final int SHOOTER_INTAKE = 6; //Victor
+  public static final int SHOOTER = 5;
+  public static final int WINCH = 6;
 
-  //Intake
-  public static final int INTAKE = 7; //Victor
+  //Extra SparkMax ID: 7
+
+  //Talons/Victors
   
-  //Storage
-  public static final int STORAGE = 8; //Talon
-  public static final int STORAGE_INTAKE = 9; //Victor
+  public static final int SHOOTER_INTAKE = 8; //Victor
 
-  //Climber
-  public static final int WINCH = 10; //Neo
-  public static final int HOOK = 11; //Talon
+  public static final int INTAKE = 9; //Victor  
+  
+  public static final int STORAGE = 10; //Talon
+  public static final int STORAGE_INTAKE = 11; //Victor
+  
+  public static final int HOOK = 12; //Talon
 
-  //Wheel
-  public static final int WHEEL = 12; //Talon
+  public static final int WHEEL = 13; //Talon
 
   //Sensors
 
