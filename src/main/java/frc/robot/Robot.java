@@ -28,8 +28,6 @@ public class Robot extends TimedRobot {
   public static RobotMap robotMap = new RobotMap();  
   public static OI controllers; 
 
-
-
   //Command m_autonomousCommand;
   //SendableChooser<Command> m_chooser = new SendableChooser<>();
 

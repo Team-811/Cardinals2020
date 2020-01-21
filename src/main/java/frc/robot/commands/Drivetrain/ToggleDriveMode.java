@@ -15,14 +15,9 @@ import frc.robot.Robot;
  */
 
 public class ToggleDriveMode extends InstantCommand {
-  /**
-   * Add your docs here.
-   */
+
   public ToggleDriveMode() {
-    super();
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.drivetrain);
+   
   }
 
   // Called once when the command executes

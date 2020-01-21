@@ -8,7 +8,6 @@
 package frc.robot.controllers;
 
 import frc.robot.commands.Drivetrain.*;
-import frc.robot.subsystems.Neo;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -50,6 +49,8 @@ public class OI {
   {
     driveController = new BobXboxController(0, 0.2, 0.2);    
     driveController.leftBumper.whileHeld(new SlowMode()); 
+    driveController.rightBumper.whenPressed(new ToggleDriveMode());
+    driveController.aButton.whenPressed(new ZeroSensors());
 
     operatorController = new BobXboxController(1,0.2,0.2);  
     
