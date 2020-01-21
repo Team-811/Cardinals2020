@@ -23,12 +23,8 @@ import frc.robot.lib.TankDrive;
 
 /**
  * This is a subsystem class. A subsystem interacts with the hardware components
- * on the robot. This subsystem deals with the mecanum drivetrain. The
- * drivetrain includes 4 motors with encoders on each, an encoder on a dead
- * wheel to track strafing, and a gyro to measure the angle of the robot. For
- * controlling the subsystem, there are methods that do field oriented driving
- * with gyro correction for joystick control, PID loops for the vision, and
- * Motion Profiling for auto driving.
+ * on the robot. This subsystem deals with the drivetrain. The
+ * drivetrain includes 4 motors with encoders on each and a gyro to measure the angle of the robot.
  */
 
 public class Drivetrain extends Subsystem implements ISubsystem {
