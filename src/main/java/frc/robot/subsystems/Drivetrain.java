@@ -74,7 +74,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   }
 
   // how fast motors will go; value between 0-1
-  private double SpeedScale = 1;
+  private double SpeedScale = 0.5;
 
   // drive mode; true = arcade; false = tank
   private boolean DriveMode = false;
@@ -114,8 +114,8 @@ public class Drivetrain extends Subsystem implements ISubsystem {
       topLeftMotor.set(driveOutput.getLeftValue());
       bottomLeftMotor.set(driveOutput.getLeftValue());
 
-      topRightMotor.set(driveOutput.getRightValue());
-      bottomRightMotor.set(driveOutput.getRightValue());
+      topRightMotor.set(-driveOutput.getRightValue());
+      bottomRightMotor.set(-driveOutput.getRightValue());
 
       prevAngle = getGyroAngle(); // Stores previous angle
 
@@ -161,7 +161,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   }
 
   public double getRightEncoder() {
-    return (topRightEncoder.getPosition() + bottomRightEncoder.getPosition()) / 2;
+    return (topRightEncoder.getPosition() + bottomRightEncoder.getPosition()) / -2;
   }
 
   // Encoder Velocities
@@ -170,7 +170,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   }
 
   public double getRightVelocity() {
-    return (topRightEncoder.getVelocity() + bottomRightEncoder.getVelocity()) / 2;
+    return (topRightEncoder.getVelocity() + bottomRightEncoder.getVelocity()) / -2;
   }
 
   public double getForwardVelocity() {
@@ -227,6 +227,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     SmartDashboard.putNumber("Right Encoder", getRightEncoder());
     SmartDashboard.putNumber("Right Velocity", getRightVelocity());
     SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
+    SmartDashboard.putNumber("Forward Velocity", getForwardVelocity());
 
     String mode;
     if (DriveMode)

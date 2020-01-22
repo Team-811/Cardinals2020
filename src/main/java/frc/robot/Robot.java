@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     controllers = new OI();
 
-    CameraServer.getInstance().startAutomaticCapture();
+    //CameraServer.getInstance().startAutomaticCapture();
 
     updateSmartdashboard();
 
