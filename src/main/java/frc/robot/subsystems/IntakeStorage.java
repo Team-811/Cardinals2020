@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -96,6 +97,9 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
         zeroEncoders();
         intakeMotor.setInverted(false);
         kickerMotor.setInverted(false);
+
+        intakeMotor.setIdleMode(IdleMode.kBrake);
+        kickerMotor.setIdleMode(IdleMode.kBrake);
     }
 
     private void zeroEncoders() {
