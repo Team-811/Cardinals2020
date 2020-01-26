@@ -8,6 +8,7 @@
 package frc.robot.controllers;
 
 import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.IntakeStorage.*;
 import frc.robot.commands.Shooter.*;
 import frc.robot.commands.Utility.*;
 
@@ -52,8 +53,12 @@ public class OI {
     driveController = new BobXboxController(0, 0.2, 0.2);    
     driveController.leftBumper.whileHeld(new SlowMode()); 
     driveController.rightBumper.whenPressed(new ToggleDriveMode());
+    
     driveController.aButton.whenPressed(new ZeroSensors());
-    driveController.bButton.whenPressed(new RunShooter());
+
+    driveController.bButton.whenPressed(new ToggleShooter());
+    driveController.xButton.whenPressed(new ToggleKicker());
+    driveController.yButton.whenPressed(new ToggleIntakeStorage());
 
     operatorController = new BobXboxController(1,0.2,0.2);  
     

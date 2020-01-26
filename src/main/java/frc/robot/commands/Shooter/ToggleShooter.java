@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Utility;
+package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -14,9 +14,9 @@ import frc.robot.Robot;
  * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.
  */
 
-public class ZeroSensors extends InstantCommand {
+public class ToggleShooter extends InstantCommand {
 
-  public ZeroSensors() {
+  public ToggleShooter() {
    
   }
 
@@ -24,9 +24,7 @@ public class ZeroSensors extends InstantCommand {
   @Override
   protected void initialize() 
   {
-    Robot.drivetrain.zeroSensors();
-    Robot.shooter.zeroSensors();
-    Robot.intakeStorage.zeroSensors();
+    Robot.shooter.ToggleShooter(.1);
   }
 
 }

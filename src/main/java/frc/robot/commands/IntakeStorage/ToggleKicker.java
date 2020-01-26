@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Shooter;
+package frc.robot.commands.IntakeStorage;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -14,9 +14,9 @@ import frc.robot.Robot;
  * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.
  */
 
-public class RunShooter extends InstantCommand {
+public class ToggleKicker extends InstantCommand {
 
-  public RunShooter() {
+  public ToggleKicker() {
    
   }
 
@@ -24,7 +24,7 @@ public class RunShooter extends InstantCommand {
   @Override
   protected void initialize() 
   {
-    Robot.shooter.ToggleShooter(.1);
+    Robot.intakeStorage.ToggleKicker(0.1);
   }
 
 }

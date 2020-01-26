@@ -7,13 +7,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.controllers.OI;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IntakeStorage;
 import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +23,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
   public static Drivetrain drivetrain = Drivetrain.getInstance();
-  public static Shooter shooter = Shooter.getInstance();
+  public static Shooter shooter = Shooter.getInstance(); 
+  public static IntakeStorage intakeStorage = IntakeStorage.getInstance();
   public static RobotMap robotMap = new RobotMap();  
   public static OI controllers; 
 
@@ -144,6 +144,7 @@ public class Robot extends TimedRobot {
   {
       drivetrain.outputSmartdashboard();
       shooter.outputSmartdashboard();
+      intakeStorage.outputSmartdashboard();
   }
 
 }
