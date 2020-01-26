@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.controllers.OI;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Neo;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
   public static Drivetrain drivetrain = Drivetrain.getInstance();
-  public static Neo neo = Neo.getInstance();
+  public static Shooter shooter = Shooter.getInstance();
   public static RobotMap robotMap = new RobotMap();  
   public static OI controllers; 
 
@@ -143,7 +143,7 @@ public class Robot extends TimedRobot {
   private void updateSmartdashboard()
   {
       drivetrain.outputSmartdashboard();
-      neo.outputSmartdashboard();
+      shooter.outputSmartdashboard();
   }
 
 }

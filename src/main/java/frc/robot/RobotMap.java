@@ -31,12 +31,12 @@ public class RobotMap {
   //Neos
 
   //Drivetrain
-  public static final int DRIVE_TOP_LEFT_MOTOR = 1;
+  public static final int DRIVE_TOP_LEFT_MOTOR = 5;
   public static final int DRIVE_BOTTOM_LEFT_MOTOR = 2;
   public static final int DRIVE_TOP_RIGHT_MOTOR = 3; 
   public static final int DRIVE_BOTTOM_RIGHT_MOTOR = 4;
   
-  public static final int SHOOTER = 5;
+  public static final int SHOOTER = 1;
   public static final int WINCH = 6;
 
   //Extra SparkMax ID: 7

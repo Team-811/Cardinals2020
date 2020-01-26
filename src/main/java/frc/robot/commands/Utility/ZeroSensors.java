@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Drivetrain;
+package frc.robot.commands.Utility;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -25,6 +25,7 @@ public class ZeroSensors extends InstantCommand {
   protected void initialize() 
   {
     Robot.drivetrain.zeroSensors();
+    Robot.shooter.zeroSensors();
   }
 
 }
