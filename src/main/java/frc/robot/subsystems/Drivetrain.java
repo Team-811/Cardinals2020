@@ -63,12 +63,13 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     bottomLeftEncoder = bottomLeftMotor.getEncoder();
     bottomRightEncoder = bottomRightMotor.getEncoder();
 
-    configureSparkMAX();
-    zeroEncoders();
+    configureSparkMAX();    
 
     gyro = new AHRS(SerialPort.Port.kMXP);
-    gyro.reset();
-    invertGyro(false);
+    gyro.reset();    
+    invertGyro(false);    
+
+    zeroSensors();
 
     drivetrain = new TankDrive();
   }
@@ -228,6 +229,8 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     SmartDashboard.putNumber("Right Velocity", getRightVelocity());
     SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
     SmartDashboard.putNumber("Forward Velocity", getForwardVelocity());
+
+    SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 
     String mode;
     if (DriveMode)
