@@ -67,7 +67,8 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
     gyro = new AHRS(SerialPort.Port.kMXP);
     gyro.reset();    
-    invertGyro(false);    
+    invertGyro(false); 
+    zeroGyro();   
 
     zeroSensors();
 
@@ -80,10 +81,11 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   // drive mode; true = arcade; false = tank
   private boolean DriveMode = false;
 
+  Output driveOutput = new Output(0,0);
   public void DriveWithJoy(double leftStick, double rightStick, double rotation) {
     // Tank Drive
     if (!DriveMode) {
-      Output driveOutput;
+      
 
       driveOutput = drivetrain.tankDrive(leftStick * SpeedScale, rightStick * SpeedScale);
 
@@ -92,25 +94,26 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
       topRightMotor.set(driveOutput.getRightValue());
       bottomRightMotor.set(driveOutput.getRightValue());
+           
     }
 
     // Arcade Drive
     else {
-      Output driveOutput;
+      
       double correction;
 
-      if (rotation < 0.2 && rotation > -0.2) {
-        // when not rotating, compare your current gyro pos to the last time you were
-        // rotating to get error
-        correction = gyroCorrection();
-      } else {
-        correction = 0;
-      }
+      // if (rotation < 0.2 && rotation > -0.2) {
+      //   // when not rotating, compare your current gyro pos to the last time you were
+      //   // rotating to get error
+      //   correction = gyroCorrection();
+      // } else {
+      //   correction = 0;
+      // }
 
-      if (gyro.isConnected())
-        driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale);
-      else
-        driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale);
+      //if (gyro.isConnected())
+        //driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale);
+      //else
+      driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale);
 
       topLeftMotor.set(driveOutput.getLeftValue());
       bottomLeftMotor.set(driveOutput.getLeftValue());
@@ -124,12 +127,20 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
   }
 
+  boolean slow = false;
   // toggle slow mode
   public void slowMode(boolean isSlow) {
     if (isSlow)
-      SpeedScale = 0.5;
+      {
+        slow = true;
+        SpeedScale = 0.5;
+      }
     else
+    {
+      slow = false;
       SpeedScale = 1;
+    } 
+      
   }
 
   // toggle drive mode
@@ -229,6 +240,8 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     SmartDashboard.putNumber("Right Velocity", getRightVelocity());
     SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
     SmartDashboard.putNumber("Forward Velocity", getForwardVelocity());
+
+    SmartDashboard.putBoolean("Slow Mode", slow);
 
     SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 

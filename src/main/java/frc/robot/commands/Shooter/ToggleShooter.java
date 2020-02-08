@@ -24,7 +24,7 @@ public class ToggleShooter extends InstantCommand {
   @Override
   protected void initialize() 
   {
-    Robot.shooter.ToggleShooter(.1);
+    Robot.shooter.ToggleShooter(0.1);
   }
 
 }

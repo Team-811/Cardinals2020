@@ -24,7 +24,7 @@ public class ToggleKicker extends InstantCommand {
   @Override
   protected void initialize() 
   {
-    Robot.intakeStorage.ToggleKicker(0.1);
+    Robot.intakeStorage.ToggleKicker(0.3);
   }
 
 }

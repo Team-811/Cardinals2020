@@ -7,10 +7,9 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,104 +28,71 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
         return instance;
     }
 
-    private CANSparkMax intakeMotor;
-    private CANEncoder intakeEncoder;
-
-    private CANSparkMax kickerMotor;
-    private CANEncoder kickerEncoder;
+    private TalonSRX intakeMotor;
+    private TalonSRX kickerMotor;    
 
     public IntakeStorage() {
 
-        intakeMotor = new CANSparkMax(RobotMap.INTAKE_STORAGE, MotorType.kBrushless);
-        intakeEncoder = intakeMotor.getEncoder();
-
-        kickerMotor = new CANSparkMax(RobotMap.KICKER, MotorType.kBrushless);
-        kickerEncoder = kickerMotor.getEncoder();
+        intakeMotor = new TalonSRX(RobotMap.INTAKE_STORAGE);
+        kickerMotor = new TalonSRX(RobotMap.KICKER);        
 
         zeroSensors();
-        configureSparkMAX();
+        configureTalons();
     }
 
     boolean isRunningIntake = false;
 
     private void RunIntakeStorage(double speed) {
         if(isRunningIntake)
-            intakeMotor.set(speed);
+            intakeMotor.set(ControlMode.PercentOutput, speed);
         else
-            intakeMotor.set(0);
+            intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 
     public void ToggleIntakeStorage(double speed)
     {
         isRunningIntake = !isRunningIntake;
         RunIntakeStorage(speed);
-    }
-
-    public double getIntakeEncoder() {
-        return intakeEncoder.getPosition();
-    }
-
-    public double getIntakeVelocity() {
-        return intakeEncoder.getVelocity();
-    }
+    }    
 
     boolean isRunningKicker = false;
 
     private void RunKicker(double speed) {
         if(isRunningKicker)
-            kickerMotor.set(speed);
+            kickerMotor.set(ControlMode.PercentOutput, speed);
         else
-            kickerMotor.set(0);
+            kickerMotor.set(ControlMode.PercentOutput, 0);
     }
 
     public void ToggleKicker(double speed)
     {
         isRunningKicker = !isRunningKicker;
         RunKicker(speed);
-    }
+    }   
 
-    public double getKickerEncoder() {
-        return kickerEncoder.getPosition();
-    }
-
-    public double getKickerVelocity() {
-        return kickerEncoder.getVelocity();
-    }
-
-    private void configureSparkMAX() {
-        zeroEncoders();
+    private void configureTalons() {        
         intakeMotor.setInverted(false);
         kickerMotor.setInverted(false);
 
-        intakeMotor.setIdleMode(IdleMode.kBrake);
-        kickerMotor.setIdleMode(IdleMode.kBrake);
-    }
-
-    private void zeroEncoders() {
-        intakeEncoder.setPosition(0);
-        kickerEncoder.setPosition(0);
-    }
+        intakeMotor.setNeutralMode(NeutralMode.Brake);
+        kickerMotor.setNeutralMode(NeutralMode.Brake);
+    }    
 
     @Override
     public void outputSmartdashboard() {
         SmartDashboard.putBoolean("Intake Running", isRunningIntake);
-        SmartDashboard.putNumber("Intake Encoder ", getIntakeEncoder());
-        SmartDashboard.putNumber("Intake Velocity ", getIntakeVelocity());
-
         SmartDashboard.putBoolean("Kicker Running", isRunningKicker);
-        SmartDashboard.putNumber("Kicker Encoder ", getKickerEncoder());
-        SmartDashboard.putNumber("Kicker Velocity ", getKickerVelocity());
     }
 
     @Override
     public void zeroSensors() {
-        zeroEncoders();
+        
     }
 
     @Override
     public void resetSubsystem() {
         zeroSensors();
-        configureSparkMAX();
+        configureTalons();
     }
 
     @Override

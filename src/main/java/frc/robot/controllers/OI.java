@@ -50,7 +50,7 @@ public class OI {
 
   public OI()
   {
-    driveController = new BobXboxController(0, 0.2, 0.2);    
+    driveController = new BobXboxController(0, 0.3, 0.3);    
     driveController.leftBumper.whileHeld(new SlowMode()); 
     driveController.rightBumper.whenPressed(new ToggleDriveMode());
     
@@ -60,7 +60,7 @@ public class OI {
     driveController.xButton.whenPressed(new ToggleKicker());
     driveController.yButton.whenPressed(new ToggleIntakeStorage());
 
-    operatorController = new BobXboxController(1,0.2,0.2);  
+    operatorController = new BobXboxController(1,0.3,0.3);  
     
   }    
 

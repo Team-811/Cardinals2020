@@ -14,11 +14,20 @@ public class SlowMode extends Command {
   public SlowMode() {
     
   }
-
-  // Called just before this Command runs the first time
+  
   @Override
-  protected void initialize() {
+  protected void execute() {
     Robot.drivetrain.slowMode(true);
+  }
+
+  @Override
+  protected void end(){
+    Robot.drivetrain.slowMode(false);
+  }
+
+  @Override
+  protected void interrupted() {
+    Robot.drivetrain.slowMode(false);
   }
 
   @Override

@@ -28,8 +28,6 @@ public class RobotMap {
 
   //CAN IDs
 
-  //Neos
-
   //Drivetrain
   public static final int DRIVE_TOP_LEFT_MOTOR = 1;
   public static final int DRIVE_BOTTOM_LEFT_MOTOR = 2;
@@ -46,9 +44,8 @@ public class RobotMap {
 
   //Extra SparkMax ID: 9
 
-  //Talons/Victors  
+ 
   public static final int HOOK = 10;
-
   public static final int WHEEL = 11; 
 
   //Sensors
