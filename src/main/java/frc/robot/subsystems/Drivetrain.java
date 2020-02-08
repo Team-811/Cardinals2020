@@ -67,8 +67,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
     gyro = new AHRS(SerialPort.Port.kMXP);
     gyro.reset();    
-    invertGyro(false); 
-    zeroGyro();   
+    invertGyro(false);    
 
     zeroSensors();
 
@@ -76,7 +75,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   }
 
   // how fast motors will go; value between 0-1
-  private double SpeedScale = 0.5;
+  private double SpeedScale = 1;
 
   // drive mode; true = arcade; false = tank
   private boolean DriveMode = false;
@@ -226,10 +225,10 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     bottomLeftMotor.setInverted(false);
     bottomRightMotor.setInverted(false);
 
-    topLeftMotor.setIdleMode(IdleMode.kBrake);
-    topRightMotor.setIdleMode(IdleMode.kBrake);
-    bottomLeftMotor.setIdleMode(IdleMode.kBrake);
-    bottomRightMotor.setIdleMode(IdleMode.kBrake);
+    topLeftMotor.setIdleMode(IdleMode.kCoast);
+    topRightMotor.setIdleMode(IdleMode.kCoast);
+    bottomLeftMotor.setIdleMode(IdleMode.kCoast);
+    bottomRightMotor.setIdleMode(IdleMode.kCoast);
   }
 
   @Override

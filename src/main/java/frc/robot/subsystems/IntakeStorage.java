@@ -71,8 +71,8 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
     }   
 
     private void configureTalons() {        
-        intakeMotor.setInverted(false);
-        kickerMotor.setInverted(false);
+        intakeMotor.setInverted(true);
+        kickerMotor.setInverted(true);
 
         intakeMotor.setNeutralMode(NeutralMode.Brake);
         kickerMotor.setNeutralMode(NeutralMode.Brake);
@@ -93,6 +93,10 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
     public void resetSubsystem() {
         zeroSensors();
         configureTalons();
+        RunIntakeStorage(0);
+        RunKicker(0);
+        isRunningIntake = false;
+        isRunningKicker = false;
     }
 
     @Override

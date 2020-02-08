@@ -65,7 +65,7 @@ public class Shooter extends Subsystem implements ISubsystem {
 
     private void configureSparkMAX() {
         zeroEncoders();
-        shooterMotor.setInverted(false);
+        shooterMotor.setInverted(true);
         shooterMotor.setIdleMode(IdleMode.kBrake);
     }
 
@@ -89,6 +89,8 @@ public class Shooter extends Subsystem implements ISubsystem {
     public void resetSubsystem() {
         zeroSensors();
         configureSparkMAX();
+        RunShooter(0);
+        isRunning = false;
     }
 
     @Override

@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     controllers = new OI();
 
+    drivetrain.zeroGyro();
     //CameraServer.getInstance().startAutomaticCapture();
 
     updateSmartdashboard();
@@ -70,6 +71,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    drivetrain.resetSubsystem();
+    intakeStorage.resetSubsystem();
+    shooter.resetSubsystem();
   }
 
   @Override
