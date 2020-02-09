@@ -26,15 +26,15 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
 
-  //CAN IDs
+  // CAN IDs
 
-  //Drivetrain
+  // Drivetrain
   public static final int DRIVE_TOP_LEFT_MOTOR = 1;
   public static final int DRIVE_BOTTOM_LEFT_MOTOR = 2;
-  public static final int DRIVE_TOP_RIGHT_MOTOR = 3; 
+  public static final int DRIVE_TOP_RIGHT_MOTOR = 3;
   public static final int DRIVE_BOTTOM_RIGHT_MOTOR = 4;
-  
-  public static final int SHOOTER = 5; 
+
+  public static final int SHOOTER = 5;
 
   public static final int KICKER = 6;
 
@@ -42,13 +42,11 @@ public class RobotMap {
 
   public static final int WINCH = 8;
 
-  //Extra SparkMax ID: 9
+  // Extra SparkMax ID: 9
 
- 
   public static final int HOOK = 10;
-  public static final int WHEEL = 11; 
+  public static final int WHEEL = 11;
 
-  //Sensors
-
+  // Sensors
 
 }

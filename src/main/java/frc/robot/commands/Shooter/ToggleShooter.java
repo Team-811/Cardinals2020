@@ -16,13 +16,14 @@ public class ToggleShooter extends InstantCommand {
    * This Command toggles the shooter on/off. It does not toggle the kicker.
    */
   public ToggleShooter() {
-   
+
   }
 
-  // Called once when the command executes. Since this is an InstantCommand, the method wil only be called once and not continuously. This is good when something needs to be turned on/off or toggled.
+  // Called once when the command executes. Since this is an InstantCommand, the
+  // method wil only be called once and not continuously. This is good when
+  // something needs to be turned on/off or toggled.
   @Override
-  protected void initialize() 
-  {
+  protected void initialize() {
     Robot.shooter.toggleShooter(1);
   }
 

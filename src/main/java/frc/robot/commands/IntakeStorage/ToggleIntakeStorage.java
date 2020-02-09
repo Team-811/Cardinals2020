@@ -16,13 +16,14 @@ public class ToggleIntakeStorage extends InstantCommand {
    * This command toggles the intake/storage on or off
    */
   public ToggleIntakeStorage() {
-   
+
   }
 
-    // Called once when the command executes. Since this is an InstantCommand, the method wil only be called once and not continuously. This is good when something needs to be turned on/off or toggled.
+  // Called once when the command executes. Since this is an InstantCommand, the
+  // method wil only be called once and not continuously. This is good when
+  // something needs to be turned on/off or toggled.
   @Override
-  protected void initialize() 
-  {
+  protected void initialize() {
     Robot.intakeStorage.toggleIntakeStorage(.6);
   }
 

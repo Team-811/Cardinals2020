@@ -8,13 +8,15 @@
 package frc.robot.subsystems;
 
 /**
- * This is the subsystem interface.  It ensures that the subsystem classes all must contain these methods for safety 
- * and convienance.
+ * This is the subsystem interface. It ensures that the subsystem classes all
+ * must contain these methods for safety and convienance.
  */
-public interface ISubsystem 
-{
+public interface ISubsystem {
     public abstract void outputSmartdashboard();
+
     public abstract void zeroSensors();
+
     public abstract void resetSubsystem();
+
     public abstract void testSubsystem();
 }

@@ -13,20 +13,22 @@ import frc.robot.Robot;
 public class AutoRunShooter extends Command {
 
   /**
-   * This command runs the shooter (and kicker) automatically accounting for lost shooter speed because of balls
+   * This command runs the shooter (and kicker) automatically accounting for lost
+   * shooter speed because of balls
    */
-  public AutoRunShooter() {    
+  public AutoRunShooter() {
   }
-  
-  //run the shooter automatically, continously while the command is called (while a button is held)
+
+  // run the shooter automatically, continously while the command is called (while
+  // a button is held)
   @Override
   protected void execute() {
     Robot.shooter.autoRunShooter(1);
   }
 
-  //stop the shooter when the command is no longer being called
+  // stop the shooter when the command is no longer being called
   @Override
-  protected void end(){
+  protected void end() {
     Robot.shooter.stopShooter();
   }
 

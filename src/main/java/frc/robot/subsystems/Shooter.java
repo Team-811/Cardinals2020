@@ -74,13 +74,20 @@ public class Shooter extends Subsystem implements ISubsystem {
     public void autoRunShooter(double speed) {
         shooterMotor.set(speed);
         if (speed == 0) {
+            shooterIsRunning = false;
+
+            kickerIsRunning = false;
             kickerMotor.set(ControlMode.PercentOutput, 0);
+        } else {
+            shooterIsRunning = true;
         }
 
         // only run the kicker once the shooter has reached full speed again
         if (getShooterVelocity() > shooterFullVelocity * speed) {
+            kickerIsRunning = true;
             kickerMotor.set(ControlMode.PercentOutput, 1);
         } else {
+            kickerIsRunning = false;
             kickerMotor.set(ControlMode.PercentOutput, 0);
         }
     }
@@ -182,7 +189,7 @@ public class Shooter extends Subsystem implements ISubsystem {
     public void resetSubsystem() {
         stopShooter();
         zeroSensors();
-        configureMotorControllers();        
+        configureMotorControllers();
     }
 
     @Override

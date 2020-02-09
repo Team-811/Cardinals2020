@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 
 public class TimerCommand extends TimedCommand {
   /**
-   * This command pauses the code for a given period of time before moving on. Good for making Command Groups where actions need to be spaced out.
-    @param timeout : time in seconds
+   * This command pauses the code for a given period of time before moving on.
+   * Good for making Command Groups where actions need to be spaced out.
+   * 
+   * @param timeout : time in seconds
    */
   public TimerCommand(double timeout) {
-    super(timeout);  
+    super(timeout);
   }
 
   // Called just before this Command runs the first time

@@ -12,8 +12,8 @@ import frc.robot.Robot;
 
 public class DriveWithJoy extends Command {
   /**
- * This command allows the robot to be driven with the controller joysticks.
- */
+   * This command allows the robot to be driven with the controller joysticks.
+   */
   public DriveWithJoy() {
     requires(Robot.drivetrain);
   }
@@ -26,7 +26,8 @@ public class DriveWithJoy extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drivetrain.driveWithJoy(-Robot.controllers.driveController.leftStick.getY(), Robot.controllers.driveController.rightStick.getY(),Robot.controllers.driveController.rightStick.getX());
+    Robot.drivetrain.driveWithJoy(-Robot.controllers.driveController.leftStick.getY(),
+        Robot.controllers.driveController.rightStick.getY(), Robot.controllers.driveController.rightStick.getX());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -38,7 +39,7 @@ public class DriveWithJoy extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    
+
   }
 
   // Called when another command which requires one or more of the same

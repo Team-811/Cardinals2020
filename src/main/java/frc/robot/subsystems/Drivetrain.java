@@ -127,7 +127,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
     // Arcade Drive
     else {
-      //double correction;
+      // double correction;
 
       // if (rotation < 0.2 && rotation > -0.2) {
       // // when not rotating, compare your current gyro pos to the last time you were
