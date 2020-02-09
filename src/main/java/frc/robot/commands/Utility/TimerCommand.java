@@ -9,17 +9,13 @@ package frc.robot.commands.Utility;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
 
-/**
- * Add your docs here.
- */
 public class TimerCommand extends TimedCommand {
   /**
-   * Add your docs here.
+   * This command pauses the code for a given period of time before moving on. Good for making Command Groups where actions need to be spaced out.
+    @param timeout : time in seconds
    */
   public TimerCommand(double timeout) {
-    super(timeout);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    super(timeout);  
   }
 
   // Called just before this Command runs the first time

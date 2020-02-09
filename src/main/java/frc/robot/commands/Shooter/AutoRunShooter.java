@@ -11,15 +11,20 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class AutoRunShooter extends Command {
-  public AutoRunShooter() {
-    
+
+  /**
+   * This command runs the shooter (and kicker) automatically accounting for lost shooter speed because of balls
+   */
+  public AutoRunShooter() {    
   }
   
+  //run the shooter automatically, continously while the command is called (while a button is held)
   @Override
   protected void execute() {
     Robot.shooter.autoRunShooter(1);
   }
 
+  //stop the shooter when the command is no longer being called
   @Override
   protected void end(){
     Robot.shooter.stopShooter();

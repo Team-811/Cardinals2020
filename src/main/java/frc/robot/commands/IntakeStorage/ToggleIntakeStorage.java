@@ -10,17 +10,16 @@ package frc.robot.commands.IntakeStorage;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
-/**
- * This is a command.  A command is used to make actual actions happen on the robot.  It can be a single action or a sequence of actions.
- */
-
 public class ToggleIntakeStorage extends InstantCommand {
 
+  /**
+   * This command toggles the intake/storage on or off
+   */
   public ToggleIntakeStorage() {
    
   }
 
-  // Called once when the command executes
+    // Called once when the command executes. Since this is an InstantCommand, the method wil only be called once and not continuously. This is good when something needs to be turned on/off or toggled.
   @Override
   protected void initialize() 
   {

@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class DriveWithJoy extends Command {
+  /**
+ * This command allows the robot to be driven with the controller joysticks.
+ */
   public DriveWithJoy() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
     requires(Robot.drivetrain);
   }
 
