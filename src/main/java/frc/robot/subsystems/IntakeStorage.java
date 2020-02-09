@@ -16,87 +16,101 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
- * This is a subsystem class. A subsystem interacts with the hardware components
- * on the robot.
+ * This is the subsystem class for the Robot intake and storage container. It
+ * contains methods to start/stop the intake at given speeds. The intake and
+ * storage are connected together, so only one motor is used to control the two.
  */
 
 public class IntakeStorage extends Subsystem implements ISubsystem {
 
     private static IntakeStorage instance = new IntakeStorage();
 
+    /**
+     * @return A new instance of the Intake/Storage
+     */
     public static IntakeStorage getInstance() {
         return instance;
     }
 
     private TalonSRX intakeMotor;
-    private TalonSRX kickerMotor;    
 
+    private boolean intakeIsRunning;
+
+    /**
+     * @return A new instance of the Intake/Storage
+     */
     public IntakeStorage() {
-
         intakeMotor = new TalonSRX(RobotMap.INTAKE_STORAGE);
-        kickerMotor = new TalonSRX(RobotMap.KICKER);        
-
-        zeroSensors();
-        configureTalons();
+        resetSubsystem();
     }
 
-    boolean isRunningIntake = false;
+    /**
+     * This method runs the intake/storage at a given speed. NOTE: it only sets the
+     * speed; it does not toggle the subsystem and will not stop unless the speed
+     * parameter is 0.
+     * 
+     * @param speed (0-1)
+     */
+    public void runIntakeStorage(double speed) {
+        intakeMotor.set(ControlMode.PercentOutput, 0);
+        if (speed == 0) {
+            intakeIsRunning = false;
+        } else
+            intakeIsRunning = true;
+    }
 
-    private void RunIntakeStorage(double speed) {
-        if(isRunningIntake)
+    /**
+     * This method toggles the intake/storage at a given speed. If it is on, it
+     * turns off and vice versa.
+     * 
+     * @param speed (0-1)
+     */
+    public void toggleIntakeStorage(double speed) {
+        intakeIsRunning = !intakeIsRunning;
+
+        if (intakeIsRunning)
             intakeMotor.set(ControlMode.PercentOutput, speed);
         else
             intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 
-    public void ToggleIntakeStorage(double speed)
-    {
-        isRunningIntake = !isRunningIntake;
-        RunIntakeStorage(speed);
-    }    
-
-    boolean isRunningKicker = false;
-
-    private void RunKicker(double speed) {
-        if(isRunningKicker)
-            kickerMotor.set(ControlMode.PercentOutput, speed);
-        else
-            kickerMotor.set(ControlMode.PercentOutput, 0);
+    /**
+     * Stops the intake/storage
+     */
+    public void stopIntakeStorage() {
+        intakeIsRunning = false;
+        intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 
-    public void ToggleKicker(double speed)
-    {
-        isRunningKicker = !isRunningKicker;
-        RunKicker(speed);
-    }   
-
-    private void configureTalons() {        
+    /**
+     * Configures subsytem-specific settings for motor controllers
+     */
+    private void configureMotorControllers() {
         intakeMotor.setInverted(true);
-        kickerMotor.setInverted(true);
-
         intakeMotor.setNeutralMode(NeutralMode.Brake);
-        kickerMotor.setNeutralMode(NeutralMode.Brake);
-    }    
+    }
 
+    /**
+     * Outputs Intake/Storage subsystem information to SmartDashboard for drivers.
+     */
     @Override
     public void outputSmartdashboard() {
-        SmartDashboard.putBoolean("Intake Running", isRunningIntake);
-        SmartDashboard.putBoolean("Kicker Running", isRunningKicker);
+        SmartDashboard.putBoolean("Intake Running", intakeIsRunning);
+    }
+
+    /**
+     * Stops the intake/storage and reconfigures motor controllers.
+     */
+    @Override
+    public void resetSubsystem() {
+        stopIntakeStorage();
+        zeroSensors();
+        configureMotorControllers();
     }
 
     @Override
     public void zeroSensors() {
-        
-    }
 
-    @Override
-    public void resetSubsystem() {
-        zeroSensors();
-        configureTalons();
-        RunIntakeStorage(0);
-        RunKicker(0);
-        isRunningIntake = false;
-        isRunningKicker = false;
     }
 
     @Override

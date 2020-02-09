@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.IntakeStorage;
+package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -24,7 +24,7 @@ public class ToggleKicker extends InstantCommand {
   @Override
   protected void initialize() 
   {
-    Robot.intakeStorage.ToggleKicker(1);
+    Robot.shooter.toggleKicker(1);
   }
 
 }

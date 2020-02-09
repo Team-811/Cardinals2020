@@ -22,17 +22,16 @@ import frc.robot.lib.Output;
 import frc.robot.lib.TankDrive;
 
 /**
- * This is a subsystem class. A subsystem interacts with the hardware components
- * on the robot. This subsystem deals with the drivetrain. The
- * drivetrain includes 4 motors with encoders on each and a gyro to measure the angle of the robot.
+ * This subsystem deals with the drivetrain. The drivetrain includes 4 NEO
+ * motors with encoders on each and a gyro to measure the angle of the robot.
  */
-
 public class Drivetrain extends Subsystem implements ISubsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
 
   private static Drivetrain instance = new Drivetrain();
 
+  /**
+   * @return A new instance of the Drivetrain
+   */
   public static Drivetrain getInstance() {
     return instance;
   }
@@ -43,6 +42,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   private CANSparkMax bottomLeftMotor;
   private CANSparkMax bottomRightMotor;
 
+  // Encoders
   private CANEncoder topLeftEncoder;
   private CANEncoder topRightEncoder;
   private CANEncoder bottomLeftEncoder;
@@ -51,7 +51,11 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   private AHRS gyro;
 
   private TankDrive drivetrain;
+  private Output driveOutput;
 
+  /**
+   * @return A new instance of the Drivetrain
+   */
   public Drivetrain() {
     topLeftMotor = new CANSparkMax(RobotMap.DRIVE_TOP_LEFT_MOTOR, MotorType.kBrushless);
     topRightMotor = new CANSparkMax(RobotMap.DRIVE_TOP_RIGHT_MOTOR, MotorType.kBrushless);
@@ -63,29 +67,55 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     bottomLeftEncoder = bottomLeftMotor.getEncoder();
     bottomRightEncoder = bottomRightMotor.getEncoder();
 
-    configureSparkMAX();    
-
     gyro = new AHRS(SerialPort.Port.kMXP);
-    gyro.reset();    
-    invertGyro(false);    
+    gyro.reset();
+    invertGyro(false);
 
-    zeroSensors();
+    resetSubsystem();
 
     drivetrain = new TankDrive();
   }
 
-  // how fast motors will go; value between 0-1
-  private double SpeedScale = 1;
+  /**
+   * Default speed drivetrain will go; between 0-1
+   */
+  private double DefaultSpeedScale = 1;
 
-  // drive mode; true = arcade; false = tank
-  private boolean DriveMode = false;
+  /**
+   * Default speed drivetrain will go during slow mode; between 0-1
+   */
+  private double SlowSpeedScale = 0.5;
 
-  Output driveOutput = new Output(0,0);
-  public void DriveWithJoy(double leftStick, double rightStick, double rotation) {
+  /**
+   * Current speed scale for the robot
+   */
+  private double SpeedScale = DefaultSpeedScale;
+
+  /**
+   * Determines if the robot is currently in slow mode.
+   */
+  private boolean isSlow = false;
+
+  /**
+   * True: arcade; False: tank. Set default here.
+   */
+  private boolean DriveMode = true;
+
+  /**
+   * This is the main method for driving the robot. It determines which drive mode
+   * is currently selected and outputs to the motors accordingly. For tank drive
+   * mode, the left stick controls the left wheels and the right stick controls
+   * the right wheels. In arcade mode, the left stick controls forward/reverse
+   * motion and the right stick controls turning. Arcade mode has gyro correction
+   * to keep the robot moving in a straight line.
+   * 
+   * @param leftStick  : Y value of left XBox joystick.
+   * @param rightStick : Y value of right XBox joystick.
+   * @param rotation   : X value of right XBox joystick.
+   */
+  public void driveWithJoy(double leftStick, double rightStick, double rotation) {
     // Tank Drive
     if (!DriveMode) {
-      
-
       driveOutput = drivetrain.tankDrive(leftStick * SpeedScale, rightStick * SpeedScale);
 
       topLeftMotor.set(driveOutput.getLeftValue());
@@ -93,25 +123,25 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
       topRightMotor.set(driveOutput.getRightValue());
       bottomRightMotor.set(driveOutput.getRightValue());
-           
     }
 
     // Arcade Drive
     else {
-      
-      double correction;
+      //double correction;
 
       // if (rotation < 0.2 && rotation > -0.2) {
-      //   // when not rotating, compare your current gyro pos to the last time you were
-      //   // rotating to get error
-      //   correction = gyroCorrection();
+      // // when not rotating, compare your current gyro pos to the last time you were
+      // // rotating to get error
+      // correction = gyroCorrection();
       // } else {
-      //   correction = 0;
+      // correction = 0;
       // }
 
-      //if (gyro.isConnected())
-        //driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale);
-      //else
+      // if (gyro.isConnected())
+      // driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation -
+      // correction) * SpeedScale);
+      // else
+
       driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale);
 
       topLeftMotor.set(driveOutput.getLeftValue());
@@ -121,32 +151,84 @@ public class Drivetrain extends Subsystem implements ISubsystem {
       bottomRightMotor.set(-driveOutput.getRightValue());
 
       prevAngle = getGyroAngle(); // Stores previous angle
+    }
+  }
 
+  /**
+   * Toggle slow mode. Robot will be in slow mode as this method is repeatedly
+   * called.
+   * 
+   * @param slow : set this to true for slow mode
+   */
+  public void slowMode(boolean slow) {
+    if (slow) {
+      isSlow = true;
+      SpeedScale = SlowSpeedScale;
+    } else {
+      isSlow = false;
+      SpeedScale = DefaultSpeedScale;
     }
 
   }
 
-  boolean slow = false;
-  // toggle slow mode
-  public void slowMode(boolean isSlow) {
-    if (isSlow)
-      {
-        slow = true;
-        SpeedScale = 0.5;
-      }
-    else
-    {
-      slow = false;
-      SpeedScale = 1;
-    } 
-      
-  }
-
-  // toggle drive mode
+  /**
+   * Toggles the drive mode between arcade/tank
+   */
   public void toggleDriveMode() {
     DriveMode = !DriveMode;
   }
 
+  /**
+   * 
+   * @return Number of rotations of left motor
+   */
+  public double getLeftEncoder() {
+    return (topLeftEncoder.getPosition() + bottomLeftEncoder.getPosition()) / 2;
+  }
+
+  /**
+   * 
+   * @return Number of rotations of right motor
+   */
+  public double getRightEncoder() {
+    return (topRightEncoder.getPosition() + bottomRightEncoder.getPosition()) / -2;
+  }
+
+  /**
+   * 
+   * @return Average of left and right distances
+   */
+  public double getForwardDistance() {
+    return (getLeftEncoder() + getRightEncoder()) / 2;
+  }
+
+  /**
+   * 
+   * @return Left side speed
+   */
+  public double getLeftVelocity() {
+    return (topLeftEncoder.getVelocity() + bottomLeftEncoder.getVelocity()) / 2;
+  }
+
+  /**
+   * 
+   * @return Right side speed
+   */
+  public double getRightVelocity() {
+    return (topRightEncoder.getVelocity() + bottomRightEncoder.getVelocity()) / -2;
+  }
+
+  /**
+   * 
+   * @return Average forward speed
+   */
+  public double getForwardVelocity() {
+    return (getLeftVelocity() + getRightVelocity()) / 2;
+  }
+
+  /**
+   * Stops the drivetrain
+   */
   public void stopDrivetrain() {
     topLeftMotor.set(0);
     bottomLeftMotor.set(0);
@@ -155,41 +237,87 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     bottomRightMotor.set(0);
   }
 
-  // Gyro Correction
-
-  private double gyroCorrectRate = 0.1;
-
-  private double prevAngle;
-
-  public double gyroCorrection() {
-    return (getGyroAngle() - prevAngle) * gyroCorrectRate;
+  /**
+   * Reset drivetrain encoder distances to 0
+   */
+  public void zeroEncoders() {
+    topLeftEncoder.setPosition(0);
+    topRightEncoder.setPosition(0);
+    bottomLeftEncoder.setPosition(0);
+    bottomRightEncoder.setPosition(0);
   }
 
-  // Encoder Distances
+  /**
+   * Configures subsytem-specific settings for motor controllers
+   */
+  private void configureMotorControllers() {
+    zeroEncoders();
+    topLeftMotor.setInverted(false);
+    topRightMotor.setInverted(false);
+    bottomLeftMotor.setInverted(false);
+    bottomRightMotor.setInverted(false);
 
-  public double getLeftEncoder() {
-    return (topLeftEncoder.getPosition() + bottomLeftEncoder.getPosition()) / 2;
+    topLeftMotor.setIdleMode(IdleMode.kCoast);
+    topRightMotor.setIdleMode(IdleMode.kCoast);
+    bottomLeftMotor.setIdleMode(IdleMode.kCoast);
+    bottomRightMotor.setIdleMode(IdleMode.kCoast);
   }
 
-  public double getRightEncoder() {
-    return (topRightEncoder.getPosition() + bottomRightEncoder.getPosition()) / -2;
+  /**
+   * Outputs Drivetrain subsystem information to SmartDashboard for drivers.
+   */
+  @Override
+  public void outputSmartdashboard() {
+    SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
+    SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
+    SmartDashboard.putNumber("Right Encoder", getRightEncoder());
+    SmartDashboard.putNumber("Forward Distance", getForwardDistance());
+    SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+    SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
+    SmartDashboard.putNumber("Forward Velocity", getForwardVelocity());
+
+    SmartDashboard.putBoolean("Slow Mode", isSlow);
+
+    SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
+
+    String mode;
+    if (DriveMode)
+      mode = "Arcade";
+    else
+      mode = "Tank";
+    SmartDashboard.putString("Drive Mode ", mode);
+
   }
 
-  // Encoder Velocities
-  public double getLeftVelocity() {
-    return (topLeftEncoder.getVelocity() + bottomLeftEncoder.getVelocity()) / 2;
+  @Override
+  public void resetSubsystem() {
+    stopDrivetrain();
+    zeroSensors();
+    configureMotorControllers();
   }
 
-  public double getRightVelocity() {
-    return (topRightEncoder.getVelocity() + bottomRightEncoder.getVelocity()) / -2;
+  @Override
+  public void zeroSensors() {
+    zeroEncoders();
+    zeroGyro();
   }
 
-  public double getForwardVelocity() {
-    return (getLeftVelocity() + getRightVelocity()) / 2;
+  @Override
+  public void testSubsystem() {
+
   }
 
-  // Gyro measurements
+  @Override
+  public void initDefaultCommand() {
+    // Set the default command for a subsystem here.
+    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new DriveWithJoy());
+  }
 
+  //
+  //
+  //
+  // Gyro stuff
   private int gyroInversion = 1;
 
   public double getGyroAngle() {
@@ -207,74 +335,19 @@ public class Drivetrain extends Subsystem implements ISubsystem {
       gyroInversion = 1;
   }
 
+  private double gyroCorrectRate = 0.1;
+
+  private double prevAngle;
+
+  public double gyroCorrection() {
+    return (getGyroAngle() - prevAngle) * gyroCorrectRate;
+  }
+
   public void zeroGyro() {
     gyro.zeroYaw();
   }
 
-  public void zeroEncoders() {
-    topLeftEncoder.setPosition(0);
-    topRightEncoder.setPosition(0);
-    bottomLeftEncoder.setPosition(0);
-    bottomRightEncoder.setPosition(0);
-  }
-
-  private void configureSparkMAX() {
-    zeroEncoders();
-    topLeftMotor.setInverted(false);
-    topRightMotor.setInverted(false);
-    bottomLeftMotor.setInverted(false);
-    bottomRightMotor.setInverted(false);
-
-    topLeftMotor.setIdleMode(IdleMode.kCoast);
-    topRightMotor.setIdleMode(IdleMode.kCoast);
-    bottomLeftMotor.setIdleMode(IdleMode.kCoast);
-    bottomRightMotor.setIdleMode(IdleMode.kCoast);
-  }
-
-  @Override
-  public void outputSmartdashboard() {
-    SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
-    SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
-    SmartDashboard.putNumber("Right Encoder", getRightEncoder());
-    SmartDashboard.putNumber("Right Velocity", getRightVelocity());
-    SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
-    SmartDashboard.putNumber("Forward Velocity", getForwardVelocity());
-
-    SmartDashboard.putBoolean("Slow Mode", slow);
-
-    SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
-
-    String mode;
-    if (DriveMode)
-      mode = "Arcade";
-    else
-      mode = "Tank";
-    SmartDashboard.putString("Drive Mode ", mode);
-
-  }
-
-  @Override
-  public void zeroSensors() {
-    zeroEncoders();
-    zeroGyro();
-  }
-
-  @Override
-  public void resetSubsystem() {
-    stopDrivetrain();
-    zeroSensors();
-    configureSparkMAX();
-  }
-
-  @Override
-  public void testSubsystem() {
-
-  }
-
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new DriveWithJoy());
-  }
+  //
+  //
+  //
 }

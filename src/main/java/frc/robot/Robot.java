@@ -71,9 +71,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    drivetrain.resetSubsystem();
-    intakeStorage.resetSubsystem();
-    shooter.resetSubsystem();
+    // drivetrain.resetSubsystem();
+    // intakeStorage.resetSubsystem();
+    // shooter.resetSubsystem();
   }
 
   @Override

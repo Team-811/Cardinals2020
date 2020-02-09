@@ -60,6 +60,8 @@ public class OI {
     driveController.xButton.whenPressed(new ToggleKicker());
     driveController.yButton.whenPressed(new ToggleIntakeStorage());
 
+    driveController.rightTriggerButton.whileHeld(new AutoRunShooter());
+
     operatorController = new BobXboxController(1,0.3,0.3);  
     
   }    

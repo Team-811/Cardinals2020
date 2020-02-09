@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -17,14 +20,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
- * This is a subsystem class. A subsystem interacts with the hardware components
- * on the robot.
+ * This is the subsystem class for the Shooter. It contains methods to toggle
+ * the shooter on or off and also to run the shooter automatically, accounting
+ * for lost speed. This subsystem contains the shooter and kicker (storage to
+ * shooter) motors.
  */
-
 public class Shooter extends Subsystem implements ISubsystem {
 
     private static Shooter instance = new Shooter();
 
+    /**
+     * @return New instance of shooter subsystem.
+     */
     public static Shooter getInstance() {
         return instance;
     }
@@ -32,65 +39,155 @@ public class Shooter extends Subsystem implements ISubsystem {
     private CANSparkMax shooterMotor;
     private CANEncoder shooterEncoder;
 
+    private TalonSRX kickerMotor;
+
+    private boolean shooterIsRunning;
+    private boolean kickerIsRunning;
+
+    /**
+     * Measured full velocity of shooter when run at full speed without any balls.
+     */
+    private final double shooterFullVelocity = 5715;
+
+    /**
+     * @return New instance of shooter subsystem.
+     */
     public Shooter() {
         shooterMotor = new CANSparkMax(RobotMap.SHOOTER, MotorType.kBrushless);
         shooterEncoder = shooterMotor.getEncoder();
 
-        zeroSensors();
-        configureSparkMAX();
+        kickerMotor = new TalonSRX(RobotMap.KICKER);
+
+        resetSubsystem();
     }
 
-    boolean isRunning = false;
+    /**
+     * Runs the shooter at a given speed. This method accounts for speed lost when
+     * shooting a ball. The kicker motor from the storage to the shooter will only
+     * feed the next ball when the shooter has reached full speed again. NOTE: this
+     * method does not toggle the shooter, it only adjusts the speed. It will not
+     * stop the shooter unless the speed is 0. This method also runs the kicker
+     * motor automatically depending on the shooter speed.
+     * 
+     * @param speed (0-1)
+     */
+    public void autoRunShooter(double speed) {
+        shooterMotor.set(speed);
+        if (speed == 0) {
+            kickerMotor.set(ControlMode.PercentOutput, 0);
+        }
 
-    private void RunShooter(double speed) {
-        if(isRunning)
+        // only run the kicker once the shooter has reached full speed again
+        if (getShooterVelocity() > shooterFullVelocity * speed) {
+            kickerMotor.set(ControlMode.PercentOutput, 1);
+        } else {
+            kickerMotor.set(ControlMode.PercentOutput, 0);
+        }
+    }
+
+    /**
+     * Runs the shooter at a given speed. Also runs the kicker continuously.
+     * 
+     * @param speed (0-1)
+     */
+    public void runShooter(double speed) {
+        shooterMotor.set(speed);
+        if (speed == 0) {
+            kickerMotor.set(ControlMode.PercentOutput, 0);
+            kickerIsRunning = false;
+            shooterIsRunning = false;
+        } else {
+            kickerMotor.set(ControlMode.PercentOutput, 1);
+            kickerIsRunning = true;
+            shooterIsRunning = true;
+        }
+    }
+
+    /**
+     * Toggles the shooter on/off. Each time this method is called, the shooter will
+     * go into the opposite state (if on, turns off). This methods only toggles the
+     * shooter, not the kicker. Mostly used for testing.
+     * 
+     * @param speed (0-1)
+     */
+    public void toggleShooter(double speed) {
+        shooterIsRunning = !shooterIsRunning;
+        if (shooterIsRunning)
             shooterMotor.set(speed);
         else
             shooterMotor.set(0);
     }
 
-    public void ToggleShooter(double speed)
-    {
-        isRunning = !isRunning;
-        RunShooter(speed);
+    /**
+     * Toggles the kicker on/off. Each time this method is called, the kicker will
+     * go into the opposite state (if on, turns off). This methods only toggles the
+     * kicker, not the shooter. Mostly used for testing.
+     * 
+     * @param speed (0-1)
+     */
+    public void toggleKicker(double speed) {
+        kickerIsRunning = !kickerIsRunning;
+        if (kickerIsRunning)
+            kickerMotor.set(ControlMode.PercentOutput, speed);
+        else
+            kickerMotor.set(ControlMode.PercentOutput, 0);
     }
 
-    public double getShooterEncoder() {
-        return shooterEncoder.getPosition();
+    /**
+     * Stops the shooter and kicker
+     */
+    public void stopShooter() {
+        kickerIsRunning = false;
+        shooterIsRunning = false;
+
+        kickerMotor.set(ControlMode.PercentOutput, 0);
+        shooterMotor.set(0);
     }
 
+    /**
+     * @return Speed of the shooter in RPM
+     */
     public double getShooterVelocity() {
         return shooterEncoder.getVelocity();
     }
 
-    private void configureSparkMAX() {
-        zeroEncoders();
+    /**
+     * Configures subsytem-specific settings for motor controllers
+     */
+    private void configureMotorControllers() {
+        zeroSensors();
+
         shooterMotor.setInverted(true);
         shooterMotor.setIdleMode(IdleMode.kBrake);
+
+        kickerMotor.setInverted(true);
+        kickerMotor.setNeutralMode(NeutralMode.Brake);
     }
 
-    private void zeroEncoders() {
-        shooterEncoder.setPosition(0);
-    }
-
+    /**
+     * Outputs Shooter subsystem information to SmartDashboard for drivers.
+     */
     @Override
     public void outputSmartdashboard() {
-        SmartDashboard.putBoolean("Shooter Running", isRunning);
-        SmartDashboard.putNumber("Shooter Encoder ", getShooterEncoder());
+        SmartDashboard.putBoolean("Shooter Running", shooterIsRunning);
         SmartDashboard.putNumber("Shooter Velocity ", getShooterVelocity());
+
+        SmartDashboard.putBoolean("Kicker Running", kickerIsRunning);
+    }
+
+    /**
+     * Stops the shooter and kicker motors; reconfigures motor controllers.
+     */
+    @Override
+    public void resetSubsystem() {
+        stopShooter();
+        zeroSensors();
+        configureMotorControllers();        
     }
 
     @Override
     public void zeroSensors() {
-        zeroEncoders();
-    }
-
-    @Override
-    public void resetSubsystem() {
-        zeroSensors();
-        configureSparkMAX();
-        RunShooter(0);
-        isRunning = false;
+        shooterEncoder.setPosition(0);
     }
 
     @Override

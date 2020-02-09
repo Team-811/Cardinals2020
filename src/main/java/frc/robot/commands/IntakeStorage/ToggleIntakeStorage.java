@@ -24,7 +24,7 @@ public class ToggleIntakeStorage extends InstantCommand {
   @Override
   protected void initialize() 
   {
-    Robot.intakeStorage.ToggleIntakeStorage(.6);
+    Robot.intakeStorage.toggleIntakeStorage(.6);
   }
 
 }

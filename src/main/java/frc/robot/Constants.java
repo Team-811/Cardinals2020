@@ -12,7 +12,6 @@ package frc.robot;
  */
 public class Constants 
 {
-    //TODO
     public static final double wheelbase = 0.84;
     public static final double wheelDiameter = 0.1;
     public static final double smallWheelDiameter = 0.1;
