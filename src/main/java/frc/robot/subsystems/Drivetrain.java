@@ -97,6 +97,11 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   private boolean isSlow = false;
 
   /**
+   * Sets acceleration rate of drivetrain to correct "jerkiness". How many seconds it will take to go from 0 to full speed.
+   */
+  private double RampRate = 3;
+
+  /**
    * True: arcade; False: tank. Set default here.
    */
   private boolean DriveMode = true;
@@ -261,6 +266,11 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     topRightMotor.setIdleMode(IdleMode.kCoast);
     bottomLeftMotor.setIdleMode(IdleMode.kCoast);
     bottomRightMotor.setIdleMode(IdleMode.kCoast);
+
+    topLeftMotor.setClosedLoopRampRate(RampRate);
+    topRightMotor.setClosedLoopRampRate(RampRate);
+    bottomLeftMotor.setClosedLoopRampRate(RampRate);
+    bottomRightMotor.setClosedLoopRampRate(RampRate);
   }
 
   /**
