@@ -52,15 +52,18 @@ public class OI {
     driveController = new BobXboxController(0, 0.3, 0.3);
 
     driveController.leftBumper.whileHeld(new SlowMode());
-    driveController.rightBumper.whenPressed(new ToggleDriveMode());
-
-    driveController.aButton.whenPressed(new ZeroSensors());
-    driveController.bButton.whenPressed(new ToggleShooter());
-    driveController.xButton.whenPressed(new ToggleKicker());
-    driveController.yButton.whenPressed(new ToggleIntakeStorage());
-
+    driveController.rightBumper.whenPressed(new ZeroSensors());   
+    
+    driveController.startButton.whenPressed(new ToggleDriveMode());
+    
+    driveController.leftTriggerButton.whenPressed(new UnjamComp());
     driveController.rightTriggerButton.whileHeld(new AutoRunShooter());
 
+    driveController.yButton.whenPressed(new ToggleIntakeStorage());
+
+    driveController.bButton.whenPressed(new ToggleShooter());
+    driveController.xButton.whenPressed(new ToggleKicker());
+    
     operatorController = new BobXboxController(1, 0.3, 0.3);
 
   }

@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.commands.Utility.TimerCommand;
 
 /**
  * This is the subsystem class for the Robot intake and storage container. It
@@ -34,7 +35,12 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
 
     private TalonSRX intakeMotor;
 
-    private boolean intakeIsRunning;
+    public boolean intakeIsRunning;
+
+    public boolean intakeRunning()
+    {
+        return intakeIsRunning;
+    }
 
     /**
      * @return A new instance of the Intake/Storage
@@ -52,7 +58,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      * @param speed (0-1)
      */
     public void runIntakeStorage(double speed) {
-        intakeMotor.set(ControlMode.PercentOutput, 0);
+        intakeMotor.set(ControlMode.PercentOutput, speed);
         if (speed == 0) {
             intakeIsRunning = false;
         } else
