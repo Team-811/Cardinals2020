@@ -79,12 +79,12 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   /**
    * Default speed drivetrain will go; between 0-1
    */
-  private double DefaultSpeedScale = 0.5;
+  private double DefaultSpeedScale = 0.7;
 
   /**
    * Default speed drivetrain will go during slow mode; between 0-1
    */
-  private double SlowSpeedScale = 0.5;
+  private double SlowSpeedScale = 0.3;
 
   /**
    * Current speed scale for the robot

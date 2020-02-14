@@ -41,8 +41,8 @@ public class Shooter extends Subsystem implements ISubsystem {
 
     private TalonSRX kickerMotor;
 
-    private boolean shooterIsRunning;
-    private boolean kickerIsRunning;
+    private boolean shooterIsRunning = false;
+    private boolean kickerIsRunning = false;
 
     /**
      * Measured full velocity of shooter when run at full speed without any balls.

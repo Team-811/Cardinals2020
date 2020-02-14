@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   public static Shooter shooter = Shooter.getInstance();
   public static IntakeStorage intakeStorage = IntakeStorage.getInstance();
   public static RobotMap robotMap = new RobotMap();
-  public static OI controllers;
+  public static OI controllers = new OI();
 
   // Command m_autonomousCommand;
   // SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -150,6 +150,7 @@ public class Robot extends TimedRobot {
     drivetrain.outputSmartdashboard();
     shooter.outputSmartdashboard();
     intakeStorage.outputSmartdashboard();
+    controllers.OutputSmartDashboard();
   }
 
 }

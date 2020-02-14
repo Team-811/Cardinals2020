@@ -7,6 +7,7 @@
 
 package frc.robot.controllers;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.IntakeStorage.*;
 import frc.robot.commands.Shooter.*;
@@ -45,35 +46,59 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
 
+  /**
+   * Switch between single or dual controller modes for competition/testing. True
+   * is dual controller and false is single.
+   */
+  private boolean mode = true;
+
   public BobXboxController driveController;
   public BobXboxController operatorController;
 
   public OI() {
     driveController = new BobXboxController(0, 0.3, 0.3);
-
-    // driveController.leftBumper.whileHeld(new SlowMode());
-    // driveController.rightBumper.whenPressed(new ZeroSensors());   
-    
-    driveController.startButton.whenPressed(new ToggleDriveMode());
-    
-    // driveController.leftTriggerButton.whenPressed(new UnjamComp());
-    // driveController.rightTriggerButton.whileHeld(new AutoRunShooter());
-
-    // driveController.yButton.whenPressed(new ToggleIntakeStorage());
-
-    // driveController.bButton.whenPressed(new ToggleShooter());
-    // driveController.xButton.whenPressed(new ToggleKicker());
-    
     operatorController = new BobXboxController(1, 0.3, 0.3);
 
-    operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
-    
-    operatorController.aButton.whenPressed(new ToggleIntakeStorage());
+    // Dual Controller
+    if (mode) {
+      driveController.startButton.whenPressed(new ToggleDriveMode());
 
-    operatorController.xButton.whenPressed(new UnjamComp());
+      operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
 
-    operatorController.yButton.whenPressed(new ToggleKickerAndShooter());
+      operatorController.aButton.whenPressed(new ToggleIntakeStorage());
 
+      operatorController.xButton.whenPressed(new UnjamComp());
+
+      operatorController.yButton.whenPressed(new ToggleKickerAndShooter());
+    }
+    // Single controller
+    else {
+      driveController.startButton.whenPressed(new ToggleDriveMode());
+      driveController.selectButton.whenPressed(new ZeroSensors());
+
+      driveController.leftBumper.whileHeld(new SlowMode());      
+
+      driveController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());
+      driveController.rightTriggerButton.whileHeld(new AutoRunShooter());
+
+      driveController.aButton.whenPressed(new ToggleIntakeStorage());
+      driveController.xButton.whenPressed(new UnjamComp());
+      driveController.bButton.whenPressed(new ToggleShooter());
+
+    }
+
+  }
+
+  public void OutputSmartDashboard() {
+    String strMode;
+    if(mode)
+    {
+      strMode = "DUAL";
+    }
+    else
+    strMode = "SINGLE";
+
+    SmartDashboard.putString("Controller Mode", strMode);
   }
 
 }
