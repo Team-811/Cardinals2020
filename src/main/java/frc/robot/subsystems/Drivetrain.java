@@ -79,7 +79,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   /**
    * Default speed drivetrain will go; between 0-1
    */
-  private double DefaultSpeedScale = 1;
+  private double DefaultSpeedScale = 0.5;
 
   /**
    * Default speed drivetrain will go during slow mode; between 0-1
@@ -99,7 +99,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   /**
    * Sets acceleration rate of drivetrain to correct "jerkiness". How many seconds it will take to go from 0 to full speed.
    */
-  private double RampRate = 0.4;
+  private double RampRate = 0.75;
 
   /**
    * True: arcade; False: tank. Set default here.
@@ -147,7 +147,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
       // correction) * SpeedScale);
       // else
 
-      driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale);
+      driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * .8);
 
       topLeftMotor.set(driveOutput.getLeftValue());
       bottomLeftMotor.set(driveOutput.getLeftValue());

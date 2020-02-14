@@ -47,7 +47,7 @@ public class Shooter extends Subsystem implements ISubsystem {
     /**
      * Measured full velocity of shooter when run at full speed without any balls.
      */
-    private final double shooterFullVelocity = 5000;
+    private final double shooterFullVelocity = 5200;
 
     /**
      * @return New instance of shooter subsystem.
@@ -123,6 +123,30 @@ public class Shooter extends Subsystem implements ISubsystem {
             shooterMotor.set(speed);
         else
             shooterMotor.set(0);
+    }
+
+    /**
+     * Toggles the kicker and shooter on/off. Each time this method is called, the shooter and kicker will
+     * go into the opposite state (if on, turns off). Mostly used for testing.
+     * 
+     * @param speed (0-1)
+     */
+    public void toggleKickerAndShooter(double speed){
+        shooterIsRunning = !shooterIsRunning;
+        kickerIsRunning = !kickerIsRunning;
+        if (shooterIsRunning&&kickerIsRunning)
+        {
+            shooterMotor.set(speed);
+            kickerMotor.set(ControlMode.PercentOutput, speed);
+        }
+            
+        else
+        {
+            shooterMotor.set(0);
+            kickerMotor.set(ControlMode.PercentOutput, 0);
+        }
+            
+
     }
 
     /**
