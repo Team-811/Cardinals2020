@@ -47,7 +47,7 @@ public class Shooter extends Subsystem implements ISubsystem {
     /**
      * Measured full velocity of shooter when run at full speed without any balls.
      */
-    private final double shooterFullVelocity = 5200;
+    private final double shooterFullVelocity = 5100;
 
     /**
      * @return New instance of shooter subsystem.

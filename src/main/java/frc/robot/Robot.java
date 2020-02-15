@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   public static Shooter shooter = Shooter.getInstance();
   public static IntakeStorage intakeStorage = IntakeStorage.getInstance();
   public static RobotMap robotMap = new RobotMap();
-  public static OI controllers = new OI();
+  public static OI controllers;
 
   // Command m_autonomousCommand;
   // SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    
     //m_autonomous1 = m_chooser.getSelected();
     // m_autonomousCommand = m_chooser.getSelected();
       /*

@@ -84,7 +84,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   /**
    * Default speed drivetrain will go during slow mode; between 0-1
    */
-  private double SlowSpeedScale = 0.3;
+  private double SlowSpeedScale = 0.25;
 
   /**
    * Current speed scale for the robot
@@ -147,7 +147,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
       // correction) * SpeedScale);
       // else
 
-      driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * .8);
+      driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * .6);
 
       topLeftMotor.set(driveOutput.getLeftValue());
       bottomLeftMotor.set(driveOutput.getLeftValue());

@@ -34,7 +34,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
 
     private TalonSRX intakeMotor;
 
-    public boolean intakeIsRunning = false;;
+    private boolean intakeIsRunning = false;
 
     public boolean intakeRunning()
     {

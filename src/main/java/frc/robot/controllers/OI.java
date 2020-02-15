@@ -62,8 +62,10 @@ public class OI {
     // Dual Controller
     if (mode) {
       driveController.startButton.whenPressed(new ToggleDriveMode());
+      driveController.leftBumper.whileHeld(new SlowMode());
 
       operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
+      operatorController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());
 
       operatorController.aButton.whenPressed(new ToggleIntakeStorage());
 
@@ -83,7 +85,7 @@ public class OI {
 
       driveController.aButton.whenPressed(new ToggleIntakeStorage());
       driveController.xButton.whenPressed(new UnjamComp());
-      driveController.bButton.whenPressed(new ToggleShooter());
+      driveController.bButton.whenPressed(new ToggleKickerAndShooter());
 
     }
 

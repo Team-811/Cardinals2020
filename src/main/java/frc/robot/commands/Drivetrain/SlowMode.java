@@ -32,6 +32,7 @@ public class SlowMode extends Command {
 
   @Override
   protected void interrupted() {
+    end();
   }
 
   @Override

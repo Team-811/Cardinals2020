@@ -8,6 +8,7 @@
 package frc.robot.commands.IntakeStorage;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.commands.Utility.TimerCommand;
 
@@ -32,16 +33,14 @@ public class UnjamComp extends CommandGroup {
 
         // if the intake was running when unjam is called, turn it back on after
         // unjamming. Else, just run it backwards and stop
-
-        boolean running = Robot.intakeStorage.intakeIsRunning;
-
+        
         addSequential(new StopIntakeStorage());
         addSequential(new ToggleIntakeStorageReverse());
         addSequential(new TimerCommand(0.5));
-        addSequential(new StopIntakeStorage());
+        addSequential(new StopIntakeStorage());      
 
-        if(running)
-        addSequential(new ToggleIntakeStorage());
+       
+        //addSequential(new ToggleIntakeStorage());
 
     }
 }
