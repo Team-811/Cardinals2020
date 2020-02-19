@@ -24,7 +24,7 @@ public class ToggleIntakeStorageReverse extends InstantCommand {
   // something needs to be turned on/off or toggled.
   @Override
   protected void initialize() {
-    Robot.intakeStorage.toggleIntakeStorage(-.6);
+    Robot.intakeStorage.toggleIntakeStorage(-1);
   }
 
 }

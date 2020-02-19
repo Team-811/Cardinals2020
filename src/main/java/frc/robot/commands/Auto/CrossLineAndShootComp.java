@@ -5,20 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.IntakeStorage;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
+import frc.robot.Constants;
+import frc.robot.commands.IntakeStorage.ToggleIntakeStorage;
+import frc.robot.commands.Shooter.ToggleKickerAndShooter;
 import frc.robot.commands.Utility.TimerCommand;
 
-public class UnjamComp extends CommandGroup {
+public class CrossLineAndShootComp extends CommandGroup {
     /**
-     * This is a command. A command is used to make actual actions happen on the
-     * robot. It can be a single action or a sequence of actions. This one is a
-     * combination of commands that runs the intake/storage back and forth a few
-     * times to try to unjam any stuck balls
+     * This command moves the robot forward one robot length, allowing it to cross
+     * the initiation line. It then moves the robot back against the wall and runs
+     * the shooter to shoot the preloaded balls
      */
-    public UnjamComp() {
+    public CrossLineAndShootComp() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         // addSequential(new Command2());
@@ -30,18 +31,13 @@ public class UnjamComp extends CommandGroup {
         // addSequential(new Command2());
         // Command1 and Command2 will run in parallel.
 
-        // if the intake was running when unjam is called, turn it back on after
-        // unjamming. Else, just run it backwards and stop
+        addSequential(new CrossLine());
+        addSequential(new TimerCommand(0.2));
+        addSequential(new DriveInches(Constants.ROBOT_LENGTH + Constants.LINE_TO_WALL,0.4));
+        addSequential(new TimerCommand(0.2));
         
-        boolean running = Robot.intakeStorage.intakeRunning();
-
-        addSequential(new StopIntakeStorage());
-        addSequential(new ToggleIntakeStorageReverse());
-        addSequential(new TimerCommand(0.5));
-        addSequential(new StopIntakeStorage());       
-
-        if(running)
-        addSequential(new ToggleIntakeStorage());
+        addParallel(new ToggleIntakeStorage());
+        addSequential(new ToggleKickerAndShooter());
 
     }
 }

@@ -16,8 +16,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.commands.Drivetrain.DriveWithJoy;
+import frc.robot.commands.Utility.TimerCommand;
 import frc.robot.lib.Output;
 import frc.robot.lib.TankDrive;
 
@@ -79,12 +81,12 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   /**
    * Default speed drivetrain will go; between 0-1
    */
-  private double DefaultSpeedScale = 0.7;
+  private double DefaultSpeedScale = Constants.DRIVETRAIN_SPEED_SCALE;
 
   /**
    * Default speed drivetrain will go during slow mode; between 0-1
    */
-  private double SlowSpeedScale = 0.25;
+  private double SlowSpeedScale = Constants.DRIVETRAIN_SLOW_SCALE;
 
   /**
    * Current speed scale for the robot
@@ -97,9 +99,10 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   private boolean isSlow = false;
 
   /**
-   * Sets acceleration rate of drivetrain to correct "jerkiness". How many seconds it will take to go from 0 to full speed.
+   * Sets acceleration rate of drivetrain to correct "jerkiness". How many seconds
+   * it will take to go from 0 to full speed.
    */
-  private double RampRate = 0.75;
+  private double RampRate = Constants.DRIVETRAIN_RAMP_RATE;
 
   /**
    * True: arcade; False: tank. Set default here.
@@ -181,6 +184,39 @@ public class Drivetrain extends Subsystem implements ISubsystem {
    */
   public void toggleDriveMode() {
     DriveMode = !DriveMode;
+  }
+
+  /**
+   * Drives the robot forward a given number of inches and stops the drivetrain
+   * after
+   * 
+   * @param inches
+   * @param speed
+   */
+  public void driveInches(double inches, double speed) {
+    while (Math.abs(getForwardVelocity()) > 0) {
+      stopDrivetrain();
+    }
+
+    zeroEncoders();
+    TimerCommand.PauseCode(0.2);
+
+    outputSmartdashboard();
+
+    double distanceDriven = 0;
+
+    while (Math.abs(distanceDriven) < inches) {
+      driveWithJoy(speed, 0, 0);
+      distanceDriven = Math.abs(getForwardDistance()) * Constants.TICKS_TO_INCHES_WHEELS;
+
+      outputSmartdashboard();
+
+      if(getForwardVelocity()==0 && Math.abs(getForwardDistance())*Constants.TICKS_TO_INCHES_WHEELS>10)
+      {
+        break;
+      }
+    }
+    stopDrivetrain();
   }
 
   /**
@@ -271,6 +307,11 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     topRightMotor.setOpenLoopRampRate(RampRate);
     bottomLeftMotor.setOpenLoopRampRate(RampRate);
     bottomRightMotor.setOpenLoopRampRate(RampRate);
+
+    topLeftEncoder.setPositionConversionFactor(0.1);
+    topRightEncoder.setPositionConversionFactor(0.1);
+    bottomLeftEncoder.setPositionConversionFactor(0.1);
+    bottomRightEncoder.setPositionConversionFactor(0.1);
   }
 
   /**

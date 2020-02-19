@@ -8,6 +8,7 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class ToggleKickerAndShooter extends InstantCommand {
@@ -24,7 +25,7 @@ public class ToggleKickerAndShooter extends InstantCommand {
   // something needs to be turned on/off or toggled.
   @Override
   protected void initialize() {
-    Robot.shooter.toggleKickerAndShooter(1);
+    Robot.shooter.toggleKickerAndShooter(Constants.SHOOTER_SPEED, Constants.KICKER_SPEED);
   }
 
 }

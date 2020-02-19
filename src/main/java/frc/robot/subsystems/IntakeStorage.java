@@ -7,9 +7,10 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,7 +33,8 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
         return instance;
     }
 
-    private TalonSRX intakeMotor;
+    private CANSparkMax intakeMotor;
+    private CANEncoder intakeEncoder;
 
     private boolean intakeIsRunning = false;
 
@@ -45,7 +47,8 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      * @return A new instance of the Intake/Storage
      */
     public IntakeStorage() {
-        intakeMotor = new TalonSRX(RobotMap.INTAKE_STORAGE);
+        intakeMotor = new CANSparkMax(RobotMap.INTAKE_STORAGE, MotorType.kBrushless);
+        intakeEncoder = intakeMotor.getEncoder();
         resetSubsystem();
     }
 
@@ -57,7 +60,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      * @param speed (0-1)
      */
     public void runIntakeStorage(double speed) {
-        intakeMotor.set(ControlMode.PercentOutput, speed);
+        intakeMotor.set(speed);
         if (speed == 0) {
             intakeIsRunning = false;
         } else
@@ -74,9 +77,9 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
         intakeIsRunning = !intakeIsRunning;
 
         if (intakeIsRunning)
-            intakeMotor.set(ControlMode.PercentOutput, speed);
+            intakeMotor.set(speed);
         else
-            intakeMotor.set(ControlMode.PercentOutput, 0);
+            intakeMotor.set(0);
     }
 
     /**
@@ -84,7 +87,16 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      */
     public void stopIntakeStorage() {
         intakeIsRunning = false;
-        intakeMotor.set(ControlMode.PercentOutput, 0);
+        intakeMotor.set(0);
+    }
+
+    /**
+     * 
+     * @return Speed of the intake
+     */
+    public double getIntakeStorageVelocity()
+    {
+        return intakeEncoder.getVelocity();
     }
 
     /**
@@ -92,7 +104,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      */
     private void configureMotorControllers() {
         intakeMotor.setInverted(true);
-        intakeMotor.setNeutralMode(NeutralMode.Brake);
+        intakeMotor.setIdleMode(IdleMode.kBrake);
     }
 
     /**
@@ -101,6 +113,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
     @Override
     public void outputSmartdashboard() {
         SmartDashboard.putBoolean("Intake Running", intakeIsRunning);
+        SmartDashboard.putNumber("Intake Velocity", getIntakeStorageVelocity());
     }
 
     /**
@@ -115,7 +128,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
 
     @Override
     public void zeroSensors() {
-
+        intakeEncoder.setPosition(0);
     }
 
     @Override

@@ -7,8 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Auto.CrossLine;
+import frc.robot.commands.Auto.CrossLineAndShootComp;
 import frc.robot.controllers.OI;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeStorage;
@@ -22,14 +28,13 @@ import frc.robot.subsystems.Shooter;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static Drivetrain drivetrain = Drivetrain.getInstance();
-  public static Shooter shooter = Shooter.getInstance();
-  public static IntakeStorage intakeStorage = IntakeStorage.getInstance();
-  public static RobotMap robotMap = new RobotMap();
+  public static Drivetrain drivetrain;
+  public static Shooter shooter;
+  public static IntakeStorage intakeStorage;
   public static OI controllers;
 
-  // Command m_autonomousCommand;
-  // SendableChooser<Command> m_chooser = new SendableChooser<>();
+  Command m_autonomousCommand;
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -37,31 +42,33 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    controllers = new OI();
 
+    drivetrain = Drivetrain.getInstance();
+    shooter = Shooter.getInstance();
+    intakeStorage = IntakeStorage.getInstance();
+    controllers = OI.getInstance();
     drivetrain.zeroGyro();
-    // CameraServer.getInstance().startAutomaticCapture();
-
     updateSmartdashboard();
 
-    // SmartDashboard CameraServer
+    CameraServer server = CameraServer.getInstance();
+    server.startAutomaticCapture();
 
-    // m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    // SmartDashboard.putData("Auto mode", m_chooser);
+    // List auto options here and assign them each to a command. This will put them
+    // in SmartDashboard and allow them to be selected
+    m_chooser.setDefaultOption("Cross Line", new CrossLine());
+    m_chooser.addOption("Cross Line and Shoot (Middle)", new CrossLineAndShootComp());
+
+    SmartDashboard.putData("Auto mode", m_chooser);
   }
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
    * teleoperated and test.
-   *
-   * <p>
-   * This runs after the mode specific periodic functions, but before LiveWindow
-   * and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
+   
   }
 
   /**
@@ -72,8 +79,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     // drivetrain.resetSubsystem();
-    // intakeStorage.resetSubsystem();
     // shooter.resetSubsystem();
+    // intakeStorage.resetSubsystem();
   }
 
   @Override
@@ -83,32 +90,18 @@ public class Robot extends TimedRobot {
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable chooser
-   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-   * remove all of the chooser code and uncomment the getString code to get the
-   * auto name from the text box below the Gyro
-   *
-   * <p>
-   * You can add additional auto modes by adding additional commands to the
-   * chooser code above (like the commented example) or additional comparisons to
-   * the switch structure below with additional strings & commands.
+   * between different autonomous modes using the dashboard.
    */
   @Override
   public void autonomousInit() {
-    
-    //m_autonomous1 = m_chooser.getSelected();
-    // m_autonomousCommand = m_chooser.getSelected();
-      /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
-     * switch(autoSelected) { case "My Auto": autonomousCommand = new
-     * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
-     * ExampleCommand(); break; }
-     */
+
+    // See which command we selected
+    m_autonomousCommand = m_chooser.getSelected();
 
     // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    // m_autonomousCommand.start();
-    // }
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.start();
+    }
 
   }
 
@@ -118,8 +111,13 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+    updateSmartdashboard();
   }
 
+  /**
+   * This function is called when teleop starts. Use it to make sure anything that
+   * may have been running it auto stops
+   */
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
@@ -129,6 +127,10 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     // m_autonomousCommand.cancel();
     // }
+
+    intakeStorage.stopIntakeStorage();
+    shooter.stopShooter();
+
   }
 
   /**

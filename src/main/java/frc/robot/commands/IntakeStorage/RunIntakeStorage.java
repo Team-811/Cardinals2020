@@ -21,7 +21,7 @@ public class RunIntakeStorage extends Command {
   // run the intake/storage continously while the command is called
   @Override
   protected void execute() {
-    Robot.intakeStorage.runIntakeStorage(0.6);
+    Robot.intakeStorage.runIntakeStorage(1);
   }
 
   // stop the intake/storage when the command is no longer being called
@@ -39,4 +39,5 @@ public class RunIntakeStorage extends Command {
   protected boolean isFinished() {
     return false;
   }
+
 }

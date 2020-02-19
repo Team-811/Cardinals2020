@@ -8,6 +8,7 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class AutoRunShooter extends Command {
@@ -23,7 +24,7 @@ public class AutoRunShooter extends Command {
   // a button is held)
   @Override
   protected void execute() {
-    Robot.shooter.autoRunShooter(1);
+    Robot.shooter.autoRunShooter(Constants.SHOOTER_SPEED, Constants.KICKER_SPEED);
   }
 
   // stop the shooter when the command is no longer being called

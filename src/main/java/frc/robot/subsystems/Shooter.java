@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 /**
@@ -43,11 +44,8 @@ public class Shooter extends Subsystem implements ISubsystem {
 
     private boolean shooterIsRunning = false;
     private boolean kickerIsRunning = false;
-
-    /**
-     * Measured full velocity of shooter when run at full speed without any balls.
-     */
-    private final double shooterFullVelocity = 5100;
+    
+    private double shooterFullVelocity = Constants.SHOOTER_FULL_VELOCITY;
 
     /**
      * @return New instance of shooter subsystem.
@@ -69,11 +67,12 @@ public class Shooter extends Subsystem implements ISubsystem {
      * stop the shooter unless the speed is 0. This method also runs the kicker
      * motor automatically depending on the shooter speed.
      * 
-     * @param speed (0-1)
+     * @param shooterSpeed (0-1)
+     * @param kickerSpeed (0-1)
      */
-    public void autoRunShooter(double speed) {
-        shooterMotor.set(speed);
-        if (speed == 0) {
+    public void autoRunShooter(double shooterSpeed, double kickerSpeed) {
+        shooterMotor.set(shooterSpeed);
+        if (shooterSpeed == 0) {
             shooterIsRunning = false;
 
             kickerIsRunning = false;
@@ -83,14 +82,15 @@ public class Shooter extends Subsystem implements ISubsystem {
         }
 
         // only run the kicker once the shooter has reached full speed again
-        if (getShooterVelocity() > shooterFullVelocity * speed) {
+        if (getShooterVelocity() > shooterFullVelocity * shooterSpeed) {
             kickerIsRunning = true;
-            kickerMotor.set(ControlMode.PercentOutput, 1);
+            kickerMotor.set(ControlMode.PercentOutput, kickerSpeed);
         } else {
             kickerIsRunning = false;
             kickerMotor.set(ControlMode.PercentOutput, 0);
         }
     }
+    
 
     /**
      * Runs the shooter at a given speed. Also runs the kicker continuously.
@@ -129,15 +129,16 @@ public class Shooter extends Subsystem implements ISubsystem {
      * Toggles the kicker and shooter on/off. Each time this method is called, the shooter and kicker will
      * go into the opposite state (if on, turns off). Mostly used for testing.
      * 
-     * @param speed (0-1)
+     * @param shooterSpeed (0-1)
+     * @param kickerSpeed (0-1)
      */
-    public void toggleKickerAndShooter(double speed){
+    public void toggleKickerAndShooter(double shooterSpeed, double kickerSpeed){
         shooterIsRunning = !shooterIsRunning;
         kickerIsRunning = !kickerIsRunning;
         if (shooterIsRunning&&kickerIsRunning)
         {
-            shooterMotor.set(speed);
-            kickerMotor.set(ControlMode.PercentOutput, speed);
+            shooterMotor.set(shooterSpeed);
+            kickerMotor.set(ControlMode.PercentOutput, kickerSpeed);
         }
             
         else

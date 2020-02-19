@@ -8,6 +8,8 @@
 package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Auto.CrossLine;
+import frc.robot.commands.Auto.CrossLineAndShootComp;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.IntakeStorage.*;
 import frc.robot.commands.Shooter.*;
@@ -50,11 +52,19 @@ public class OI {
    * Switch between single or dual controller modes for competition/testing. True
    * is dual controller and false is single.
    */
-  private boolean mode = true;
+  private boolean mode = false;
 
   public BobXboxController driveController;
   public BobXboxController operatorController;
 
+  public static OI getInstance()
+  {
+    return new OI();
+  }
+
+  /**
+   * Operator interface for binding commands to controllers
+   */
   public OI() {
     driveController = new BobXboxController(0, 0.3, 0.3);
     operatorController = new BobXboxController(1, 0.3, 0.3);
@@ -86,6 +96,9 @@ public class OI {
       driveController.aButton.whenPressed(new ToggleIntakeStorage());
       driveController.xButton.whenPressed(new UnjamComp());
       driveController.bButton.whenPressed(new ToggleKickerAndShooter());
+
+      driveController.yButton.whenPressed(new CrossLine());
+      driveController.rightBumper.whenPressed(new CrossLineAndShootComp());
 
     }
 

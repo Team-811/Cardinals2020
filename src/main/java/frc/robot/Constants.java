@@ -10,37 +10,41 @@ package frc.robot;
 /**
  * This class contains constants about the robot like physical dimensions
  */
-public class Constants 
-{
-    public static final double wheelbase = 0.84;
-    public static final double wheelDiameter = 0.1;
-    public static final double smallWheelDiameter = 0.1;
-    public static final double maxVelocity = 1;
-    public static final double maxAcceleration = 1;
-    public static final double maxJerk = 50;
-    public static final double trackScrubFactor = 1;
-    public static final double strafeTrackScrubFactor = 0.8;
-    public static final int ticksPerRotation = 1024;
+public class Constants {
+    // Speed constants
 
-    // DRIVE WHEEL COEFFICIENTS
-    public static final double LEFT_COEFFICIENT = 1;
-    public static final double RIGHT_COEFFICENT = 1;
-   
-    public static final double robotLength = 0.8763; //With bumpers
-    public static final double robotWidth = 0.8636; //With bumpers
+    public static final double DRIVETRAIN_SPEED_SCALE = 0.7;
+    public static final double DRIVETRAIN_SLOW_SCALE = 0.3;
 
+    public static final double INTAKE_STORAGE_SPEED = 0.6;
 
-    //camera location
-    public static final double X_DIR_OFFSET_IN_METERS = .18;
-    public static final double Y_DIR_OFFSET_IN_METERS = 0;
-    public static final double INITIAL_Z_AXIS_ROTATION = 0;
+    public static final double SHOOTER_SPEED = 1;
+    public static final double KICKER_SPEED = 1;
 
-    //vision stuff
-    public static double kMaxGoalTrackAge = 1.0;
-    public static double kMaxTrackerDistance = 18.0;
-    public static double kCameraFrameRate = 30.0;
-    public static double kTrackReportComparatorStablityWeight = 1.0;
-    public static double kTrackReportComparatorAgeWeight = 1.0;
+    public static final double SHOOTER_FULL_VELOCITY = 5100;
 
-    public static final double cameraLatency = 0.2;
+    public static final double DRIVETRAIN_RAMP_RATE = 0.75;
+
+    // Conversion Factors for Encoders
+
+    /**
+     * 24.34 inches = 1 ticks
+     * 1 inch = 0.041 ticks
+     */
+    public static final double TICKS_TO_INCHES_WHEELS = 7.75 * Math.PI;
+
+    /**
+     * 1 rotation = x ticks 1 rotation is also 8 inches
+     */
+    public static final double TICKS_TO_ROTATIONS_WHEELS = 1;
+
+    // Field Dimensions (values in inches)
+    public static final double LINE_TO_WALL = 120;
+
+    // Robot Dimensions (values in inches)
+
+    // With bumpers
+    public static final double ROBOT_LENGTH = 45;
+    public static final double ROBOT_WIDTH = 0;
+
 }
