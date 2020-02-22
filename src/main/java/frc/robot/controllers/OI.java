@@ -14,6 +14,7 @@ import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.IntakeStorage.*;
 import frc.robot.commands.Shooter.*;
 import frc.robot.commands.Utility.*;
+import frc.robot.commands.Vision.ToggleLED;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -85,7 +86,7 @@ public class OI {
     }
     // Single controller
     else {
-      driveController.startButton.whenPressed(new ToggleDriveMode());
+      driveController.startButton.whenPressed(new ToggleLED());
       driveController.selectButton.whenPressed(new ZeroSensors());
 
       driveController.leftBumper.whileHeld(new SlowMode());      

@@ -19,6 +19,7 @@ import frc.robot.controllers.OI;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeStorage;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
   public static Shooter shooter;
   public static IntakeStorage intakeStorage;
   public static OI controllers;
+  public static Vision vision;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -47,6 +49,10 @@ public class Robot extends TimedRobot {
     shooter = Shooter.getInstance();
     intakeStorage = IntakeStorage.getInstance();
     controllers = OI.getInstance();
+    vision = Vision.getInstance();
+
+    Vision.initialize();
+
     drivetrain.zeroGyro();
     updateSmartdashboard();
 
