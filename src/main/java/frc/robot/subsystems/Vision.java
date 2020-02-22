@@ -8,9 +8,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.awt.Color;
-import java.awt.color.*;
 import frc.robot.lib.Pixy2.Pixy2;
 import frc.robot.lib.Pixy2.links.SPILink;
 
@@ -35,7 +35,7 @@ public class Vision extends Subsystem implements ISubsystem {
     }
 
     public Vision() {
-        initialize();
+        
     }
 
     private boolean lampStatus = false;
@@ -48,10 +48,10 @@ public class Vision extends Subsystem implements ISubsystem {
 
         if (lampStatus) {
             pixy.setLamp((byte) 1, (byte) 0);
-            pixy.setLED(currentLEDColor);
+            setLEDColor(currentLEDColor);
         } else {
             pixy.setLamp((byte) 0, (byte) 0);
-            pixy.setLED(currentLEDColor);
+            setLEDColor(currentLEDColor);
         }
     }
 
@@ -65,11 +65,13 @@ public class Vision extends Subsystem implements ISubsystem {
     public void setLEDColor(java.awt.Color color) {
         currentLEDColor = color;
         pixy.setLED(Color.BLACK);
+        pixy.setLED(currentLEDColor);
     }
 
     @Override
     public void outputSmartdashboard() {
-
+        SmartDashboard.putString("LED Color",currentLEDColor.toString());
+        SmartDashboard.putBoolean("Lamp Status", lampStatus);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class Vision extends Subsystem implements ISubsystem {
 
     @Override
     public void resetSubsystem() {
-        initialize();
+        
     }
 
     @Override

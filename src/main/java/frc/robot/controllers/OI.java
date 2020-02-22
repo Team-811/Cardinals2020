@@ -10,11 +10,14 @@ package frc.robot.controllers;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
-import frc.robot.commands.Drivetrain.*;
-import frc.robot.commands.IntakeStorage.*;
-import frc.robot.commands.Shooter.*;
-import frc.robot.commands.Utility.*;
-import frc.robot.commands.Vision.ToggleLamp;
+import frc.robot.commands.Drivetrain.SlowMode;
+import frc.robot.commands.Drivetrain.ToggleDriveMode;
+import frc.robot.commands.IntakeStorage.RunIntakeStorageReverse;
+import frc.robot.commands.IntakeStorage.ToggleIntakeStorage;
+import frc.robot.commands.IntakeStorage.UnjamComp;
+import frc.robot.commands.Shooter.AutoRunShooter;
+import frc.robot.commands.Shooter.ToggleKickerAndShooter;
+import frc.robot.commands.Utility.ZeroSensors;
 
 /**
  * This class is the glue that binds the controls on the physical operator
