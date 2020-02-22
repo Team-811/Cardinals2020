@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     controllers = OI.getInstance();
     vision = Vision.getInstance();
 
-    Vision.initialize();
+    vision.initialize();
 
     drivetrain.zeroGyro();
     updateSmartdashboard();
@@ -160,7 +160,8 @@ public class Robot extends TimedRobot {
     drivetrain.outputSmartdashboard();
     shooter.outputSmartdashboard();
     intakeStorage.outputSmartdashboard();
-    controllers.OutputSmartDashboard();
+    controllers.outputSmartDashboard();
+    vision.outputSmartdashboard();
   }
 
 }

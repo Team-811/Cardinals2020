@@ -8,6 +8,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import java.awt.Color;
+import java.awt.color.*;
 import frc.robot.lib.Pixy2.Pixy2;
 import frc.robot.lib.Pixy2.links.SPILink;
 
@@ -26,23 +29,42 @@ public class Vision extends Subsystem implements ISubsystem {
 
     private static final Pixy2 pixy = Pixy2.createInstance(new SPILink());;
 
-    public static void initialize() {
+    public void initialize() {
         pixy.init();
-        pixy.setLamp((byte) 0, (byte) 1);
+        pixy.setLamp((byte) 0, (byte) 0);
     }
 
     public Vision() {
-
+        initialize();
     }
 
-    private boolean color;
+    private boolean lampStatus = false;
 
-    public void toggleLed() {
-        color = !color;
-        if (color)
-            pixy.setLED(255, 0, 0);
-        else
-            pixy.setLED(0, 255, 0);
+    /**
+     * Toggles the two bright white lights on the Pixy2
+     */
+    public void toggleLamp() {
+        lampStatus = !lampStatus;
+
+        if (lampStatus) {
+            pixy.setLamp((byte) 1, (byte) 0);
+            pixy.setLED(currentLEDColor);
+        } else {
+            pixy.setLamp((byte) 0, (byte) 0);
+            pixy.setLED(currentLEDColor);
+        }
+    }
+
+    private java.awt.Color currentLEDColor = Color.black;
+
+    /**
+     * Set the color of the Pixy2 LED
+     * 
+     * @param color RGB Value in Hex
+     */
+    public void setLEDColor(java.awt.Color color) {
+        currentLEDColor = color;
+        pixy.setLED(Color.BLACK);
     }
 
     @Override
@@ -57,7 +79,7 @@ public class Vision extends Subsystem implements ISubsystem {
 
     @Override
     public void resetSubsystem() {
-
+        initialize();
     }
 
     @Override

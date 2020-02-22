@@ -28,15 +28,14 @@ public class Constants {
     // Conversion Factors for Encoders
 
     /**
-     * 24.34 inches = 1 ticks
-     * 1 inch = 0.041 ticks
+     * 24.34 inches = 1 ticks 1 inch = 0.041 ticks
      */
-    public static final double TICKS_TO_INCHES_WHEELS = 7.75 * Math.PI;
+    public static final double TICKS_TO_INCHES_WHEELS = 7.75 * Math.PI * .1;
 
     /**
-     * 1 rotation = x ticks 1 rotation is also 8 inches
+     * 1 rotation = 10 ticks
      */
-    public static final double TICKS_TO_ROTATIONS_WHEELS = 1;
+    public static final double TICKS_TO_ROTATIONS_WHEELS = 0.1;
 
     // Field Dimensions (values in inches)
     public static final double LINE_TO_WALL = 120;

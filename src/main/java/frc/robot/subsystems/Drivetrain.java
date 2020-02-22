@@ -349,10 +349,10 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     bottomLeftMotor.setOpenLoopRampRate(RampRate);
     bottomRightMotor.setOpenLoopRampRate(RampRate);
 
-    topLeftEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
-    topRightEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
-    bottomLeftEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
-    bottomRightEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
+    topLeftEncoder.setPositionConversionFactor(Constants.TICKS_TO_INCHES_WHEELS);
+    topRightEncoder.setPositionConversionFactor(Constants.TICKS_TO_INCHES_WHEELS);
+    bottomLeftEncoder.setPositionConversionFactor(Constants.TICKS_TO_INCHES_WHEELS);
+    bottomRightEncoder.setPositionConversionFactor(Constants.TICKS_TO_INCHES_WHEELS);
   }
 
   /**

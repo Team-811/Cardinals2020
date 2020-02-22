@@ -10,11 +10,11 @@ package frc.robot.commands.Vision;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 
-public class ToggleLED extends InstantCommand {
+public class ToggleLamp extends InstantCommand {
   /**
-   * This command toggles the drive mode of the robot between arcade and tank
+   * This command toggles the two bright white lights on the Pixy2
    */
-  public ToggleLED() {
+  public ToggleLamp() {
 
   }
 
@@ -23,7 +23,7 @@ public class ToggleLED extends InstantCommand {
   // something needs to be turned on/off or toggled.
   @Override
   protected void initialize() {
-    Robot.vision.toggleLed();
+    Robot.vision.toggleLamp();
   }
 
 }
