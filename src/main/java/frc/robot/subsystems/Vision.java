@@ -7,11 +7,14 @@
 
 package frc.robot.subsystems;
 
+import java.awt.Color;
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import java.awt.Color;
 import frc.robot.lib.Pixy2.Pixy2;
+import frc.robot.lib.Pixy2.Pixy2CCC;
+import frc.robot.lib.Pixy2.Pixy2CCC.Block;
 import frc.robot.lib.Pixy2.links.SPILink;
 
 /**
@@ -32,10 +35,49 @@ public class Vision extends Subsystem implements ISubsystem {
     public void initialize() {
         pixy.init();
         pixy.setLamp((byte) 0, (byte) 0);
+        pixyC = pixy.getCCC();
     }
 
     public Vision() {
-        
+
+    }
+
+    Pixy2CCC pixyC;
+
+    /**
+     * Stores retrieved blocks from Pixy2
+     */
+    ArrayList<Block> blocks = new ArrayList<Block>();
+
+    /**
+     * 
+     * @return True if one or more balls is in the frame
+     */
+    public boolean ballDetected() {
+        detectBalls();
+
+        if (!blocks.isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 
+     * @return Number of balls in frame
+     */
+    public int numBallsDetected() {
+        detectBalls();
+        return blocks.size();
+    }
+
+    /**
+     * Method to get new pixy blocks before doing measurements
+     */
+    private void detectBalls() {
+        pixyC.getBlocks(true, 1, 10);
+        blocks = pixyC.getBlocks();
     }
 
     private boolean lampStatus = false;
@@ -70,8 +112,20 @@ public class Vision extends Subsystem implements ISubsystem {
 
     @Override
     public void outputSmartdashboard() {
-        SmartDashboard.putString("LED Color",currentLEDColor.toString());
+        SmartDashboard.putString("LED Color", currentLEDColor.toString());
         SmartDashboard.putBoolean("Lamp Status", lampStatus);
+        SmartDashboard.putBoolean("Ball Detected", ballDetected());
+        SmartDashboard.putNumber("# Of Balls", numBallsDetected());
+        SmartDashboard.putNumber("Height", pixy.getFrameHeight());
+        SmartDashboard.putNumber("Width", pixy.getFrameWidth());
+        try {
+            SmartDashboard.putNumber("Ball X", blocks.get(0).getX());
+            SmartDashboard.putNumber("Ball Y", blocks.get(0).getY());
+        } catch (Exception e) {
+            SmartDashboard.putNumber("Ball X", -1);
+            SmartDashboard.putNumber("Ball Y", -1);
+        }
+
     }
 
     @Override
@@ -81,7 +135,7 @@ public class Vision extends Subsystem implements ISubsystem {
 
     @Override
     public void resetSubsystem() {
-        
+
     }
 
     @Override

@@ -87,7 +87,7 @@ public class Pixy2CCC {
 	 */
 	public int getBlocks(boolean wait, int sigmap, int maxBlocks) {
 		long start = System.currentTimeMillis();
-
+		blocks.clear();
 		while (true) {
 			// Fill in request data
 			pixy.bufferPayload[0] = (byte) sigmap;
