@@ -194,29 +194,54 @@ public class Drivetrain extends Subsystem implements ISubsystem {
    * @param speed
    */
   public void driveInches(double inches, double speed) {
-    while (Math.abs(getForwardVelocity()) > 0) {
+
+    // Stop the drivetrain before beginning measurements
+    while (getForwardDistanceAbs() > 0) {
       stopDrivetrain();
     }
 
+    // Start distance measurements from zero
     zeroEncoders();
-    TimerCommand.PauseCode(0.2);
-
+    TimerCommand.PauseCode(0.1);
     outputSmartdashboard();
-
     double distanceDriven = 0;
 
-    while (Math.abs(distanceDriven) < inches) {
+    // drive forward until the distance driven is greater than or equal to the
+    // inches given
+    while (Math.abs(distanceDriven) <= inches) {
+
+      // use driveWithJoy just to drive straight, input speed as the controller's left
+      // stick value
       driveWithJoy(speed, 0, 0);
-      distanceDriven = Math.abs(getForwardDistance()) * Constants.TICKS_TO_INCHES_WHEELS;
+      distanceDriven = getForwardDistanceAbs();
 
       outputSmartdashboard();
 
-      if(getForwardVelocity()==0 && Math.abs(getForwardDistance())*Constants.TICKS_TO_INCHES_WHEELS>10)
-      {
+      // if the robot is supposed to be moving but can't, stop moving
+      if (getForwardVelocity() == 0 && Math.abs(getForwardDistance()) * Constants.TICKS_TO_INCHES_WHEELS > 10) {
         break;
       }
     }
+
+    // decrease the ramp rate before stopping the drivetrain to minimize coasting
+    // since this is supposed to be an exact distance measurement
+    setSparkOpenLoopRampRate(0.3);
     stopDrivetrain();
+
+    // put the ramp rate back to the default
+    setSparkOpenLoopRampRate(RampRate);
+  }
+
+  /**
+   * Manually set the ramp rate of drivetrain motors
+   * 
+   * @param rate How fast from 0 to full speed in seconds
+   */
+  private void setSparkOpenLoopRampRate(double rate) {
+    topLeftMotor.setOpenLoopRampRate(rate);
+    topRightMotor.setOpenLoopRampRate(rate);
+    bottomLeftMotor.setOpenLoopRampRate(rate);
+    bottomRightMotor.setOpenLoopRampRate(rate);
   }
 
   /**
@@ -245,6 +270,14 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
   /**
    * 
+   * @return Absolute value of the current forward distance
+   */
+  public double getForwardDistanceAbs() {
+    return Math.abs(getForwardDistance());
+  }
+
+  /**
+   * 
    * @return Left side speed
    */
   public double getLeftVelocity() {
@@ -265,6 +298,14 @@ public class Drivetrain extends Subsystem implements ISubsystem {
    */
   public double getForwardVelocity() {
     return (getLeftVelocity() + getRightVelocity()) / 2;
+  }
+
+  /**
+   * 
+   * @return Absolute value of forward velocity
+   */
+  public double getForwardVelocityAbs() {
+    return Math.abs(getForwardVelocity());
   }
 
   /**
@@ -308,10 +349,10 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     bottomLeftMotor.setOpenLoopRampRate(RampRate);
     bottomRightMotor.setOpenLoopRampRate(RampRate);
 
-    topLeftEncoder.setPositionConversionFactor(0.1);
-    topRightEncoder.setPositionConversionFactor(0.1);
-    bottomLeftEncoder.setPositionConversionFactor(0.1);
-    bottomRightEncoder.setPositionConversionFactor(0.1);
+    topLeftEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
+    topRightEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
+    bottomLeftEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
+    bottomRightEncoder.setPositionConversionFactor(0.1 * Constants.TICKS_TO_INCHES_WHEELS);
   }
 
   /**
@@ -320,12 +361,13 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   @Override
   public void outputSmartdashboard() {
     SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
-    SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
-    SmartDashboard.putNumber("Right Encoder", getRightEncoder());
-    SmartDashboard.putNumber("Forward Distance", getForwardDistance());
-    SmartDashboard.putNumber("Right Velocity", getRightVelocity());
-    SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
-    SmartDashboard.putNumber("Forward Velocity", getForwardVelocity());
+    SmartDashboard.putNumber("Left Encoder (in)", getLeftEncoder());
+    SmartDashboard.putNumber("Right Encoder (in)", getRightEncoder());
+    SmartDashboard.putNumber("Net Forward Distance (in)", getForwardDistance());
+
+    SmartDashboard.putNumber("Right Velocity (rpm)", getRightVelocity());
+    SmartDashboard.putNumber("Left Velocity (rpm)", getLeftVelocity());
+    SmartDashboard.putNumber("Forward Velocity (rpm)", getForwardVelocity());
 
     SmartDashboard.putBoolean("Slow Mode", isSlow);
 

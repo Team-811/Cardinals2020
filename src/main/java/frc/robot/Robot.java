@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
     // in SmartDashboard and allow them to be selected
     m_chooser.setDefaultOption("Cross Line", new CrossLine());
     m_chooser.addOption("Cross Line and Shoot (Middle)", new CrossLineAndShootComp());
+    m_chooser.addOption("Do Nothing", null);
 
     SmartDashboard.putData("Auto mode", m_chooser);
   }
@@ -68,7 +69,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-   
+
   }
 
   /**
