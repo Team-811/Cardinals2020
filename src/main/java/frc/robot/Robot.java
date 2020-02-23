@@ -15,9 +15,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
+import frc.robot.commands.Utility.ZeroSensors;
 import frc.robot.controllers.OI;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeStorage;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -34,6 +36,7 @@ public class Robot extends TimedRobot {
   public static IntakeStorage intakeStorage;
   public static OI controllers;
   public static Vision vision;
+  public static LED led;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -50,10 +53,12 @@ public class Robot extends TimedRobot {
     intakeStorage = IntakeStorage.getInstance();
     controllers = OI.getInstance();
     vision = Vision.getInstance();
+    led = LED.getInstance();
 
     vision.initialize();
 
-    drivetrain.zeroGyro();
+    drivetrain.zeroSensors();
+
     updateSmartdashboard();
 
     CameraServer server = CameraServer.getInstance();
