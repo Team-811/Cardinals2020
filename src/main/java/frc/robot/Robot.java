@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
-import frc.robot.commands.Utility.ZeroSensors;
 import frc.robot.controllers.OI;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeStorage;
