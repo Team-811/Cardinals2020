@@ -60,6 +60,9 @@ public class Robot extends TimedRobot {
 
     updateSmartdashboard();
 
+    //set default LED pattern
+    led.setRainbowGradient();
+
     CameraServer server = CameraServer.getInstance();
     server.startAutomaticCapture();
 
