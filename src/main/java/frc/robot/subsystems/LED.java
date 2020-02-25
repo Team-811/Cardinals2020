@@ -42,9 +42,9 @@ public class LED extends Subsystem implements ISubsystem {
 
   }
 
-  public void setRainbowGradient() {
+  public void setRainbowGradient(int delay) {
     try {
-      LEDPort.writeString("1");
+      LEDPort.writeString("1" + "," + delay);
       currentPattern = 1;
     } catch (Exception e) {
     }

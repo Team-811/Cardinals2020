@@ -15,16 +15,18 @@ public class RainbowGradient extends InstantCommand {
     /**
      * Sets LEDs to moving rainbow gradient
      */
-    public RainbowGradient() {
-
+    public RainbowGradient(int delay) {
+        _delay = delay;
     }
+
+    private int _delay;
 
     // Called once when the command executes. Since this is an InstantCommand, the
     // method will only be called once and not continuously. This is good when
     // something needs to be turned on/off or toggled.
     @Override
     protected void initialize() {
-        Robot.led.setRainbowGradient();
+        Robot.led.setRainbowGradient(_delay);
     }
 
 }
