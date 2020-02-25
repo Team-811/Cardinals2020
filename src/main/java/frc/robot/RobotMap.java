@@ -42,11 +42,16 @@ public class RobotMap {
 
   public static final int WINCH = 8;
 
+
   // Extra SparkMax ID: 9
 
-  public static final int HOOK = 10;
+  public static final int TELESCOPE_EXTEND = 10;
   public static final int WHEEL = 11;
+  public static final int TELESCOPE_WINCH = 12;
 
   // Sensors
-
+  public static final int TELESCOPE_LOW = 0;
+  public static final int TELESCOPE_HIGH = 1;
+  public static final int TELESCOPE_UP = 2;
+  
 }
