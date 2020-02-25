@@ -253,9 +253,9 @@ void MovingGradient(int c1, int c2, int del)
     rev = 2;
   }
 
-  fill_gradient_RGB(climber, 0, CHSV(g + c1, 255, 255), climberLength, CHSV(c1 + c2 - g, 255, 255));
-  fill_gradient_RGB(shooter, 0, CHSV(g + c1, 255, 255), shooterLength, CHSV(c1 + c2 - g, 255, 255));
-  fill_gradient_RGB(intake, 0, CHSV(g + c1, 255, 255), intakeLength, CHSV(c1 + c2 - g, 255, 255));
+  fill_gradient_RGB(climber, 0, CHSV(g + c1, 255, 255), climberLength, CHSV(c2 - g, 255, 255));
+  fill_gradient_RGB(shooter, 0, CHSV(g + c1, 255, 255), shooterLength, CHSV(c2 - g, 255, 255));
+  fill_gradient_RGB(intake, 0, CHSV(g + c1, 255, 255), intakeLength, CHSV(c2 - g, 255, 255));
 
   if (rev == 3)
   {
