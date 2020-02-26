@@ -109,32 +109,22 @@ public class Vision extends Subsystem implements ISubsystem {
         blocks = pixyC.getBlocks();
     }
 
+    private double centerX = 150;
     /**
-     * Attempt to align the robot toward the largest target (ball). If the intake is on,
-     * this will also attempt to grab it
+     * Attempt to align the robot toward the largest target (ball). If the intake is
+     * on, this will also attempt to grab it. Right now, this only aligns the x-axis
      */
     public void alignLargestTarget() {
         Block target = getBiggestBlock();
         double blockX = target.getX();
-        double centered = 150;
-        if (blockX >= centered)
-        {//Right
-            while (blockX >= centered)
-            {
-                target = getBiggestBlock();
-                blockX = target.getX();
-                Robot.drivetrain.driveWithJoy(.3, 0, .5);
-            }
-            Robot.drivetrain.stopDrivetrain();
-        }
-        else
-        {//left
-            while (blockX <= centered)
-            {
-                target = getBiggestBlock();
-                blockX = target.getX();
-                Robot.drivetrain.driveWithJoy(.3, 0, -.5);
-            }
+        
+        if (blockX >= centerX) {
+            // Right
+            Robot.drivetrain.driveWithJoy(.3, 0, .5);
+        } else if (blockX <= centerX) {
+            // Left
+            Robot.drivetrain.driveWithJoy(.3, 0, -.5);
+        } else {
             Robot.drivetrain.stopDrivetrain();
         }
     }

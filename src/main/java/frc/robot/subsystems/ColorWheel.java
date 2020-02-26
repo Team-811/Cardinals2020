@@ -14,6 +14,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -63,6 +64,7 @@ public class ColorWheel extends Subsystem implements ISubsystem {
     public void rotationControl(double speed) {
         ColorMatchResult initial = m_colorMatcher.matchClosestColor(cSensor.getColor());
         int count = 0;
+        double start = Timer.getFPGATimestamp();
 
         // the color sensor will see the same color 8 times during one rotation
         while (count < 8) {
@@ -71,6 +73,9 @@ public class ColorWheel extends Subsystem implements ISubsystem {
                 count++;
                 outputSmartdashboard();
             }
+            // If it tries for more than 10 seconds, stop the loop
+            if (Timer.getFPGATimestamp() - start > 10)
+                break;
         }
         stopColorWheel();
         Robot.led.setBlink(96, 200);
@@ -82,7 +87,7 @@ public class ColorWheel extends Subsystem implements ISubsystem {
      * @param speed (0-1)
      */
     public void positionControl(double speed) {
-        String target = "";
+        String target = Robot.ds.getGameSpecificMessage();
 
         if (target.length() > 0) {
             switch (target.charAt(0)) {
@@ -113,8 +118,14 @@ public class ColorWheel extends Subsystem implements ISubsystem {
      * @param speed
      */
     private void goToColor(Color c, double speed) {
+
+        double start = Timer.getFPGATimestamp();
+
         while (m_colorMatcher.matchClosestColor(cSensor.getColor()).color != c) {
             cWheelMotor.set(speed);
+            // If it tries for more than 10 seconds, stop the loop
+            if (Timer.getFPGATimestamp() - start > 10)
+                break;
         }
         stopColorWheel();
         Robot.led.setBlink(96, 200);

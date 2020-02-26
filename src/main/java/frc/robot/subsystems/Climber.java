@@ -56,6 +56,7 @@ public class Climber extends Subsystem implements ISubsystem {
     private DigitalInput telescopeLow;
 
     private double telescopeExtendMax = 0;
+    public int direction = 1;
 
     /**
      * Run the winch motor at a given speed
@@ -63,7 +64,7 @@ public class Climber extends Subsystem implements ISubsystem {
      * @param speed (0-1)
      */
     public void runWinch(double speed) {
-        winch.set(ControlMode.PercentOutput, speed);
+        winch.set(ControlMode.PercentOutput, speed * direction);
         if (speed == 0) {
             winchRunning = false;
             Robot.setDefaultLED();
@@ -76,41 +77,41 @@ public class Climber extends Subsystem implements ISubsystem {
     /*
      * Limit Switch Patterns:
      * 
-     * telescopeHigh on and telescopeLow on: telescope extend up only 
-     * telescopeHigh on and telescopeLow off: telescope extend up or down 
-     * telescopeHigh off andtelescopeLow off: telescope extend down only 
-     * telescopeHigh off and telescope low on: do not move, wiring issue
+     * telescopeHigh on and telescopeLow on: telescope extend up only telescopeHigh
+     * on and telescopeLow off: telescope extend up or down telescopeHigh off
+     * andtelescopeLow off: telescope extend down only telescopeHigh off and
+     * telescope low on: do not move, wiring issue
      * 
      * telescopeUp on: stop telescope winch
      * 
-     * These limit switches prevent certain motors from moving once they have reached
-     * a certain point to avoid damaging the robot
+     * These limit switches prevent certain motors from moving once they have
+     * reached a certain point to avoid damaging the robot
      * 
      */
 
     /**
      * Run the telescope arm extender. This accounts for limit switches and will
-     * only run the motor in allowed configurations and will blink red LEDs if switches
-     * are hit
+     * only run the motor in allowed configurations and will blink red LEDs if
+     * switches are hit
      * 
      * @param speed (0-1)
      */
     public void runTelescopeExtend(double speed) {
-        if (speed < 0) {
+        if (speed * direction < 0) {
             if (telescopeHigh.get() && telescopeLow.get())
                 telescopeExtend.set(ControlMode.PercentOutput, 0);
             else if (telescopeHigh.get() && !telescopeLow.get())
-                telescopeExtend.set(ControlMode.PercentOutput, speed);
+                telescopeExtend.set(ControlMode.PercentOutput, speed * direction);
             else if (!telescopeHigh.get() && !telescopeLow.get())
-                telescopeExtend.set(ControlMode.PercentOutput, speed);
+                telescopeExtend.set(ControlMode.PercentOutput, speed * direction);
             else
                 telescopeExtend.set(ControlMode.PercentOutput, 0);
 
         } else {
             if (telescopeHigh.get() && telescopeLow.get())
-                telescopeExtend.set(ControlMode.PercentOutput, speed);
+                telescopeExtend.set(ControlMode.PercentOutput, speed * direction);
             else if (telescopeHigh.get() && !telescopeLow.get())
-                telescopeExtend.set(ControlMode.PercentOutput, speed);
+                telescopeExtend.set(ControlMode.PercentOutput, speed * direction);
             else if (!telescopeHigh.get() && !telescopeLow.get())
                 telescopeExtend.set(ControlMode.PercentOutput, 0);
             else
@@ -130,16 +131,33 @@ public class Climber extends Subsystem implements ISubsystem {
      * Accounts for limit swiches and blinks red LEDs if they are hit
      * 
      * @param speed (0-1)
+     * @return true when the limit switch has been hit
      */
-    public void runTelescopeWinch(double speed) {
-        if (!telescopeUp.get())
-            telescopeWinch.set(ControlMode.PercentOutput, speed);
-        else
-        {
+    public boolean runTelescopeWinch(double speed) {
+        if (!telescopeUp.get()){
+            telescopeWinch.set(ControlMode.PercentOutput, speed * direction);
+            return false;
+        }            
+        else {
             telescopeWinch.set(ControlMode.PercentOutput, 0);
             Robot.led.setBlink(5, 200);
+            return true;
         }
-            
+    }
+
+    /**
+     * Set the climber mechanisms to move in reverse if needed
+     * 
+     * @param state true for reverse
+     */
+    public void reverse(boolean state) {
+        if (state) {
+            direction = -1;
+
+        } else {
+            direction = 1;
+
+        }
     }
 
     @Override

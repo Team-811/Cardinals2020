@@ -10,6 +10,7 @@ package frc.robot.controllers;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
+import frc.robot.commands.Climber.ReverseClimber;
 import frc.robot.commands.Climber.RunTelescopeExtend;
 import frc.robot.commands.Climber.RunTelescopeWinch;
 import frc.robot.commands.Climber.RunWinch;
@@ -86,6 +87,8 @@ public class OI {
       driveController.selectButton.whenPressed(new ZeroSensors());
       driveController.leftBumper.whileHeld(new SlowMode());
       driveController.aButton.whileHeld(new AlignLargestTarget());
+
+      driveController.startButton.whileHeld(new ReverseClimber());
       driveController.xButton.whileHeld(new RunTelescopeWinch());
       driveController.yButton.whileHeld(new RunTelescopeExtend());
       driveController.bButton.whileHeld(new RunWinch());
