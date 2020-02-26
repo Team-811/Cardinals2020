@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
+import frc.robot.commands.Drivetrain.DriveWithJoy;
 import frc.robot.lib.Pixy2.Pixy2;
 import frc.robot.lib.Pixy2.Pixy2CCC;
 import frc.robot.lib.Pixy2.Pixy2CCC.Block;
@@ -115,8 +117,27 @@ public class Vision extends Subsystem implements ISubsystem {
     public void alignLargestTarget() {
         Block target = getBiggestBlock();
         double blockX = target.getX();
-
-                
+        double centered = 150;
+        if (blockX >= centered)
+        {//Right
+            while (blockX >= centered)
+            {
+                target = getBiggestBlock();
+                blockX = target.getX();
+                Robot.drivetrain.driveWithJoy(.3, 0, .5);
+            }
+            Robot.drivetrain.stopDrivetrain();
+        }
+        else
+        {//left
+            while (blockX <= centered)
+            {
+                target = getBiggestBlock();
+                blockX = target.getX();
+                Robot.drivetrain.driveWithJoy(.3, 0, -.5);
+            }
+            Robot.drivetrain.stopDrivetrain();
+        }
     }
 
     private boolean lampStatus = false;
