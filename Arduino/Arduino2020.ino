@@ -11,9 +11,9 @@
 #define PIN3    5
 
 //length of each strip
-#define intakeLength    157
+#define intakeLength    149
 #define shooterLength   20
-#define climberLength   33
+#define climberLength   30
 
 //create an LED strip object for each strip
 CRGB intake[intakeLength];
