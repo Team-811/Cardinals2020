@@ -5,33 +5,30 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
-public class AutoRunShooter extends Command {
+public class RunWinch extends Command {
 
   /**
-   * This command runs the shooter (and kicker) automatically accounting for lost
-   * shooter speed because of balls
+   * This command runs the winch on the climber to lift the robot
    */
-  public AutoRunShooter() {
+  public RunWinch() {
   }
 
-  // run the shooter automatically, continously while the command is called (while
-  // a button is held)
+  //run the winch while a button is pressed
   @Override
   protected void execute() {
-    Robot.shooter.autoRunShooter(Constants.SHOOTER_SPEED, Constants.KICKER_SPEED);
+    Robot.climber.runWinch(1);
   }
 
-  // stop the shooter when the command is no longer being called
+  // stop the winch when the command is no longer being called
   @Override
   protected void end() {
-    Robot.shooter.stopShooter();
-    Robot.shooter.setShooterLEDs(false);
+    Robot.climber.runWinch(0);
+    Robot.setDefaultLED();
   }
 
   @Override

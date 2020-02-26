@@ -10,6 +10,11 @@ package frc.robot.controllers;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
+import frc.robot.commands.Climber.RunTelescopeExtend;
+import frc.robot.commands.Climber.RunTelescopeWinch;
+import frc.robot.commands.Climber.RunWinch;
+import frc.robot.commands.ColorWheel.PositionControl;
+import frc.robot.commands.ColorWheel.RotationControl;
 import frc.robot.commands.Drivetrain.SlowMode;
 import frc.robot.commands.Drivetrain.ToggleDriveMode;
 import frc.robot.commands.IntakeStorage.RunIntakeStorageReverse;
@@ -18,6 +23,7 @@ import frc.robot.commands.IntakeStorage.UnjamComp;
 import frc.robot.commands.Shooter.AutoRunShooter;
 import frc.robot.commands.Shooter.ToggleKickerAndShooter;
 import frc.robot.commands.Utility.ZeroSensors;
+import frc.robot.commands.Vision.AlignLargestTarget;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -61,8 +67,7 @@ public class OI {
   public BobXboxController driveController;
   public BobXboxController operatorController;
 
-  public static OI getInstance()
-  {
+  public static OI getInstance() {
     return new OI();
   }
 
@@ -75,24 +80,32 @@ public class OI {
 
     // Dual Controller
     if (mode) {
-      driveController.startButton.whenPressed(new ToggleDriveMode());
-      driveController.leftBumper.whileHeld(new SlowMode());
 
+      // Driver
+      driveController.startButton.whenPressed(new ToggleDriveMode());
+      driveController.selectButton.whenPressed(new ZeroSensors());
+      driveController.leftBumper.whileHeld(new SlowMode());
+      driveController.aButton.whileHeld(new AlignLargestTarget());
+      driveController.xButton.whileHeld(new RunTelescopeWinch());
+      driveController.yButton.whileHeld(new RunTelescopeExtend());
+      driveController.bButton.whileHeld(new RunWinch());
+
+      // Operator
+      operatorController.leftBumper.whileHeld(new RotationControl());
+      operatorController.rightBumper.whileHeld(new PositionControl());
       operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
       operatorController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());
-
       operatorController.aButton.whenPressed(new ToggleIntakeStorage());
-
       operatorController.xButton.whenPressed(new UnjamComp());
-
       operatorController.yButton.whenPressed(new ToggleKickerAndShooter());
     }
+
     // Single controller
     else {
       driveController.startButton.whenPressed(new ToggleDriveMode());
       driveController.selectButton.whenPressed(new ZeroSensors());
 
-      driveController.leftBumper.whileHeld(new SlowMode());      
+      driveController.leftBumper.whileHeld(new SlowMode());
 
       driveController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());
       driveController.rightTriggerButton.whileHeld(new AutoRunShooter());
@@ -110,12 +123,10 @@ public class OI {
 
   public void outputSmartDashboard() {
     String strMode;
-    if(mode)
-    {
+    if (mode) {
       strMode = "DUAL";
-    }
-    else
-    strMode = "SINGLE";
+    } else
+      strMode = "SINGLE";
 
     SmartDashboard.putString("Controller Mode", strMode);
   }

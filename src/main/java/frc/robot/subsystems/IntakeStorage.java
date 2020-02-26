@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -38,8 +39,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
 
     private boolean intakeIsRunning = false;
 
-    public boolean intakeRunning()
-    {
+    public boolean intakeRunning() {
         return intakeIsRunning;
     }
 
@@ -63,8 +63,11 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
         intakeMotor.set(speed);
         if (speed == 0) {
             intakeIsRunning = false;
-        } else
-            intakeIsRunning = true;
+            setIntakeLEDs(false);
+        } else {
+            intakeIsRunning = true; 
+            setIntakeLEDs(true);
+        }
     }
 
     /**
@@ -75,11 +78,14 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      */
     public void toggleIntakeStorage(double speed) {
         intakeIsRunning = !intakeIsRunning;
-
-        if (intakeIsRunning)
+        if (intakeIsRunning) {
             intakeMotor.set(speed);
-        else
+            setIntakeLEDs(true);
+        } else {
             intakeMotor.set(0);
+            setIntakeLEDs(false);
+        }
+
     }
 
     /**
@@ -88,14 +94,29 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
     public void stopIntakeStorage() {
         intakeIsRunning = false;
         intakeMotor.set(0);
+
+        setIntakeLEDs(false);
+    }
+
+    /**
+     * Sets the LEDs to the intake pattern, accounting for other subsystems
+     * 
+     * @param state true to turn on LEDs, false to return them to original state
+     */
+    public void setIntakeLEDs(boolean state) {
+        if (state && !Robot.shooter.shooterRunning()) {
+            Robot.led.setColorChase(60, 60, 50);
+        } else {
+            if (!Robot.shooter.shooterRunning())
+                Robot.setDefaultLED();
+        }
     }
 
     /**
      * 
      * @return Speed of the intake
      */
-    public double getIntakeStorageVelocity()
-    {
+    public double getIntakeStorageVelocity() {
         return intakeEncoder.getVelocity();
     }
 

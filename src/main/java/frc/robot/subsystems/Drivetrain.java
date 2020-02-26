@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.Drivetrain.DriveWithJoy;
 import frc.robot.commands.Utility.TimerCommand;
@@ -122,7 +123,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
    * @param rotation   : X value of right XBox joystick.
    */
   public void driveWithJoy(double leftStick, double rightStick, double rotation) {
-    // Tank Drive
+    // Tank Drive (no gyro correction)
     if (!DriveMode) {
       driveOutput = drivetrain.tankDrive(leftStick * SpeedScale, rightStick * SpeedScale);
 
@@ -133,24 +134,22 @@ public class Drivetrain extends Subsystem implements ISubsystem {
       bottomRightMotor.set(driveOutput.getRightValue());
     }
 
-    // Arcade Drive
+    // Arcade Drive (gyro correction)
     else {
-      // double correction;
 
-      // if (rotation < 0.2 && rotation > -0.2) {
-      // // when not rotating, compare your current gyro pos to the last time you were
-      // // rotating to get error
-      // correction = gyroCorrection();
-      // } else {
-      // correction = 0;
-      // }
+      double correction;
+      if (Math.abs(rotation) < 0.2) {
+        // when not rotating, compare your current gyro pos to the last time you were
+        // rotating to get error
+        correction = gyroCorrection();
+      } else {
+        correction = 0;
+      }
 
-      // if (gyro.isConnected())
-      // driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation -
-      // correction) * SpeedScale);
-      // else
-
-      driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * .6);
+      if (gyro.isConnected())
+        driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale * 0.6);
+      else
+        driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * 0.6);
 
       topLeftMotor.set(driveOutput.getLeftValue());
       bottomLeftMotor.set(driveOutput.getLeftValue());
@@ -172,9 +171,17 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     if (slow) {
       isSlow = true;
       SpeedScale = SlowSpeedScale;
+      Robot.led.setColorFill(165, 50);
     } else {
       isSlow = false;
       SpeedScale = DefaultSpeedScale;
+      if (Robot.intakeStorage.intakeRunning()) {
+        Robot.intakeStorage.setIntakeLEDs(true);
+        if (Robot.shooter.shooterRunning())
+          Robot.shooter.setShooterLEDs(true);
+      } else
+        Robot.setDefaultLED();
+
     }
 
   }
@@ -407,9 +414,6 @@ public class Drivetrain extends Subsystem implements ISubsystem {
     setDefaultCommand(new DriveWithJoy());
   }
 
-  //
-  //
-  //
   // Gyro stuff
   private int gyroInversion = 1;
 
@@ -430,7 +434,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
 
   private double gyroCorrectRate = 0.1;
 
-  private double prevAngle;
+  private double prevAngle = 0;
 
   public double gyroCorrection() {
     return (getGyroAngle() - prevAngle) * gyroCorrectRate;
@@ -439,8 +443,4 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   public void zeroGyro() {
     gyro.zeroYaw();
   }
-
-  //
-  //
-  //
 }

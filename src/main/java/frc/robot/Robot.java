@@ -8,7 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -16,6 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
 import frc.robot.controllers.OI;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ColorWheel;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeStorage;
 import frc.robot.subsystems.LED;
@@ -33,9 +37,12 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Shooter shooter;
   public static IntakeStorage intakeStorage;
+  public static Climber climber;
+  public static ColorWheel colorWheel;
   public static OI controllers;
   public static Vision vision;
   public static LED led;
+  public static DriverStation ds;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -50,9 +57,12 @@ public class Robot extends TimedRobot {
     drivetrain = Drivetrain.getInstance();
     shooter = Shooter.getInstance();
     intakeStorage = IntakeStorage.getInstance();
+    climber = Climber.getInstance();
+    colorWheel = ColorWheel.getInstance();
     controllers = OI.getInstance();
     vision = Vision.getInstance();
     led = LED.getInstance();
+    ds = DriverStation.getInstance();
 
     vision.initialize();
 
@@ -60,7 +70,7 @@ public class Robot extends TimedRobot {
 
     updateSmartdashboard();
 
-    //set default LED pattern
+    // set default LED pattern
     led.setRainbowGradient(0);
 
     CameraServer server = CameraServer.getInstance();
@@ -73,6 +83,21 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Do Nothing", null);
 
     SmartDashboard.putData("Auto mode", m_chooser);
+  }
+
+  /**
+   * Specify the default LED pattern for when the Robot is not performing a task
+   */
+  public static void setDefaultLED() {
+    try {
+      Alliance a = ds.getAlliance();
+      if (a == Alliance.Blue) {
+        Robot.led.setMovingGradient(120, 180, 10);
+      } else {
+        Robot.led.setMovingGradient(0, 60, 10);
+      }
+    } catch (Exception e) {
+    }
   }
 
   /**
@@ -114,7 +139,8 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
+      led.setRainbowChase(60);
+      m_autonomousCommand.start();      
     }
 
   }
@@ -167,8 +193,11 @@ public class Robot extends TimedRobot {
     drivetrain.outputSmartdashboard();
     shooter.outputSmartdashboard();
     intakeStorage.outputSmartdashboard();
+    climber.outputSmartdashboard();
+    colorWheel.outputSmartdashboard();
     controllers.outputSmartDashboard();
     vision.outputSmartdashboard();
+    led.outputSmartdashboard();
   }
 
 }

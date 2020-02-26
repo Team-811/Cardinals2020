@@ -28,6 +28,7 @@ public class RunIntakeStorageReverse extends Command {
   @Override
   protected void end() {
     Robot.intakeStorage.stopIntakeStorage();
+    Robot.intakeStorage.setIntakeLEDs(false);
   }
 
   @Override
