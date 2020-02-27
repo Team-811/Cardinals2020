@@ -65,7 +65,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
             intakeIsRunning = false;
             setIntakeLEDs(false);
         } else {
-            intakeIsRunning = true; 
+            intakeIsRunning = true;
             setIntakeLEDs(true);
         }
     }
@@ -104,11 +104,14 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      * @param state true to turn on LEDs, false to return them to original state
      */
     public void setIntakeLEDs(boolean state) {
-        if (state && !Robot.shooter.shooterRunning()) {
-            Robot.led.setColorChase(60, 60, 50);
-        } else {
-            if (!Robot.shooter.shooterRunning())
-                Robot.setDefaultLED();
+        try {
+            if (state && !Robot.shooter.shooterRunning()) {
+                Robot.led.setColorChase(60, 60, 50);
+            } else {
+                if (!Robot.shooter.shooterRunning())
+                    Robot.setDefaultLED();
+            }
+        } catch (Exception e) {
         }
     }
 
@@ -133,8 +136,7 @@ public class IntakeStorage extends Subsystem implements ISubsystem {
      */
     @Override
     public void outputSmartdashboard() {
-        SmartDashboard.putBoolean("Intake Running", intakeIsRunning);
-        SmartDashboard.putNumber("Intake Velocity", getIntakeStorageVelocity());
+        SmartDashboard.putBoolean("Intake Running", intakeIsRunning);        
     }
 
     /**

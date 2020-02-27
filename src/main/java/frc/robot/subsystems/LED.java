@@ -39,12 +39,12 @@ public class LED extends Subsystem implements ISubsystem {
       LEDPort = new SerialPort(9600, SerialPort.Port.kUSB);
     } catch (Exception e) {
     }
-
   }
 
   public void setRainbowGradient(int delay) {
     try {
-      LEDPort.writeString("1" + "," + delay);
+      if (currentPattern != 1)
+        LEDPort.writeString("1" + "," + delay);
       currentPattern = 1;
     } catch (Exception e) {
     }
@@ -52,7 +52,8 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setRainbowChase(int delay) {
     try {
-      LEDPort.writeString("2" + "," + delay);
+      if (currentPattern != 2)
+        LEDPort.writeString("2" + "," + delay);
       currentPattern = 2;
     } catch (Exception e) {
     }
@@ -60,7 +61,8 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setColorFill(int HSVcolor, int delay) {
     try {
-      LEDPort.writeString("3" + "," + HSVcolor + "," + delay);
+      if (currentPattern != 3)
+        LEDPort.writeString("3" + "," + HSVcolor + "," + delay);
       currentPattern = 3;
     } catch (Exception e) {
     }
@@ -68,7 +70,8 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setBlink(int HSVcolor, int delay) {
     try {
-      LEDPort.writeString("4" + "," + HSVcolor + "," + delay);
+      if (currentPattern != 4)
+        LEDPort.writeString("4" + "," + HSVcolor + "," + delay);
       currentPattern = 4;
     } catch (Exception e) {
     }
@@ -76,7 +79,8 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setMovingGradient(int HSVcolor1, int HSVcolor2, int delay) {
     try {
-      LEDPort.writeString("5" + "," + HSVcolor1 + "," + HSVcolor2 + "," + delay);
+      if (currentPattern != 5)
+        LEDPort.writeString("5" + "," + HSVcolor1 + "," + HSVcolor2 + "," + delay);
       currentPattern = 5;
     } catch (Exception e) {
     }
@@ -84,7 +88,8 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setColorChase(int HSVcolor1, int HSVcolor2, int delay) {
     try {
-      LEDPort.writeString("6" + "," + HSVcolor1 + "," + HSVcolor2 + "," + delay);
+      if (currentPattern != 6)
+        LEDPort.writeString("6" + "," + HSVcolor1 + "," + HSVcolor2 + "," + delay);
       currentPattern = 6;
     } catch (Exception e) {
     }

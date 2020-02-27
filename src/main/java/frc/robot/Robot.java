@@ -55,8 +55,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     drivetrain = Drivetrain.getInstance();
-    shooter = Shooter.getInstance();
-    intakeStorage = IntakeStorage.getInstance();
+    shooter = Shooter.getInstance(); 
+    intakeStorage = IntakeStorage.getInstance();       
     climber = Climber.getInstance();
     colorWheel = ColorWheel.getInstance();
     controllers = OI.getInstance();

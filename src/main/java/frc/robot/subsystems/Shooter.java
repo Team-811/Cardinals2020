@@ -88,16 +88,16 @@ public class Shooter extends Subsystem implements ISubsystem {
         }
 
         // only run the kicker once the shooter has reached full speed again
-        if (getShooterVelocity() > shooterFullVelocity * shooterSpeed) {            
+        if (getShooterVelocity() > shooterFullVelocity * shooterSpeed) {
             kickerIsRunning = true;
             kickerMotor.set(ControlMode.PercentOutput, kickerSpeed);
             setShooterLEDs(true);
-        } else {            
+        } else {
             kickerIsRunning = false;
             kickerMotor.set(ControlMode.PercentOutput, 0);
             Robot.led.setBlink(0, 300);
         }
-    }        
+    }
 
     /**
      * Runs the shooter at a given speed. Also runs the kicker continuously.
@@ -128,10 +128,10 @@ public class Shooter extends Subsystem implements ISubsystem {
      */
     public void toggleShooter(double speed) {
         shooterIsRunning = !shooterIsRunning;
-        if (shooterIsRunning) {            
+        if (shooterIsRunning) {
             shooterMotor.set(speed);
             setShooterLEDs(true);
-        } else {            
+        } else {
             shooterMotor.set(0);
             setShooterLEDs(false);
         }
@@ -148,11 +148,11 @@ public class Shooter extends Subsystem implements ISubsystem {
     public void toggleKickerAndShooter(double shooterSpeed, double kickerSpeed) {
         shooterIsRunning = !shooterIsRunning;
         kickerIsRunning = !kickerIsRunning;
-        if (shooterIsRunning && kickerIsRunning) {            
+        if (shooterIsRunning && kickerIsRunning) {
             shooterMotor.set(shooterSpeed);
             kickerMotor.set(ControlMode.PercentOutput, kickerSpeed);
             setShooterLEDs(true);
-        } else {            
+        } else {
             shooterMotor.set(0);
             kickerMotor.set(ControlMode.PercentOutput, 0);
             setShooterLEDs(false);
@@ -189,17 +189,22 @@ public class Shooter extends Subsystem implements ISubsystem {
 
     /**
      * Sets the LEDs to the shooter pattern, accounting for other subsystems
+     * 
      * @param state true to turn on LEDs, false to return them to original state
      */
     public void setShooterLEDs(boolean state) {
-        if (state) {
-            Robot.led.setColorChase(100, 100, 50);
-        } else {
-            if (Robot.intakeStorage.intakeRunning())
-                Robot.intakeStorage.setIntakeLEDs(true);
-            else
-                Robot.setDefaultLED();
+        try {
+            if (state) {
+                Robot.led.setColorChase(100, 100, 50);
+            } else {
+                if (Robot.intakeStorage.intakeRunning())
+                    Robot.intakeStorage.setIntakeLEDs(true);
+                else
+                    Robot.setDefaultLED();
+            }
+        } catch (Exception e) {
         }
+
     }
 
     /**
@@ -229,7 +234,6 @@ public class Shooter extends Subsystem implements ISubsystem {
     public void outputSmartdashboard() {
         SmartDashboard.putBoolean("Shooter Running", shooterIsRunning);
         SmartDashboard.putNumber("Shooter Velocity ", getShooterVelocity());
-
         SmartDashboard.putBoolean("Kicker Running", kickerIsRunning);
     }
 

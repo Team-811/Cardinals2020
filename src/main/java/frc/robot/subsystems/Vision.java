@@ -161,20 +161,19 @@ public class Vision extends Subsystem implements ISubsystem {
 
     @Override
     public void outputSmartdashboard() {
-        SmartDashboard.putString("LED Color", currentLEDColor.toString());
-        SmartDashboard.putBoolean("Lamp Status", lampStatus);
-        SmartDashboard.putBoolean("Ball Detected", ballDetected());
-        SmartDashboard.putNumber("# Of Balls", numBallsDetected());
-        SmartDashboard.putNumber("Height", pixy.getFrameHeight());
-        SmartDashboard.putNumber("Width", pixy.getFrameWidth());
-        try {
-            SmartDashboard.putNumber("Ball X", blocks.get(0).getX());
-            SmartDashboard.putNumber("Ball Y", blocks.get(0).getY());
-        } catch (Exception e) {
-            SmartDashboard.putNumber("Ball X", -1);
-            SmartDashboard.putNumber("Ball Y", -1);
-        }
-
+        // SmartDashboard.putString("LED Color", currentLEDColor.toString());
+        // SmartDashboard.putBoolean("Lamp Status", lampStatus);
+        // SmartDashboard.putBoolean("Ball Detected", ballDetected());
+        // SmartDashboard.putNumber("# Of Balls", numBallsDetected());
+        // SmartDashboard.putNumber("Height", pixy.getFrameHeight());
+        // SmartDashboard.putNumber("Width", pixy.getFrameWidth());
+        // try {
+        //     SmartDashboard.putNumber("Ball X", blocks.get(0).getX());
+        //     SmartDashboard.putNumber("Ball Y", blocks.get(0).getY());
+        // } catch (Exception e) {
+        //     SmartDashboard.putNumber("Ball X", -1);
+        //     SmartDashboard.putNumber("Ball Y", -1);
+        // }
     }
 
     @Override

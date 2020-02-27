@@ -181,7 +181,6 @@ public class Drivetrain extends Subsystem implements ISubsystem {
           Robot.shooter.setShooterLEDs(true);
       } else
         Robot.setDefaultLED();
-
     }
 
   }
@@ -367,18 +366,10 @@ public class Drivetrain extends Subsystem implements ISubsystem {
    */
   @Override
   public void outputSmartdashboard() {
-    SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
-    SmartDashboard.putNumber("Left Encoder (in)", getLeftEncoder());
-    SmartDashboard.putNumber("Right Encoder (in)", getRightEncoder());
-    SmartDashboard.putNumber("Net Forward Distance (in)", getForwardDistance());
-
-    SmartDashboard.putNumber("Right Velocity (rpm)", getRightVelocity());
-    SmartDashboard.putNumber("Left Velocity (rpm)", getLeftVelocity());
+    SmartDashboard.putNumber("Gyro Angle", getGyroAngle());    
+    SmartDashboard.putNumber("Net Forward Distance (in)", getForwardDistance());    
     SmartDashboard.putNumber("Forward Velocity (rpm)", getForwardVelocity());
-
     SmartDashboard.putBoolean("Slow Mode", isSlow);
-
-    SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 
     String mode;
     if (DriveMode)
