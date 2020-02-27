@@ -8,6 +8,7 @@
 package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class RunTelescopeExtend extends Command {
@@ -21,7 +22,7 @@ public class RunTelescopeExtend extends Command {
     // run the extender while a button is pressed
     @Override
     protected void execute() {
-        Robot.climber.runTelescopeExtend(1);
+        Robot.climber.runTelescopeExtend(Constants.TELESCOPE_EXTEND_SPEED);
     }
 
     // stop the extender when the command is no longer being called

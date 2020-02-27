@@ -56,7 +56,8 @@ public class Climber extends Subsystem implements ISubsystem {
     private DigitalInput telescopeLow;
 
     private double telescopeExtendMax = 0;
-    public int direction = 1;
+    private int direction = 1;
+    private boolean isReverse = false;
 
     /**
      * Run the winch motor at a given speed
@@ -134,11 +135,10 @@ public class Climber extends Subsystem implements ISubsystem {
      * @return true when the limit switch has been hit
      */
     public boolean runTelescopeWinch(double speed) {
-        if (!telescopeUp.get()){
+        if (!telescopeUp.get()) {
             telescopeWinch.set(ControlMode.PercentOutput, speed * direction);
             return false;
-        }            
-        else {
+        } else {
             telescopeWinch.set(ControlMode.PercentOutput, 0);
             Robot.led.setBlink(5, 200);
             return true;
@@ -152,9 +152,10 @@ public class Climber extends Subsystem implements ISubsystem {
      */
     public void reverse(boolean state) {
         if (state) {
+            isReverse = true;
             direction = -1;
-
         } else {
+            isReverse = false;
             direction = 1;
         }
     }
@@ -164,7 +165,8 @@ public class Climber extends Subsystem implements ISubsystem {
         SmartDashboard.putBoolean("Winch Running", winchRunning);
         SmartDashboard.putBoolean("THigh Limit Switch", tHigh);
         SmartDashboard.putBoolean("TLow Limit Switch", tLow);
-        SmartDashboard.putBoolean("TUp Limit Switch", tUp);
+        SmartDashboard.putBoolean("TUp Limit Switch", tUp);        
+        SmartDashboard.putBoolean("Climber Reverse", isReverse);
     }
 
     @Override

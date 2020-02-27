@@ -8,6 +8,7 @@
 package frc.robot.commands.IntakeStorage;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class RunIntakeStorage extends Command {
@@ -21,7 +22,7 @@ public class RunIntakeStorage extends Command {
   // run the intake/storage continously while the command is called
   @Override
   protected void execute() {
-    Robot.intakeStorage.runIntakeStorage(1);
+    Robot.intakeStorage.runIntakeStorage(Constants.INTAKE_STORAGE_SPEED);
   }
 
   // stop the intake/storage when the command is no longer being called

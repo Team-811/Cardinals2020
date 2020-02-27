@@ -8,6 +8,7 @@
 package frc.robot.commands.IntakeStorage;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class ToggleIntakeStorageReverse extends InstantCommand {
@@ -24,7 +25,7 @@ public class ToggleIntakeStorageReverse extends InstantCommand {
   // something needs to be turned on/off or toggled.
   @Override
   protected void initialize() {
-    Robot.intakeStorage.toggleIntakeStorage(-0.75);
+    Robot.intakeStorage.toggleIntakeStorage(-Constants.INTAKE_STORAGE_SPEED);
   }
 
 }

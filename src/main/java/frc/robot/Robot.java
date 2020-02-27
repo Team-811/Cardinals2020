@@ -197,9 +197,6 @@ public class Robot extends TimedRobot {
     controllers.outputSmartDashboard();
     vision.outputSmartdashboard();
     led.outputSmartdashboard();
-    SmartDashboard.putString("Alliance Color", ds.getAlliance().toString());
-    SmartDashboard.putBoolean("Shooter2", shooter.shooterRunning());
-    SmartDashboard.putBoolean("Intake2", intakeStorage.intakeRunning());
   }
 
 }

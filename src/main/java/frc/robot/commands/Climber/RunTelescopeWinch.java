@@ -8,6 +8,7 @@
 package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class RunTelescopeWinch extends Command {
@@ -22,10 +23,10 @@ public class RunTelescopeWinch extends Command {
     // run the motor while a button is pressed
     @Override
     protected void execute() {
-        Robot.climber.runTelescopeWinch(1);
+        Robot.climber.runTelescopeWinch(Constants.TELESCOPE_WINCH_SPEED);
     }
 
-    // stop the extender when the command is no longer being called
+    // stop the arm winch when the command is no longer being called
     @Override
     protected void end() {
         Robot.climber.runTelescopeWinch(0);

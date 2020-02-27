@@ -7,10 +7,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * This is a subsystem class. A subsystem interacts with the hardware components
@@ -25,8 +24,7 @@ public class LED extends Subsystem implements ISubsystem {
   private static LED instance = null;
 
   public static LED getInstance() {
-    instance = new LED();
-    SmartDashboard.putNumber("Inc", Timer.getFPGATimestamp());
+    instance = new LED();    
     return instance;
   }
 
@@ -46,7 +44,7 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setRainbowGradient(int delay) {
     try {
-      if (currentPattern != 1 && instance!=null)
+      if (currentPattern != 1 && instance != null)
         LEDPort.writeString("1" + "," + delay);
       currentPattern = 1;
     } catch (Exception e) {
@@ -55,7 +53,7 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setRainbowChase(int delay) {
     try {
-      if (currentPattern != 2 && instance!=null)
+      if (currentPattern != 2 && instance != null)
         LEDPort.writeString("2" + "," + delay);
       currentPattern = 2;
     } catch (Exception e) {
@@ -64,7 +62,7 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setColorFill(int HSVcolor, int delay) {
     try {
-      if (currentPattern != 3 && instance!=null)
+      if (currentPattern != 3 && instance != null)
         LEDPort.writeString("3" + "," + HSVcolor + "," + delay);
       currentPattern = 3;
     } catch (Exception e) {
@@ -73,7 +71,7 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setBlink(int HSVcolor, int delay) {
     try {
-      if (currentPattern != 4 && instance!=null)
+      if (currentPattern != 4 && instance != null)
         LEDPort.writeString("4" + "," + HSVcolor + "," + delay);
       currentPattern = 4;
     } catch (Exception e) {
@@ -82,7 +80,7 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setMovingGradient(int HSVcolor1, int HSVcolor2, int delay) {
     try {
-      if (currentPattern != 5 && instance!=null)
+      if (currentPattern != 5 && instance != null)
         LEDPort.writeString("5" + "," + HSVcolor1 + "," + HSVcolor2 + "," + delay);
       currentPattern = 5;
     } catch (Exception e) {
@@ -91,7 +89,7 @@ public class LED extends Subsystem implements ISubsystem {
 
   public void setColorChase(int HSVcolor1, int HSVcolor2, int delay) {
     try {
-      if (currentPattern != 6 && instance!=null)
+      if (currentPattern != 6 && instance != null)
         LEDPort.writeString("6" + "," + HSVcolor1 + "," + HSVcolor2 + "," + delay);
       currentPattern = 6;
     } catch (Exception e) {
@@ -100,7 +98,12 @@ public class LED extends Subsystem implements ISubsystem {
 
   @Override
   public void outputSmartdashboard() {
-    SmartDashboard.putString("LED Pattern", patternNames[currentPattern] + " " + currentPattern);
+    String pattern = "";
+    if (instance == null)
+      pattern = "NULL";
+    else
+      pattern = patternNames[currentPattern] + " " + currentPattern;
+    SmartDashboard.putString("LED Pattern", pattern);
   }
 
   @Override

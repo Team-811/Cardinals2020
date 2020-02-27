@@ -146,9 +146,10 @@ public class Drivetrain extends Subsystem implements ISubsystem {
         correction = 0;
       }
 
-      //if (gyro.isConnected())
-        //driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale * 0.6);
-      //else
+      if (gyro.isConnected()) {
+        if (Math.abs(rotation - correction) > 0.01)
+          driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale * 0.6);
+      } else
         driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * 0.8);
 
       topLeftMotor.set(driveOutput.getLeftValue());
@@ -366,8 +367,8 @@ public class Drivetrain extends Subsystem implements ISubsystem {
    */
   @Override
   public void outputSmartdashboard() {
-    SmartDashboard.putNumber("Gyro Angle", getGyroAngle());    
-    SmartDashboard.putNumber("Net Forward Distance (in)", getForwardDistance());    
+    SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
+    SmartDashboard.putNumber("Net Forward Distance (in)", getForwardDistance());
     SmartDashboard.putNumber("Forward Velocity (rpm)", getForwardVelocity());
     SmartDashboard.putBoolean("Slow Mode", isSlow);
 

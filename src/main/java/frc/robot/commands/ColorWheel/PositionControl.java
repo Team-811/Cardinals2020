@@ -8,6 +8,7 @@
 package frc.robot.commands.ColorWheel;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class PositionControl extends Command {
@@ -21,7 +22,7 @@ public class PositionControl extends Command {
   //perform position control automatically while a button is held down
   @Override
   protected void execute() {
-    Robot.colorWheel.positionControl(1);
+    Robot.colorWheel.positionControl(Constants.COLOR_WHEEL_SPEED);
   }
 
   // stop the color wheel when the command is no longer being called
