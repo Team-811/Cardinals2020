@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
       if (a == Alliance.Blue) {
         Robot.led.setMovingGradient(120, 180, 10);
       } else {
-        Robot.led.setMovingGradient(0, 60, 10);
+        Robot.led.setMovingGradient(0, 40, 5);
       }
     } catch (Exception e) {
     }
@@ -170,7 +170,6 @@ public class Robot extends TimedRobot {
 
     intakeStorage.stopIntakeStorage();
     shooter.stopShooter();
-
   }
 
   /**
@@ -198,6 +197,9 @@ public class Robot extends TimedRobot {
     controllers.outputSmartDashboard();
     vision.outputSmartdashboard();
     led.outputSmartdashboard();
+    SmartDashboard.putString("Alliance Color", ds.getAlliance().toString());
+    SmartDashboard.putBoolean("Shooter2", shooter.shooterRunning());
+    SmartDashboard.putBoolean("Intake2", intakeStorage.intakeRunning());
   }
 
 }

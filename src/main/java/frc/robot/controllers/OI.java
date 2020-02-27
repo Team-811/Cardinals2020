@@ -63,7 +63,7 @@ public class OI {
    * Switch between single or dual controller modes for competition/testing. True
    * is dual controller and false is single.
    */
-  private boolean mode = false;
+  private boolean mode = true;
 
   public BobXboxController driveController;
   public BobXboxController operatorController;
@@ -86,16 +86,17 @@ public class OI {
       driveController.startButton.whenPressed(new ToggleDriveMode());
       driveController.selectButton.whenPressed(new ZeroSensors());
       driveController.leftBumper.whileHeld(new SlowMode());
-      driveController.aButton.whileHeld(new AlignLargestTarget());
+      //driveController.aButton.whileHeld(new AlignLargestTarget());
 
-      driveController.startButton.whileHeld(new ReverseClimber());
-      driveController.xButton.whileHeld(new RunTelescopeWinch());
-      driveController.yButton.whileHeld(new RunTelescopeExtend());
-      driveController.bButton.whileHeld(new RunWinch());
+      //driveController.startButton.whileHeld(new ReverseClimber());
+      //driveController.xButton.whileHeld(new RunTelescopeWinch());
+      //driveController.yButton.whileHeld(new RunTelescopeExtend());
+      //driveController.bButton.whileHeld(new RunWinch());
 
       // Operator
-      operatorController.leftBumper.whileHeld(new RotationControl());
-      operatorController.rightBumper.whileHeld(new PositionControl());
+      //operatorController.leftBumper.whileHeld(new RotationControl());
+      //operatorController.rightBumper.whileHeld(new PositionControl());
+
       operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
       operatorController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());
       operatorController.aButton.whenPressed(new ToggleIntakeStorage());

@@ -146,10 +146,10 @@ public class Drivetrain extends Subsystem implements ISubsystem {
         correction = 0;
       }
 
-      if (gyro.isConnected())
-        driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale * 0.6);
-      else
-        driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * 0.6);
+      //if (gyro.isConnected())
+        //driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, (rotation - correction) * SpeedScale * 0.6);
+      //else
+        driveOutput = drivetrain.arcadeDrive(leftStick * SpeedScale, rotation * SpeedScale * 0.8);
 
       topLeftMotor.set(driveOutput.getLeftValue());
       bottomLeftMotor.set(driveOutput.getLeftValue());
@@ -202,7 +202,7 @@ public class Drivetrain extends Subsystem implements ISubsystem {
   public void driveInches(double inches, double speed) {
 
     // Stop the drivetrain before beginning measurements
-    while (getForwardDistanceAbs() > 0) {
+    while (getForwardVelocityAbs() > 0) {
       stopDrivetrain();
     }
 

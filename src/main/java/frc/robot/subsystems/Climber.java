@@ -156,7 +156,6 @@ public class Climber extends Subsystem implements ISubsystem {
 
         } else {
             direction = 1;
-
         }
     }
 
