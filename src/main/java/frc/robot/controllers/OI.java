@@ -88,14 +88,14 @@ public class OI {
       driveController.leftBumper.whileHeld(new SlowMode());
       //driveController.aButton.whileHeld(new AlignLargestTarget());
 
-      //driveController.startButton.whileHeld(new ReverseClimber());
-      //driveController.xButton.whileHeld(new RunTelescopeWinch());
+      driveController.startButton.whileHeld(new ReverseClimber());
+      driveController.xButton.whileHeld(new RunTelescopeWinch());
       //driveController.yButton.whileHeld(new RunTelescopeExtend());
       //driveController.bButton.whileHeld(new RunWinch());
 
       // Operator
-      //operatorController.leftBumper.whileHeld(new RotationControl());
-      //operatorController.rightBumper.whileHeld(new PositionControl());
+      operatorController.leftBumper.whileHeld(new RotationControl());
+      operatorController.rightBumper.whileHeld(new PositionControl());
 
       operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
       operatorController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());

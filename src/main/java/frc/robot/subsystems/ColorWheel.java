@@ -65,13 +65,17 @@ public class ColorWheel extends Subsystem implements ISubsystem {
         ColorMatchResult initial = m_colorMatcher.matchClosestColor(cSensor.getColor());
         int count = 0;
         double start = Timer.getFPGATimestamp();
+        ColorMatchResult prev = null;
+        ColorMatchResult current;
 
         // the color sensor will see the same color 8 times during one rotation
         while (count < 8) {
             cWheelMotor.set(speed);
-            if (m_colorMatcher.matchClosestColor(cSensor.getColor()).equals(initial)) {
+            current = m_colorMatcher.matchClosestColor(cSensor.getColor());
+            if (current.equals(initial)&&!current.equals(prev)) {
                 count++;
                 outputSmartdashboard();
+                prev = current;
             }
             // If it tries for more than 10 seconds, stop the loop
             if (Timer.getFPGATimestamp() - start > 10)

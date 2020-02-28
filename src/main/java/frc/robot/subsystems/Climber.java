@@ -35,6 +35,8 @@ public class Climber extends Subsystem implements ISubsystem {
         telescopeExtend = new TalonSRX(RobotMap.TELESCOPE_EXTEND);
         telescopeWinch = new TalonSRX(RobotMap.TELESCOPE_WINCH);
 
+        telescopeWinch.setInverted(true);
+
         telescopeUp = new DigitalInput(RobotMap.TELESCOPE_UP);
         telescopeHigh = new DigitalInput(RobotMap.TELESCOPE_HIGH);
         telescopeLow = new DigitalInput(RobotMap.TELESCOPE_LOW);
@@ -46,10 +48,7 @@ public class Climber extends Subsystem implements ISubsystem {
     private TalonSRX telescopeExtend;
     private TalonSRX telescopeWinch;
 
-    private boolean winchRunning = false;
-    private boolean tUp = false;
-    private boolean tHigh = false;
-    private boolean tLow = false;
+    private boolean winchRunning = false;    
 
     private DigitalInput telescopeUp;
     private DigitalInput telescopeHigh;
@@ -134,14 +133,12 @@ public class Climber extends Subsystem implements ISubsystem {
      * @param speed (0-1)
      * @return true when the limit switch has been hit
      */
-    public boolean runTelescopeWinch(double speed) {
-        if (!telescopeUp.get()) {
-            telescopeWinch.set(ControlMode.PercentOutput, speed * direction);
-            return false;
+    public void runTelescopeWinch(double speed) {
+        if (telescopeUp.get()) {
+            telescopeWinch.set(ControlMode.PercentOutput, speed * direction);            
         } else {
             telescopeWinch.set(ControlMode.PercentOutput, 0);
-            Robot.led.setBlink(5, 200);
-            return true;
+            Robot.led.setBlink(5, 200);         
         }
     }
 
@@ -163,15 +160,15 @@ public class Climber extends Subsystem implements ISubsystem {
     @Override
     public void outputSmartdashboard() {
         SmartDashboard.putBoolean("Winch Running", winchRunning);
-        SmartDashboard.putBoolean("THigh Limit Switch", tHigh);
-        SmartDashboard.putBoolean("TLow Limit Switch", tLow);
-        SmartDashboard.putBoolean("TUp Limit Switch", tUp);        
+        SmartDashboard.putBoolean("THigh Limit Switch", !telescopeHigh.get());
+        SmartDashboard.putBoolean("TLow Limit Switch", !telescopeLow.get());
+        SmartDashboard.putBoolean("TUp Limit Switch", !telescopeUp.get());        
         SmartDashboard.putBoolean("Climber Reverse", isReverse);
     }
 
     @Override
     public void zeroSensors() {
-        telescopeExtend.setSelectedSensorPosition(0);
+        telescopeExtend.setSelectedSensorPosition(0);        
     }
 
     @Override
