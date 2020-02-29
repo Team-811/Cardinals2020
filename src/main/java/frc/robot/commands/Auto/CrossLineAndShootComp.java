@@ -9,7 +9,9 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.IntakeStorage.StopIntakeStorage;
 import frc.robot.commands.IntakeStorage.ToggleIntakeStorage;
+import frc.robot.commands.IntakeStorage.ToggleIntakeStorageReverse;
 import frc.robot.commands.Shooter.ToggleKickerAndShooter;
 import frc.robot.commands.Utility.TimerCommand;
 
@@ -36,8 +38,25 @@ public class CrossLineAndShootComp extends CommandGroup {
         addSequential(new DriveInches(Constants.ROBOT_LENGTH + Constants.LINE_TO_WALL,0.4));
         addSequential(new TimerCommand(0.2));
         
-        addParallel(new ToggleIntakeStorage());
+        addSequential(new ToggleIntakeStorage());
         addSequential(new ToggleKickerAndShooter());
 
+        addSequential(new TimerCommand(6));
+        addSequential(new StopIntakeStorage());
+        addSequential(new TimerCommand(0.3));
+        addSequential(new ToggleIntakeStorageReverse());
+        addSequential(new TimerCommand(0.3));
+        addSequential(new StopIntakeStorage());
+        addSequential(new TimerCommand(0.3));
+        addSequential(new ToggleIntakeStorage());
+
+        addSequential(new TimerCommand(3));
+        addSequential(new StopIntakeStorage());
+        addSequential(new TimerCommand(0.3));
+        addSequential(new ToggleIntakeStorageReverse());
+        addSequential(new TimerCommand(0.3));
+        addSequential(new StopIntakeStorage());
+        addSequential(new TimerCommand(0.3));
+        addSequential(new ToggleIntakeStorage());
     }
 }

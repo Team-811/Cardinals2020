@@ -28,6 +28,7 @@ public class ZeroSensors extends InstantCommand {
     Robot.drivetrain.zeroSensors();
     Robot.shooter.zeroSensors();
     Robot.intakeStorage.zeroSensors();
+    Robot.colorWheel.zeroSensors();
   }
 
 }

@@ -134,7 +134,7 @@ public class Climber extends Subsystem implements ISubsystem {
      * @return true when the limit switch has been hit
      */
     public void runTelescopeWinch(double speed) {
-        if (telescopeUp.get()) {
+        if (telescopeUp.get()||isReverse) {
             telescopeWinch.set(ControlMode.PercentOutput, speed * direction);            
         } else {
             telescopeWinch.set(ControlMode.PercentOutput, 0);

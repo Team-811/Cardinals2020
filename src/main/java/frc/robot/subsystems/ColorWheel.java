@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.Utility.TimerCommand;
 
 /**
  * This is a subsystem class. A subsystem interacts with the hardware components
@@ -56,6 +57,8 @@ public class ColorWheel extends Subsystem implements ISubsystem {
     private CANSparkMax cWheelMotor;
     private ColorSensorV3 cSensor;
 
+    private int count = 0;
+
     /**
      * Rotate the color wheel 4 times. Blink LEDs green when complete
      * 
@@ -63,26 +66,48 @@ public class ColorWheel extends Subsystem implements ISubsystem {
      */
     public void rotationControl(double speed) {
         ColorMatchResult initial = m_colorMatcher.matchClosestColor(cSensor.getColor());
-        int count = 0;
         double start = Timer.getFPGATimestamp();
-        ColorMatchResult prev = null;
-        ColorMatchResult current;
+        ColorMatchResult current = m_colorMatcher.matchClosestColor(cSensor.getColor());
+        ColorMatchResult prev = current;
 
         // the color sensor will see the same color 8 times during one rotation
-        while (count < 8) {
+        if (count < 8) {
             cWheelMotor.set(speed);
             current = m_colorMatcher.matchClosestColor(cSensor.getColor());
-            if (current.equals(initial)&&!current.equals(prev)) {
+            // SmartDashboard.putNumber("count", count);
+            SmartDashboard.putBoolean("Current=initial", current.color == initial.color);
+            SmartDashboard.putBoolean("Current=previous", current.color != prev.color);
+
+            if (current.color == initial.color && current.color != prev.color) {
                 count++;
-                outputSmartdashboard();
                 prev = current;
             }
-            // If it tries for more than 10 seconds, stop the loop
-            if (Timer.getFPGATimestamp() - start > 10)
-                break;
+
         }
         stopColorWheel();
-        Robot.led.setBlink(96, 200);
+        // Robot.led.setBlink(96, 200);
+    }
+
+    public void rotationControlManual(double speed) {
+
+        String color = getCurrentColor();
+        if (speed == 0) {
+            Robot.setDefaultLED();
+            cWheelMotor.set(0);
+        } else {
+            cWheelMotor.set(speed);
+        }
+        SmartDashboard.putString("Color2", color);
+    }
+
+    public void rotationControlTimed(double time, double speed) {
+        double initial = Timer.getFPGATimestamp();
+
+        while (Timer.getFPGATimestamp() - initial < time) {
+            cWheelMotor.set(speed);
+        }
+
+        stopColorWheel();
     }
 
     /**
@@ -91,7 +116,8 @@ public class ColorWheel extends Subsystem implements ISubsystem {
      * @param speed (0-1)
      */
     public void positionControl(double speed) {
-        String target = Robot.ds.getGameSpecificMessage();
+        // String target = Robot.ds.getGameSpecificMessage();
+        String target = "R";
 
         if (target.length() > 0) {
             switch (target.charAt(0)) {
@@ -142,10 +168,9 @@ public class ColorWheel extends Subsystem implements ISubsystem {
         cWheelMotor.set(0);
     }
 
-    private String colorString = "";
+    private String getCurrentColor() {
 
-    private void getCurrentColor() {
-
+        String colorString = "";
         ColorMatchResult match = m_colorMatcher.matchClosestColor(cSensor.getColor());
 
         if (match.color == kBlueTarget) {
@@ -160,17 +185,19 @@ public class ColorWheel extends Subsystem implements ISubsystem {
             colorString = "Unknown";
         }
 
+        return colorString;
+
     }
 
     @Override
     public void outputSmartdashboard() {
-        getCurrentColor();
-        SmartDashboard.putString("Color Sensor", colorString);
+        SmartDashboard.putString("Color Sensor", getCurrentColor());
+        SmartDashboard.putNumber("Color Count", count);
     }
 
     @Override
     public void zeroSensors() {
-
+        count = 0;
     }
 
     @Override
