@@ -15,6 +15,7 @@ public class ToggleKicker extends InstantCommand {
 
   /**
    * This command toggles the kicker on/off. It does not toggle the shooter.
+   * Mostly used for testing
    */
   public ToggleKicker() {
 

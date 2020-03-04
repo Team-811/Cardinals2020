@@ -34,14 +34,17 @@ public class CrossLineAndShootComp extends CommandGroup {
         // addSequential(new Command2());
         // Command1 and Command2 will run in parallel.
 
+        //cross the initiation line
         addSequential(new CrossLine());
         addSequential(new TimerCommand(0.2));
         addSequential(new DriveInches(Constants.ROBOT_LENGTH + Constants.LINE_TO_WALL, 0.4));
         addSequential(new TimerCommand(0.2));
         
+        //turn on the intake and the shooter
         addSequential(new ToggleIntakeStorage());
         addSequential(new ToggleKickerAndShooter());
 
+        //run the intake back and forth
         addSequential(new TimerCommand(6));
         addSequential(new StopIntakeStorage());
         addSequential(new TimerCommand(0.3));
@@ -50,7 +53,6 @@ public class CrossLineAndShootComp extends CommandGroup {
         addSequential(new StopIntakeStorage());
         addSequential(new TimerCommand(0.3));
         addSequential(new ToggleIntakeStorage());
-
         addSequential(new TimerCommand(3));
         addSequential(new StopIntakeStorage());
         addSequential(new TimerCommand(0.3));

@@ -5,31 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.IntakeStorage;
+package frc.robot.commands.ColorWheel;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
-public class RunIntakeStorage extends Command {
+public class RotateManually extends Command {
 
   /**
-   * This command runs the intake at a given speed while active
+   * This command manually spins the color wheel
    */
-  public RunIntakeStorage() {
+  public RotateManually() {
   }
 
-  // run the intake/storage continously while the command is called
+  // spin the wheel while a button is held down
   @Override
   protected void execute() {
-    Robot.intakeStorage.runIntakeStorage(Constants.INTAKE_STORAGE_SPEED);
+    Robot.colorWheel.rotationControlManual(Constants.COLOR_WHEEL_SPEED);
   }
 
-  // stop the intake/storage when the command is no longer being called
+  // stop the color wheel when the command is no longer being called
   @Override
   protected void end() {
-    Robot.intakeStorage.stopIntakeStorage();
-    Robot.intakeStorage.setIntakeLEDs(false);
+    Robot.colorWheel.stopColorWheel();
+    Robot.setDefaultLED();
   }
 
   @Override
@@ -41,5 +41,4 @@ public class RunIntakeStorage extends Command {
   protected boolean isFinished() {
     return false;
   }
-
 }

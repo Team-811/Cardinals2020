@@ -15,6 +15,7 @@ public class RotationControlTimed extends InstantCommand {
 
     /**
      * This command spins the color wheel for a given time
+     * @param time : time in seconds
      */
     public RotationControlTimed(double time) {
         _time = time;

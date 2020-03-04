@@ -14,7 +14,7 @@ import frc.robot.Robot;
 public class ToggleIntakeStorageReverse extends InstantCommand {
 
   /**
-   * This command toggles the intake/storage on or off
+   * This command toggles the intake/storage on or off in reverse
    */
   public ToggleIntakeStorageReverse() {
 

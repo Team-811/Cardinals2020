@@ -19,7 +19,7 @@ public class RunWinch extends Command {
   public RunWinch() {
   }
 
-  //run the winch while a button is pressed
+  // run the winch while a button is pressed
   @Override
   protected void execute() {
     Robot.climber.runWinch(Constants.WINCH_SPEED);

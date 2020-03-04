@@ -29,8 +29,7 @@ public class DriveWithJoy extends Command {
     Robot.drivetrain.driveWithJoy(-Robot.controllers.driveController.leftStick.getY(),
         Robot.controllers.driveController.rightStick.getY(), Robot.controllers.driveController.rightStick.getX());
   }
-  // Make this return true when this Command no longer needs to run execute()
-  // Make this return true when this Command no longer needs to run execute()
+
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
@@ -47,5 +46,6 @@ public class DriveWithJoy extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

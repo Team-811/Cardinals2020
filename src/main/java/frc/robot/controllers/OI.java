@@ -11,21 +11,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
 import frc.robot.commands.Climber.ReverseClimber;
-import frc.robot.commands.Climber.RunTelescopeExtend;
 import frc.robot.commands.Climber.RunTelescopeWinch;
-import frc.robot.commands.Climber.RunWinch;
-import frc.robot.commands.ColorWheel.PositionControl;
-import frc.robot.commands.ColorWheel.RotationControl;
+import frc.robot.commands.ColorWheel.RotateManually;
 import frc.robot.commands.ColorWheel.RotationControlTimed;
 import frc.robot.commands.Drivetrain.SlowMode;
 import frc.robot.commands.Drivetrain.ToggleDriveMode;
 import frc.robot.commands.IntakeStorage.RunIntakeStorageReverse;
 import frc.robot.commands.IntakeStorage.ToggleIntakeStorage;
-import frc.robot.commands.IntakeStorage.UnjamComp;
 import frc.robot.commands.Shooter.AutoRunShooter;
 import frc.robot.commands.Shooter.ToggleKickerAndShooter;
 import frc.robot.commands.Utility.ZeroSensors;
-import frc.robot.commands.Vision.AlignLargestTarget;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -93,13 +88,13 @@ public class OI {
       //driveController.bButton.whileHeld(new RunWinch());
 
       // Operator
-      operatorController.leftBumper.whileHeld(new RotationControl());
+      operatorController.leftBumper.whileHeld(new RotateManually());
       operatorController.rightBumper.whenPressed(new RotationControlTimed(4));
 
       operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
       operatorController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());
       operatorController.aButton.whenPressed(new ToggleIntakeStorage());
-      operatorController.xButton.whenPressed(new UnjamComp());
+    
       operatorController.yButton.whenPressed(new ToggleKickerAndShooter());
     }
 
@@ -114,7 +109,7 @@ public class OI {
       driveController.rightTriggerButton.whileHeld(new AutoRunShooter());
 
       driveController.aButton.whenPressed(new ToggleIntakeStorage());
-      driveController.xButton.whenPressed(new UnjamComp());
+      
       driveController.bButton.whenPressed(new ToggleKickerAndShooter());
 
       driveController.yButton.whenPressed(new CrossLine());

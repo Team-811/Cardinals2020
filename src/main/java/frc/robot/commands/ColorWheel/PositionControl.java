@@ -19,7 +19,7 @@ public class PositionControl extends Command {
   public PositionControl() {
   }
 
-  //perform position control automatically while a button is held down
+  // perform position control automatically while a button is held down
   @Override
   protected void execute() {
     Robot.colorWheel.positionControl(Constants.COLOR_WHEEL_SPEED);

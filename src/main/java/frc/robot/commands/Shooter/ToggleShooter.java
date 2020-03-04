@@ -14,7 +14,8 @@ import frc.robot.Robot;
 public class ToggleShooter extends InstantCommand {
 
   /**
-   * This Command toggles the shooter on/off. It does not toggle the kicker.
+   * This Command toggles the shooter on/off. It does not toggle the kicker. Used
+   * mostly for testing.
    */
   public ToggleShooter() {
 

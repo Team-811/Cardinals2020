@@ -13,11 +13,11 @@ import frc.robot.Robot;
 
 public class RunTelescopeExtend extends Command {
 
-  /**
-   * This command runs the motor to extend the hooks while a button is pressed
-   */
-  public RunTelescopeExtend() {
-  }
+    /**
+     * This command runs the motor to extend the hooks while a button is pressed
+     */
+    public RunTelescopeExtend() {
+    }
 
     // run the extender while a button is pressed
     @Override
