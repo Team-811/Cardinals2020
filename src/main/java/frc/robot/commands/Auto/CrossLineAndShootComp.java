@@ -17,7 +17,8 @@ public class CrossLineAndShootComp extends CommandGroup {
     /**
      * This command moves the robot forward one robot length, allowing it to cross
      * the initiation line. It then moves the robot back against the wall and runs
-     * the shooter to shoot the preloaded balls
+     * the shooter to shoot the preloaded balls. It will also attempt to unjam balls
+     * while shooting in case all 3 do not shoot at first
      */
     public CrossLineAndShootComp() {
         // Add Commands here:
@@ -33,9 +34,9 @@ public class CrossLineAndShootComp extends CommandGroup {
 
         addSequential(new CrossLine());
         addSequential(new TimerCommand(0.2));
-        addSequential(new DriveInches(Constants.ROBOT_LENGTH + Constants.LINE_TO_WALL,0.4));
+        addSequential(new DriveInches(Constants.ROBOT_LENGTH + Constants.LINE_TO_WALL, 0.4));
         addSequential(new TimerCommand(0.2));
-        
+
         addParallel(new ToggleIntakeStorage());
         addSequential(new ToggleKickerAndShooter());
 
