@@ -17,7 +17,7 @@ public class Constants {
     public static final double DRIVETRAIN_SLOW_SCALE = 0.3;
 
     public static final double INTAKE_STORAGE_SPEED = 0.6;
-    public static final double COLOR_WHEEL_SPEED = 0.5;
+    public static final double COLOR_WHEEL_SPEED = 0.15;
     public static final double WINCH_SPEED = 1;
     public static final double TELESCOPE_EXTEND_SPEED = 1;
     public static final double TELESCOPE_WINCH_SPEED = 1;

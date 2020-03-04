@@ -59,21 +59,23 @@ public class LED extends Subsystem implements ISubsystem {
     } catch (Exception e) {
     }
   }
-
+  
   public void setColorFill(int HSVcolor, int delay) {
-    try {
+    try {      
       if (currentPattern != 3 && instance != null)
         LEDPort.writeString("3" + "," + HSVcolor + "," + delay);
-      currentPattern = 3;
+      currentPattern = 3;          
     } catch (Exception e) {
     }
   }
 
+  private int fillColor = -1;
   public void setBlink(int HSVcolor, int delay) {
-    try {
-      if (currentPattern != 4 && instance != null)
+    try {      
+      if (instance != null && fillColor != HSVcolor)
         LEDPort.writeString("4" + "," + HSVcolor + "," + delay);
       currentPattern = 4;
+      fillColor = HSVcolor;
     } catch (Exception e) {
     }
   }
@@ -83,6 +85,7 @@ public class LED extends Subsystem implements ISubsystem {
       if (currentPattern != 5 && instance != null)
         LEDPort.writeString("5" + "," + HSVcolor1 + "," + HSVcolor2 + "," + delay);
       currentPattern = 5;
+      fillColor = -1;
     } catch (Exception e) {
     }
   }

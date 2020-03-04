@@ -16,6 +16,7 @@ import frc.robot.commands.Climber.RunTelescopeWinch;
 import frc.robot.commands.Climber.RunWinch;
 import frc.robot.commands.ColorWheel.PositionControl;
 import frc.robot.commands.ColorWheel.RotationControl;
+import frc.robot.commands.ColorWheel.RotationControlTimed;
 import frc.robot.commands.Drivetrain.SlowMode;
 import frc.robot.commands.Drivetrain.ToggleDriveMode;
 import frc.robot.commands.IntakeStorage.RunIntakeStorageReverse;
@@ -84,18 +85,16 @@ public class OI {
 
       // Driver
       driveController.startButton.whenPressed(new ToggleDriveMode());
-      driveController.selectButton.whenPressed(new ZeroSensors());
+      driveController.selectButton.whileHeld(new ReverseClimber());
       driveController.leftBumper.whileHeld(new SlowMode());
-      //driveController.aButton.whileHeld(new AlignLargestTarget());
-
-      //driveController.startButton.whileHeld(new ReverseClimber());
-      //driveController.xButton.whileHeld(new RunTelescopeWinch());
+      driveController.xButton.whileHeld(new RunTelescopeWinch());
+      driveController.aButton.whileHeld(new ZeroSensors());      
       //driveController.yButton.whileHeld(new RunTelescopeExtend());
       //driveController.bButton.whileHeld(new RunWinch());
 
       // Operator
-      //operatorController.leftBumper.whileHeld(new RotationControl());
-      //operatorController.rightBumper.whileHeld(new PositionControl());
+      operatorController.leftBumper.whileHeld(new RotationControl());
+      operatorController.rightBumper.whenPressed(new RotationControlTimed(4));
 
       operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
       operatorController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());

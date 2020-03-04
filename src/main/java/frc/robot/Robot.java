@@ -170,6 +170,7 @@ public class Robot extends TimedRobot {
 
     intakeStorage.stopIntakeStorage();
     shooter.stopShooter();
+    colorWheel.stopColorWheel();
   }
 
   /**

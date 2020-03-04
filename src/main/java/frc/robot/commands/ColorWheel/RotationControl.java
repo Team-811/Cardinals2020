@@ -22,7 +22,7 @@ public class RotationControl extends Command {
   //perform position control automatically while a button is held down
   @Override
   protected void execute() {
-    Robot.colorWheel.rotationControl(Constants.COLOR_WHEEL_SPEED);
+    Robot.colorWheel.rotationControlManual(Constants.COLOR_WHEEL_SPEED);
   }
 
   // stop the color wheel when the command is no longer being called
