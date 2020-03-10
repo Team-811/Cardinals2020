@@ -197,6 +197,7 @@ public class Robot extends TimedRobot {
     colorWheel.outputSmartdashboard();
     controllers.outputSmartDashboard();
     vision.outputSmartdashboard();
+    if(led!=null)
     led.outputSmartdashboard();
   }
 

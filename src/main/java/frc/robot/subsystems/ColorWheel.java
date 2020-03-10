@@ -12,12 +12,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.Utility.TimerCommand;
@@ -52,6 +54,8 @@ public class ColorWheel extends Subsystem implements ISubsystem {
         m_colorMatcher.addColorMatch(kGreenTarget);
         m_colorMatcher.addColorMatch(kRedTarget);
         m_colorMatcher.addColorMatch(kYellowTarget);
+
+        cWheelMotor.setIdleMode(IdleMode.kBrake);
     }
 
     private CANSparkMax cWheelMotor;
@@ -165,6 +169,8 @@ public class ColorWheel extends Subsystem implements ISubsystem {
      * Stop the color wheel motor
      */
     public void stopColorWheel() {
+        cWheelMotor.set(-Constants.COLOR_WHEEL_SPEED);
+        TimerCommand.PauseCode(0.3);
         cWheelMotor.set(0);
     }
 

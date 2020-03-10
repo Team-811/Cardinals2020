@@ -59,7 +59,7 @@ public class OI {
    * Switch between single or dual controller modes for competition/testing. True
    * is dual controller and false is single.
    */
-  private boolean mode = true;
+  private boolean mode = false;
 
   public BobXboxController driveController;
   public BobXboxController operatorController;
@@ -112,8 +112,13 @@ public class OI {
       
       driveController.bButton.whenPressed(new ToggleKickerAndShooter());
 
-      driveController.yButton.whenPressed(new CrossLine());
-      driveController.rightBumper.whenPressed(new CrossLineAndShootComp());
+      driveController.xButton.whileHeld(new RunTelescopeWinch());
+      driveController.yButton.whileHeld(new ReverseClimber());
+
+      driveController.rightBumper.whileHeld(new RotateManually());
+
+      //driveController.yButton.whenPressed(new CrossLine());
+      //driveController.rightBumper.whenPressed(new CrossLineAndShootComp());
 
     }
 

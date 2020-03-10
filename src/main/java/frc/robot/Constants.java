@@ -13,21 +13,21 @@ package frc.robot;
 public class Constants {
     // Speed constants
 
-    public static final double DRIVETRAIN_SPEED_SCALE = 0.7;
+    public static final double DRIVETRAIN_SPEED_SCALE = 0.75;
     public static final double DRIVETRAIN_SLOW_SCALE = 0.3;
 
-    public static final double INTAKE_STORAGE_SPEED = 0.6;
+    public static final double INTAKE_STORAGE_SPEED = 0.5;
     public static final double COLOR_WHEEL_SPEED = 0.15;
     public static final double WINCH_SPEED = 1;
     public static final double TELESCOPE_EXTEND_SPEED = 1;
     public static final double TELESCOPE_WINCH_SPEED = 1;
 
-    public static final double SHOOTER_SPEED = 1;
+    public static final double SHOOTER_SPEED = 0.75;
     public static final double KICKER_SPEED = 1;
 
-    public static final double SHOOTER_FULL_VELOCITY = 5100;
+    public static final double SHOOTER_FULL_VELOCITY = 0; //5100
 
-    public static final double DRIVETRAIN_RAMP_RATE = 0.75;
+    public static final double DRIVETRAIN_RAMP_RATE = 0.5;
 
     // Conversion Factors for Encoders
 
