@@ -51,7 +51,7 @@ public class RobotMap {
   
 
   // Sensors
-  //public static final int TELESCOPE_LOW = 9;
+  public static final int TELESCOPE_LOW = 9;
   public static final int TELESCOPE_HIGH = 8;
   public static final int TELESCOPE_UP = 0;
   
