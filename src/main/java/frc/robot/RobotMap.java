@@ -39,8 +39,8 @@ public class RobotMap {
   public static final int KICKER = 6;
 
   public static final int INTAKE_STORAGE = 7;
-
   public static final int WHEEL = 8;
+  public static final int INTAKE_SPINNER = 14;
 
   // Extra SparkMax ID: 9
 
@@ -51,7 +51,7 @@ public class RobotMap {
   
 
   // Sensors
-  public static final int TELESCOPE_LOW = 9;
+  //public static final int TELESCOPE_LOW = 9;
   public static final int TELESCOPE_HIGH = 8;
   public static final int TELESCOPE_UP = 0;
   

@@ -1,12 +1,12 @@
+package frc.robot.controllers;
+
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
-package frc.robot.controllers;
-
+import frc.robot.commands.ColorWheel.RotateManually;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Auto.CrossLine;
 import frc.robot.commands.Auto.CrossLineAndShootComp;
@@ -21,6 +21,8 @@ import frc.robot.commands.IntakeStorage.ToggleIntakeStorage;
 import frc.robot.commands.Shooter.AutoRunShooter;
 import frc.robot.commands.Shooter.ToggleKickerAndShooter;
 import frc.robot.commands.Utility.ZeroSensors;
+import frc.robot.commands.IntakeSpinner.ToggleIntakeSpinner;
+import frc.robot.commands.IntakeSpinner.RunIntakeSpinnerReverse; 
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -59,7 +61,7 @@ public class OI {
    * Switch between single or dual controller modes for competition/testing. True
    * is dual controller and false is single.
    */
-  private boolean mode = false;
+  private boolean mode = true;
 
   public BobXboxController driveController;
   public BobXboxController operatorController;
@@ -82,20 +84,24 @@ public class OI {
       driveController.startButton.whenPressed(new ToggleDriveMode());
       driveController.selectButton.whileHeld(new ReverseClimber());
       driveController.leftBumper.whileHeld(new SlowMode());
-      driveController.xButton.whileHeld(new RunTelescopeWinch());
-      driveController.aButton.whileHeld(new ZeroSensors());      
-      //driveController.yButton.whileHeld(new RunTelescopeExtend());
+      driveController.yButton.whileHeld(new RunTelescopeWinch());
+      driveController.aButton.whenPressed(new ZeroSensors()); 
+      driveController.leftTriggerButton.whileHeld(new ToggleIntakeSpinner());
+      //driveController.yButton.whileHeld(new ToggleIntakeSpinner());
+      driveController.rightBumper.whileHeld(new RunIntakeSpinnerReverse()); 
+      //driveControlle.yButton.whileHeld(new RunTelescopeExtend());
       //driveController.bButton.whileHeld(new RunWinch());
-
+      driveController.rightTriggerButton.whileHeld(new RunIntakeStorageReverse());
       // Operator
       operatorController.leftBumper.whileHeld(new RotateManually());
+      //
       operatorController.rightBumper.whenPressed(new RotationControlTimed(4));
 
       operatorController.rightTriggerButton.whileHeld(new AutoRunShooter());
-      operatorController.leftTriggerButton.whileHeld(new RunIntakeStorageReverse());
+      operatorController.leftTriggerButton.whenPressed(new RunIntakeStorageReverse());
       operatorController.aButton.whenPressed(new ToggleIntakeStorage());
     
-      operatorController.yButton.whenPressed(new ToggleKickerAndShooter());
+      operatorController.xButton.whenPressed(new ToggleKickerAndShooter());
     }
 
     // Single controller
@@ -110,15 +116,15 @@ public class OI {
 
       driveController.aButton.whenPressed(new ToggleIntakeStorage());
       
-      driveController.bButton.whenPressed(new ToggleKickerAndShooter());
+      driveController.leftBumper.whenPressed(new ToggleKickerAndShooter());
 
-      driveController.xButton.whileHeld(new RunTelescopeWinch());
+      //driveController.xButton.whileHeld(RunTelescopeWinch());
       driveController.yButton.whileHeld(new ReverseClimber());
 
       driveController.rightBumper.whileHeld(new RotateManually());
 
-      //driveController.yButton.whenPressed(new CrossLine());
-      //driveController.rightBumper.whenPressed(new CrossLineAndShootComp());
+      driveController.bButton.whenPressed(new CrossLine());
+      driveController.rightBumper.whenPressed(new CrossLineAndShootComp());
 
     }
 
@@ -133,5 +139,4 @@ public class OI {
 
     SmartDashboard.putString("Controller Mode", strMode);
   }
-
 }

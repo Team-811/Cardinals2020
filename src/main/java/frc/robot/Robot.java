@@ -22,6 +22,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ColorWheel;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeStorage;
+import frc.robot.subsystems.IntakeSpinner;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Shooter shooter;
   public static IntakeStorage intakeStorage;
+  public static IntakeSpinner intakeSpinner; 
   public static Climber climber;
   public static ColorWheel colorWheel;
   public static OI controllers;
@@ -56,7 +58,8 @@ public class Robot extends TimedRobot {
 
     drivetrain = Drivetrain.getInstance();
     shooter = Shooter.getInstance(); 
-    intakeStorage = IntakeStorage.getInstance();       
+    intakeStorage = IntakeStorage.getInstance();   
+    intakeSpinner = IntakeSpinner.getInstance();    
     climber = Climber.getInstance();
     colorWheel = ColorWheel.getInstance();
     controllers = OI.getInstance();
