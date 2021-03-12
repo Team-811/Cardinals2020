@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
   public static IntakeSpinner intakeSpinner; 
   public static Climber climber;
   public static ColorWheel colorWheel;
-  public static OI controllers;
+  public static 
   public static Vision vision;
   public static LED led;
   public static DriverStation ds;
